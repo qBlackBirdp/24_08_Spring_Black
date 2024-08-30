@@ -1,4 +1,4 @@
-package com.example.blackbirdlofi.blackbirdlofi.controller;
+package com.example.blackbirdlofi.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,10 +10,4 @@ public class ursHomeController {
         return "/usr/home/main";
     }
 
-    @RequestMapping("/urs/home/home")
-    public String showHome() {
-        return "/urs/home/home";
-    }
-
-    String sd = "11";
 }

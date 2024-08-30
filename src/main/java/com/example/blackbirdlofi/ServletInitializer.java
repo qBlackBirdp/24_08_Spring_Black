@@ -1,4 +1,4 @@
-package com.example.blackbirdlofi.blackbirdlofi;
+package com.example.blackbirdlofi;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
