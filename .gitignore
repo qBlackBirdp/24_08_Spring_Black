@@ -5,7 +5,7 @@ target/
 !**/src/test/**/target/
 
 ### 파이어베이스 JZON ###
-!/src/main/resources/blackbirdlofi-firebase-adminsdk-ia8s9-81614c0382.json
+blackbirdlofi-firebase-adminsdk-ia8s9-81614c0382.json
 
 ### STS ###
 .apt_generated

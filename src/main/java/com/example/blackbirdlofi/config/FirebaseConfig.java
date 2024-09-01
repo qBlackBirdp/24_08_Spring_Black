@@ -15,11 +15,11 @@ public class FirebaseConfig {
     @Bean
     public FirebaseApp initializeFirebase() throws IOException {
         FileInputStream serviceAccount =
-                new FileInputStream("src/main/resources/serviceAccountKey.json");
+                new FileInputStream("src/main/resources/blackbirdlofi-firebase-adminsdk-ia8s9-81614c0382.json");
 
         FirebaseOptions options = new FirebaseOptions.Builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                .setStorageBucket("your-bucket-name.appspot.com")
+                .setStorageBucket("blackbirdlofi.appspot.com")
                 .build();
 
         return FirebaseApp.initializeApp(options);
