@@ -9,6 +9,9 @@
     <meta charset="utf-8"/>
     <meta property="twitter:card" content="summary_large_image"/>
 
+    <%--   제이쿼리 --%>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <style data-tag="reset-style-sheet">
         html {
             line-height: 1.15;
@@ -92,6 +95,41 @@
             fill: var(--dl-color-theme-neutral-dark);
         }
     </style>
+
+    <script>
+        //비번 일치 확인.
+        $(document).ready(function () {
+            $('#password, #confirmPassword').on('input', function () {
+                var password = $('#password').val();
+                var confirmPassword = $('#confirmPassword').val();
+
+                if (password === "" && confirmPassword === "") {
+                    $('#errorMessage').hide();
+                    $('#confirmPassword').removeClass('input-error');
+                } else if (password !== confirmPassword) {
+                    $('#errorMessage').show();
+                    $('#confirmPassword').addClass('input-error');
+                } else {
+                    $('#errorMessage').hide();
+                    $('#confirmPassword').removeClass('input-error');
+                }
+            });
+
+            // 폼 제출 시 비밀번호 일치 여부 확인
+            $('#form').on('submit', function (event) {
+                var password = $('#password').val();
+                var confirmPassword = $('#confirmPassword').val();
+
+                if (password !== confirmPassword) {
+                    event.preventDefault(); // 폼 제출 막기
+                    $('#errorMessage').show();
+                    $('#confirmPassword').addClass('input-error');
+                    alert("password not match!");
+                }
+            });
+        });
+    </script>
+
     <link
             rel="stylesheet"
             href="https://unpkg.com/animate.css@4.1.1/animate.css"
@@ -136,7 +174,8 @@
                                         </div>
                                     </div>
                                     <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-container14">
-                                        <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-container15">
+                                        <form action="../member/doJoin" method="post" id="form"
+                                              class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-container15">
                                             <button class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-form-button1">
                                                 <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-image1">
                                                     <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-imagefill1">
@@ -224,48 +263,70 @@
                               </span>
                                                 </div>
                                             </button>
-                                        </div>
-                                        <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-margin1">
-                                            <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-container18">
-                                                <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-container19">
+                                            <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-margin1">
+                                                <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-container18">
+                                                    <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-container19">
                               <span class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-text16 splice.comInterMedium12upper">
                                 <span>Or</span>
                               </span>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-form">
-                                            <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-container20">
-                                                <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-background2">
-                                                    <input
-                                                            type="text"
-                                                            placeholder="Name"
-                                                            class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-input1"
-                                                    />
-                                                    <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-label1"></div>
-                                                    <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-background3">
+                                            <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-form">
+                                                <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-container20">
+                                                    <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-background2">
+                                                        <input
+                                                                type="text"
+                                                                name="name"
+                                                                placeholder="Name"
+                                                                class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-input1"
+                                                        />
+                                                        <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-label1"></div>
+                                                        <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-background3">
                                 <span class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-text18 splice.comInterRegular14.08">
                                 </span>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-background-border">
-                                                    <input
-                                                            type="text"
-                                                            placeholder="Nickname"
-                                                            class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-input2"
-                                                    />
-                                                    <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-label2"></div>
-                                                    <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-background5">
+                                                    <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-background-border">
+                                                        <input
+                                                                type="text"
+                                                                name="nickname"
+                                                                placeholder="Nickname"
+                                                                class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-input2"
+                                                        />
+                                                        <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-label2"></div>
+                                                        <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-background5">
                                 <span class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-text20 splice.comInterRegular161">
                                 </span>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-background-border">
-                                                    <input
-                                                            type="email"
-                                                            placeholder="email"                                                            class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-input2"
-                                                    />
-                                                    <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-label2"></div>
+                                                    <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-background-border">
+                                                        <input
+                                                                type="email"
+                                                                name="email"
+                                                                placeholder="Email"
+                                                                class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-input2"
+                                                        />
+                                                        <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-label2"></div>
+                                                        <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-background5">
+                                <span class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-text20 splice.comInterRegular161">
+                                </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-background-border">
+                                                        <input
+                                                                type="password"
+                                                                name="loginPw"
+                                                                id="password"
+                                                                placeholder="Password"
+                                                                class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-input2"
+                                                        />
+                                                        <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-label2"></div>
+                                                        <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-background5">
+                                <span class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-text20 splice.comInterRegular161">
+                                </span>
+                                                        </div>
+                                                    </div>
                                                     <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-background5">
                                 <span class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-text20 splice.comInterRegular161">
                                 </span>
@@ -274,39 +335,45 @@
                                                 <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-background-border">
                                                     <input
                                                             type="password"
-                                                            placeholder="password"                                                            class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-input2"
+                                                            name="ConfirmPassword"
+                                                            placeholder="Confirm Password"
+                                                            id="confirmPassword"
+                                                            class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-input2"
                                                     />
                                                     <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-label2"></div>
                                                     <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-background5">
-                                <span class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-text20 splice.comInterRegular161">
+                                                        <span class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-text20 splice.comInterRegular161">
                                 </span>
                                                     </div>
                                                 </div>
                                             </div>
+                                            <span id="errorMessage" style="color: red; display: none;">Passwords do not match!</span>
+
                                             <button class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-button2">
                             <span class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-text24 splice.comInterRegular16">
                               <span>Sign Up</span>
                             </span>
                                             </button>
                                             <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-container21">
-                                                <span class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-text22 splice.comInterRegular14">
+                                                    <span class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-text22 splice.comInterRegular14">
                               <span>Already have an account?</span>
                               <a href="/usr/member/login">Log in</a>
                             </span>
                                             </div>
-                                        </div>
                                     </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-margin3">
-                    <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-container22"></div>
-                </div>
+            </div>
+            <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-margin3">
+                <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-container22"></div>
             </div>
         </div>
     </div>
+</div>
 </div>
 </body>
 </html>

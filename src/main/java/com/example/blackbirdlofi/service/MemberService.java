@@ -17,15 +17,16 @@ public class MemberService {
         return memberRepository.findByEmail(email);
     }
     // 회원가입.
-    public ResultData doJoin(String loginId, String loginPw, String name, String nickname, String email) {
+    public ResultData doJoin(String loginId, String loginPw, String uName, String nickname, String email) {
 
         // 새로운 회원 생성
         Member newMember = new Member();
         newMember.setLoginId(loginId);
         newMember.setLoginPw(loginPw);
-        newMember.setUName(name);
+        newMember.setUName(uName);
         newMember.setNickname(nickname);
         newMember.setEmail(email);
+
 
         // 회원 저장
         memberRepository.doJoin(newMember);

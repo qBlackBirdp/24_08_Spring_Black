@@ -15,50 +15,52 @@
   --dl-space-space-halfunit: 8px;
   --dl-space-space-sixunits: 96px;
   --dl-space-space-twounits: 32px;
-  --dl-color-splice.com-blue: rgba(0, 51, 255, 1);
+  --dl-color-splice-com-blue: rgba(0, 51, 255, 1);
   --dl-radius-radius-radius2: 2px;
   --dl-radius-radius-radius4: 4px;
   --dl-radius-radius-radius8: 8px;
   --dl-space-space-fiveunits: 80px;
   --dl-space-space-fourunits: 64px;
-  --dl-color-splice.com-abbey: rgba(69, 70, 77, 1);
-  --dl-color-splice.com-black: rgba(0, 0, 0, 1);
-  --dl-color-splice.com-comet: rgba(92, 103, 125, 1);
-  --dl-color-splice.com-jumbo: rgba(129, 131, 138, 1);
-  --dl-color-splice.com-shark: rgba(48, 50, 54, 1);
-  --dl-color-splice.com-white: rgba(255, 255, 255, 1);
+  --dl-color-splice-com-abbey: rgba(69, 70, 77, 1);
+  --dl-color-splice-com-black: rgba(0, 0, 0, 1);
+  --dl-color-splice-com-comet: rgba(92, 103, 125, 1);
+  --dl-color-splice-com-jumbo: rgba(129, 131, 138, 1);
+  --dl-color-splice-com-shark: rgba(48, 50, 54, 1);
+  --dl-color-splice-com-white: rgba(255, 255, 255, 1);
   --dl-color-theme-secondary1: #FFFFFF;
   --dl-color-theme-secondary2: #FBF1EB;
   --dl-space-space-threeunits: 48px;
-  --dl-color-splice.com-yellow: rgba(241, 246, 7, 1);
-  --dl-color-splice.com-boulder: rgba(118, 118, 118, 1);
-  --dl-color-splice.com-midgray: rgba(99, 101, 109, 1);
-  --dl-color-splice.com-mischka: rgba(229, 229, 232, 1);
-  --dl-color-splice.com-scarlet: rgba(232, 29, 1, 1);
-  --dl-color-splice.com-white02: rgba(255, 255, 255, 0.0020000000949949026);
+  --dl-color-splice-com-yellow: rgba(241, 246, 7, 1);
+  --dl-color-splice-com-boulder: rgba(118, 118, 118, 1);
+  --dl-color-splice-com-midgray: rgba(99, 101, 109, 1);
+  --dl-color-splice-com-mischka: rgba(229, 229, 232, 1);
+  --dl-color-splice-com-scarlet: rgba(232, 29, 1, 1);
+  --dl-color-splice-com-white02: rgba(255, 255, 255, 0.0020000000949949026);
   --dl-color-theme-neutral-dark: #191818;
   --dl-radius-radius-cardradius: 8px;
-  --dl-color-splice.com-cinnabar: rgba(234, 67, 53, 1);
-  --dl-color-splice.com-solitude: rgba(237, 249, 255, 1);
-  --dl-color-splice.com-vidaloca: rgba(69, 162, 26, 1);
+  --dl-color-splice-com-cinnabar: rgba(234, 67, 53, 1);
+  --dl-color-splice-com-solitude: rgba(237, 249, 255, 1);
+  --dl-color-splice-com-vidaloca: rgba(69, 162, 26, 1);
   --dl-color-theme-neutral-light: #FBFAF9;
   --dl-radius-radius-imageradius: 8px;
   --dl-radius-radius-inputradius: 24px;
-  --dl-color-splice.com-aluminium: rgba(166, 168, 173, 1);
-  --dl-color-splice.com-mischka33: rgba(229, 229, 232, 0.33000001311302185);
-  --dl-color-splice.com-mischka75: rgba(229, 229, 232, 0.75);
-  --dl-color-splice.com-rustynail: rgba(140, 85, 6, 1);
-  --dl-color-splice.com-woodsmoke: rgba(18, 18, 20, 1);
+  --dl-color-splice-com-aluminium: rgba(166, 168, 173, 1);
+  --dl-color-splice-com-mischka33: rgba(229, 229, 232, 0.33000001311302185);
+  --dl-color-splice-com-mischka75: rgba(229, 229, 232, 0.75);
+  --dl-color-splice-com-rustynail: rgba(140, 85, 6, 1);
+  --dl-color-splice-com-woodsmoke: rgba(18, 18, 20, 1);
   --dl-radius-radius-buttonradius: 24px;
-  --dl-color-splice.com-athensgray: rgba(250, 250, 251, 1);
-  --dl-color-splice.com-frenchgray: rgba(200, 201, 204, 1);
-  --dl-color-splice.com-whitewhite: rgba(255, 255, 255, 1);
+  --dl-color-splice-com-athensgray: rgba(250, 250, 251, 1);
+  --dl-color-splice-com-frenchgray: rgba(200, 201, 204, 1);
+  --dl-color-splice-com-whitewhite: rgba(255, 255, 255, 1);
   --dl-space-space-oneandhalfunits: 24px;
-  --dl-color-splice.com-chateaugreen: rgba(52, 168, 83, 1);
-  --dl-color-splice.com-cornflowerblue: rgba(66, 133, 244, 1);
-  --dl-color-splice.com-selectiveyellow: rgba(251, 188, 5, 1);
-  --dl-color-splice.com-linearwhitewhite: rgba(255, 255, 255, 1);
+  --dl-color-splice-com-chateaugreen: rgba(52, 168, 83, 1);
+  --dl-color-splice-com-cornflowerblue: rgba(66, 133, 244, 1);
+  --dl-color-splice-com-selectiveyellow: rgba(251, 188, 5, 1);
+  --dl-color-splice-com-linearwhitewhite: rgba(255, 255, 255, 1);
 }
+
+
 .button {
   color: var(--dl-color-theme-neutral-dark);
   display: inline-block;
@@ -510,7 +512,7 @@
   font-size: 20px;
   font-style: normal;
   font-family: Inter;
-  font-weight: 700px;
+  font-weight: 700;
   font-stretch: normal;
   letter-spacing: 0em;
 }
@@ -518,7 +520,7 @@
   font-size: 16px;
   font-style: normal;
   font-family: Inter;
-  font-weight: 400px;
+  font-weight: 400;
   font-stretch: normal;
   letter-spacing: 0em;
 }
@@ -526,7 +528,7 @@
   font-size: 12px;
   font-style: normal;
   font-family: Inter;
-  font-weight: 500px;
+  font-weight: 500;
   font-stretch: normal;
   letter-spacing: 0em;
 }
@@ -534,7 +536,7 @@
   font-size: 14.079999923706055px;
   font-style: normal;
   font-family: Inter;
-  font-weight: 400px;
+  font-weight: 400;
   font-stretch: normal;
   letter-spacing: 0em;
 }
@@ -542,7 +544,7 @@
   font-size: 16px;
   font-style: normal;
   font-family: Inter;
-  font-weight: 400px;
+  font-weight: 400;
   font-stretch: normal;
   letter-spacing: 0em;
 }
@@ -550,7 +552,7 @@
   font-size: 14px;
   font-style: normal;
   font-family: Inter;
-  font-weight: 400px;
+  font-weight: 400;
   font-stretch: normal;
   letter-spacing: 0em;
 }
@@ -558,7 +560,7 @@
   font-size: 14px;
   font-style: normal;
   font-family: Inter;
-  font-weight: 400px;
+  font-weight: 400;
   font-stretch: normal;
   letter-spacing: 0em;
 }
@@ -566,7 +568,7 @@
   font-size: 14px;
   font-style: normal;
   font-family: Inter;
-  font-weight: 400px;
+  font-weight: 400;
   font-stretch: normal;
   letter-spacing: 0em;
 }
@@ -574,7 +576,7 @@
   font-size: 16px;
   font-style: normal;
   font-family: Inter;
-  font-weight: 400px;
+  font-weight: 400;
   font-stretch: normal;
   letter-spacing: 0em;
 }
@@ -582,7 +584,7 @@
   font-size: 16px;
   font-style: normal;
   font-family: Inter;
-  font-weight: 500px;
+  font-weight: 500;
   font-stretch: normal;
   letter-spacing: 0em;
 }
@@ -590,7 +592,7 @@
   font-size: 14px;
   font-style: normal;
   font-family: Inter;
-  font-weight: 500px;
+  font-weight: 500;
   font-stretch: normal;
   letter-spacing: 0em;
 }
@@ -598,7 +600,7 @@
   font-size: 20px;
   font-style: normal;
   font-family: Inter;
-  font-weight: 700px;
+  font-weight: 700;
   font-stretch: normal;
   letter-spacing: -0.30000001192092896px;
 }
@@ -606,7 +608,7 @@
   font-size: 16px;
   font-style: normal;
   font-family: Inter;
-  font-weight: 500px;
+  font-weight: 500;
   font-stretch: normal;
   letter-spacing: 0em;
 }
@@ -614,7 +616,7 @@
   font-size: 20px;
   font-style: normal;
   font-family: Inter;
-  font-weight: 700px;
+  font-weight: 700;
   font-stretch: normal;
   letter-spacing: 0em;
 }
@@ -622,7 +624,7 @@
   font-size: 12px;
   font-style: normal;
   font-family: Inter;
-  font-weight: 400px;
+  font-weight: 400;
   font-stretch: normal;
   letter-spacing: 0em;
 }
@@ -630,7 +632,7 @@
   font-size: 16px;
   font-style: normal;
   font-family: Inter;
-  font-weight: 500px;
+  font-weight: 500;
   font-stretch: normal;
   letter-spacing: 0em;
 }
@@ -638,7 +640,7 @@
   font-size: 16px;
   font-style: normal;
   font-family: Inter;
-  font-weight: 700px;
+  font-weight: 700;
   font-stretch: normal;
   letter-spacing: -0.23999999463558197px;
 }
@@ -646,7 +648,7 @@
   font-size: 36px;
   font-style: normal;
   font-family: Inter;
-  font-weight: 700px;
+  font-weight: 700;
   font-stretch: normal;
   letter-spacing: -0.5400000214576721px;
 }
@@ -654,7 +656,7 @@
   font-size: 16px;
   font-style: normal;
   font-family: Inter;
-  font-weight: 400px;
+  font-weight: 400;
   font-stretch: normal;
   letter-spacing: 0em;
 }
@@ -662,7 +664,7 @@
   font-size: 13px;
   font-style: normal;
   font-family: Inter;
-  font-weight: 400px;
+  font-weight: 400;
   font-stretch: normal;
   letter-spacing: 0em;
 }
@@ -670,7 +672,7 @@
   font-size: 13px;
   font-style: normal;
   font-family: Inter;
-  font-weight: 500px;
+  font-weight: 500;
   font-stretch: normal;
   letter-spacing: 0em;
 }
@@ -678,7 +680,7 @@
   font-size: 14px;
   font-style: normal;
   font-family: Inter;
-  font-weight: 500px;
+  font-weight: 500;
   font-stretch: normal;
   letter-spacing: 0em;
 }
@@ -686,7 +688,7 @@
   font-size: 14px;
   font-style: normal;
   font-family: Inter;
-  font-weight: 500px;
+  font-weight: 500;
   font-stretch: normal;
   letter-spacing: 0em;
 }
@@ -694,7 +696,7 @@
   font-size: 13px;
   font-style: normal;
   font-family: Inter;
-  font-weight: 400px;
+  font-weight: 400;
   font-stretch: normal;
   letter-spacing: 0em;
 }
@@ -702,7 +704,7 @@
   font-size: 12px;
   font-style: normal;
   font-family: Inter;
-  font-weight: 400px;
+  font-weight: 400;
   font-stretch: normal;
   letter-spacing: 0em;
 }
@@ -710,7 +712,7 @@
   font-size: 14px;
   font-style: normal;
   font-family: Inter;
-  font-weight: 500px;
+  font-weight: 500;
   font-stretch: normal;
   letter-spacing: -0.20999999344348907px;
 }
@@ -718,7 +720,7 @@
   font-size: 12px;
   font-style: normal;
   font-family: Inter;
-  font-weight: 500px;
+  font-weight: 500;
   font-stretch: normal;
   letter-spacing: 0em;
 }
@@ -726,7 +728,7 @@
   font-size: 16px;
   font-style: normal;
   font-family: Inter;
-  font-weight: 400px;
+  font-weight: 400;
   font-stretch: normal;
   letter-spacing: 0em;
 }
@@ -734,7 +736,7 @@
   font-size: 14px;
   font-style: normal;
   font-family: Inter;
-  font-weight: 700px;
+  font-weight: 700;
   font-stretch: normal;
   letter-spacing: 0em;
 }
@@ -742,7 +744,7 @@
   font-size: 20px;
   font-style: normal;
   font-family: Inter;
-  font-weight: 700px;
+  font-weight: 700;
   font-stretch: normal;
   letter-spacing: -0.30000001192092896px;
 }
@@ -750,7 +752,7 @@
   font-size: 16px;
   font-style: normal;
   font-family: Inter;
-  font-weight: 500px;
+  font-weight: 500;
   font-stretch: normal;
   letter-spacing: 0em;
 }
@@ -758,7 +760,7 @@
   font-size: 20px;
   font-style: normal;
   font-family: Inter;
-  font-weight: 700px;
+  font-weight: 700;
   font-stretch: normal;
   letter-spacing: -0.30000001192092896px;
 }
@@ -766,7 +768,7 @@
   font-size: 14px;
   font-style: normal;
   font-family: Inter;
-  font-weight: 700px;
+  font-weight: 700;
   font-stretch: normal;
   letter-spacing: -0.20999999344348907px;
 }
@@ -774,7 +776,7 @@
   font-size: 14px;
   font-style: normal;
   font-family: Inter;
-  font-weight: 500px;
+  font-weight: 500;
   font-stretch: normal;
   letter-spacing: 0em;
 }
@@ -782,7 +784,7 @@
   font-size: 14px;
   font-style: normal;
   font-family: Inter;
-  font-weight: 400px;
+  font-weight: 400;
   font-stretch: normal;
   letter-spacing: 0em;
 }
@@ -790,7 +792,7 @@
   font-size: 14px;
   font-style: normal;
   font-family: Inter;
-  font-weight: 500px;
+  font-weight: 500;
   font-stretch: normal;
   letter-spacing: 0em;
 }
@@ -798,7 +800,7 @@
   font-size: 16px;
   font-style: normal;
   font-family: Inter;
-  font-weight: 400px;
+  font-weight: 400;
   font-stretch: normal;
   letter-spacing: -0.30000001192092896px;
 }
@@ -806,7 +808,7 @@
   font-size: 12px;
   font-style: normal;
   font-family: Inter;
-  font-weight: 500px;
+  font-weight: 500;
   font-stretch: normal;
   letter-spacing: 0em;
 }
@@ -814,15 +816,15 @@
   font-size: 10px;
   font-style: normal;
   font-family: Inter;
-  font-weight: 700px;
+  font-weight: 700;
   font-stretch: normal;
   letter-spacing: 0em;
 }
 .splice\.comInterBold13upper {
   font-size: 13px;
   font-style: normal;
-  font-family: Inter;
-  font-weight: 700px;
+  font-family: Int;
+  font-weight: 700;
   font-stretch: normal;
   letter-spacing: 1px;
 }
@@ -830,7 +832,7 @@
   font-size: 72px;
   font-style: normal;
   font-family: Roboto;
-  font-weight: 700px;
+  font-weight: 700;
   font-stretch: normal;
   letter-spacing: 0em;
 }
@@ -838,7 +840,7 @@
   font-size: 16px;
   font-style: normal;
   font-family: Roboto;
-  font-weight: 700px;
+  font-weight: 700;
   font-stretch: normal;
   letter-spacing: 0em;
 }
@@ -846,7 +848,7 @@
   font-size: 54.400001525878906px;
   font-style: normal;
   font-family: Roboto;
-  font-weight: 400px;
+  font-weight: 400;
   font-stretch: normal;
   letter-spacing: 0em;
 }
@@ -854,7 +856,7 @@
   font-size: 28px;
   font-style: normal;
   font-family: Roboto;
-  font-weight: 700px;
+  font-weight: 700;
   font-stretch: normal;
   letter-spacing: -0.41999998688697815px;
 }
@@ -862,7 +864,7 @@
   font-size: 28px;
   font-style: normal;
   font-family: Roboto;
-  font-weight: 700px;
+  font-weight: 700;
   font-stretch: normal;
   letter-spacing: -0.41999998688697815px;
 }

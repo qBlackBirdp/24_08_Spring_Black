@@ -39,6 +39,7 @@ CREATE TABLE `users` (
 );
 
 
+
 CREATE TABLE `instruments` (
                                `id` int(10) NOT NULL,
                                `istm_id` int(10) NOT NULL,
@@ -78,10 +79,13 @@ ALTER TABLE `coin` ADD CONSTRAINT `FK_users_TO_coin_1` FOREIGN KEY (`u_id`) REFE
 ALTER TABLE `coin_transactions` ADD CONSTRAINT `FK_users_TO_coin_transactions_1` FOREIGN KEY (`id2`) REFERENCES `users` (`id`);
 
 -- 테스트데이터 user
-INSERT INTO users (id, regDate, updateDate, loginId, loginPw, u_name, nickname, email, delStatus, sellLevel, authLevel, spotifyLoginId, googleLoginId)
+INSERT INTO users (regDate, updateDate, loginId, loginPw, u_name, nickname, email, delStatus, sellLevel, authLevel, spotifyLoginId, googleLoginId)
 VALUES
-    (1, NOW(), NOW(), 'user-1a2b3c4d', 'password1', 'John Doe', 'johnny', 'john@example.com', 0, 3, 3, NULL, null),
-    (2, NOW(), NOW(), 'user-5f6g7h8i', 'password2', 'Jane Smith', 'janey', 'jane@example.com', 0, 3, 3, NULL, null),
-    (3, NOW(), NOW(), 'user-9j0k1l2m', 'password3', 'Jim Brown', 'jimbo', 'jim@example.com', 0, 3, 3, NULL, null);
+    (NOW(), NOW(), 'user-1a2b3c4d', 'password1', 'John Doe', 'johnny', 'john@example.com', 0, 3, 3, NULL, null),
+    (NOW(), NOW(), 'user-5f6g7h8i', 'password2', 'Jane Smith', 'janey', 'jane@example.com', 0, 3, 3, NULL, null),
+    (NOW(), NOW(), 'user-9j0k1l2m', 'password3', 'Jim Brown', 'jimbo', 'jim@example.com', 0, 3, 3, NULL, null);
+
+SELECT *
+FROM users;
 
 

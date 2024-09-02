@@ -1,9 +1,7 @@
 package com.example.blackbirdlofi.repository;
 
 import com.example.blackbirdlofi.vo.Member;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 @Mapper
 public interface MemberRepository {
@@ -19,7 +17,8 @@ public interface MemberRepository {
             INSERT INTO users 
             (loginId, loginPw, u_name, nickname, email, regDate, updateDate) 
             VALUES 
-            (#{loginId}, #{loginPw}, #{name}, #{nickname}, #{email}, #{regDate}, #{updateDate})
+            (#{loginId}, #{loginPw}, #{uName}, #{nickname}, #{email}, NOW(), NOW())
             """)
+    @Options(useGeneratedKeys = true, keyProperty = "id")
     void doJoin(Member newMember);
 }
