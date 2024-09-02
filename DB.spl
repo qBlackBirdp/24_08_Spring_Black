@@ -1,0 +1,87 @@
+DROP DATABASE IF EXISTS `24_08_Spring_Black`;
+CREATE DATABASE `24_08_Spring_Black`;
+USE `24_08_Spring_Black`;
+
+CREATE TABLE `samples` (
+                           `id` int(10) NOT NULL,
+                           `u_id` int(10) NOT NULL,
+                           `istm_id` int(10) NOT NULL,
+                           `regDate` DATETIME NOT NULL,
+                           `s_name` varchar(100) NOT NULL,  -- `varchar(10)`에서 `varchar(100)`으로 변경하였습니다.
+                           `BPM` int(10) NOT NULL,
+                           `genres` varchar(100) NOT NULL,  -- `varchar(10)`에서 `varchar(100)`으로 변경하였습니다.
+                           `price` int NULL DEFAULT 0,
+                           `delStatus` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '삭제 여부 (0=삭제 전, 1=삭제 후)',
+                           `delDate` DATETIME NULL COMMENT '삭제 날짜',
+                           `Field` VARCHAR(255) NULL,
+                           PRIMARY KEY (`id`)
+);
+
+CREATE INDEX `IDX_samples_u_id` ON `samples`(`u_id`);
+CREATE INDEX `IDX_samples_istm_id` ON `samples`(`istm_id`);
+
+CREATE TABLE `users` (
+                         `id` int(10) NOT NULL AUTO_INCREMENT,
+                         `regDate` DATETIME NOT NULL,
+                         `updateDate` DATETIME NULL DEFAULT NULL COMMENT '계정 정보 마지막 업데이트 일시',
+                         `loginId` varchar(50) NOT NULL COMMENT '자동 생성된 로그인 ID, user-123456 형식',
+                         `loginPw` varchar(100) NOT NULL,
+                         `u_name` char(20) NOT NULL,
+                         `nickname` char(20) NOT NULL,
+                         `email` varchar(50) NOT NULL UNIQUE COMMENT '로그인에 사용될 이메일 주소',
+                         `delStatus` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '탈퇴 여부 (0=탈퇴 전, 1=탈퇴 후)',
+                         `delDate` DATETIME NULL COMMENT '탈퇴 날짜',
+                         `sellLevel` SMALLINT(2) NOT NULL DEFAULT 3 COMMENT '판매권한 (없음=3, 있음=5)',
+                         `authLevel` SMALLINT(2) NOT NULL DEFAULT 3 COMMENT '권한 레벨 (없음=3, 있음 = 7)',
+                         `spotifyLoginId` VARCHAR(100) NULL DEFAULT NULL COMMENT 'Spotify 소셜 로그인 ID',
+                         `googleLoginId` VARCHAR(100) NULL DEFAULT NULL COMMENT 'Google 소셜 로그인 ID',
+                         PRIMARY KEY (`id`)
+);
+
+
+CREATE TABLE `instruments` (
+                               `id` int(10) NOT NULL,
+                               `istm_id` int(10) NOT NULL,
+                               `istm_name` char(10) NOT NULL COMMENT 'Drums, Vocals, Synth, Keys, Guitar, Bass, FX, Strings',
+                               `istm_type` char(10) NOT NULL COMMENT 'Drums, Vocals, Synth, Keys, Guitar, Bass, FX, Strings',
+                               PRIMARY KEY (`id`, `istm_id`)
+);
+
+CREATE TABLE `instruments_items` (
+                                     `id` int(10) NOT NULL,
+                                     `items_name` char(10) NOT NULL,
+                                     PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `coin` (
+                        `id` int(10) NOT NULL,
+                        `u_id` int(10) NOT NULL,
+                        `balance` int(100) NOT NULL,
+                        `updateDate` DATETIME NOT NULL,
+                        PRIMARY KEY (`id`, `u_id`)
+);
+
+CREATE TABLE `coin_transactions` (
+                                     `tran_id` int(10) NOT NULL,
+                                     `id2` int(10) NOT NULL,
+                                     `tran_type` char(20) NOT NULL COMMENT 'spend coin, get coin, adjust',
+                                     `tranDate` DATETIME NOT NULL,
+                                     `amount` int(100) NOT NULL,
+                                     PRIMARY KEY (`tran_id`, `id2`)
+);
+
+-- 외래 키 제약 조건 추가
+ALTER TABLE `samples` ADD CONSTRAINT `FK_users_TO_samples_1` FOREIGN KEY (`u_id`) REFERENCES `users` (`id`);
+ALTER TABLE `samples` ADD CONSTRAINT `FK_instruments_TO_samples_1` FOREIGN KEY (`istm_id`) REFERENCES `instruments` (`id`);
+ALTER TABLE `instruments` ADD CONSTRAINT `FK_instruments_items_TO_instruments_1` FOREIGN KEY (`istm_id`) REFERENCES `instruments_items` (`id`);
+ALTER TABLE `coin` ADD CONSTRAINT `FK_users_TO_coin_1` FOREIGN KEY (`u_id`) REFERENCES `users` (`id`);
+ALTER TABLE `coin_transactions` ADD CONSTRAINT `FK_users_TO_coin_transactions_1` FOREIGN KEY (`id2`) REFERENCES `users` (`id`);
+
+-- 테스트데이터 user
+INSERT INTO users (id, regDate, updateDate, loginId, loginPw, u_name, nickname, email, delStatus, sellLevel, authLevel, spotifyLoginId, googleLoginId)
+VALUES
+    (1, NOW(), NOW(), 'user-1a2b3c4d', 'password1', 'John Doe', 'johnny', 'john@example.com', 0, 3, 3, NULL, null),
+    (2, NOW(), NOW(), 'user-5f6g7h8i', 'password2', 'Jane Smith', 'janey', 'jane@example.com', 0, 3, 3, NULL, null),
+    (3, NOW(), NOW(), 'user-9j0k1l2m', 'password3', 'Jim Brown', 'jimbo', 'jim@example.com', 0, 3, 3, NULL, null);
+
+
