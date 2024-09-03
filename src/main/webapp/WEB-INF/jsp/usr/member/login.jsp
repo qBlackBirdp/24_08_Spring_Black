@@ -9,6 +9,9 @@
     <meta charset="utf-8"/>
     <meta property="twitter:card" content="summary_large_image"/>
 
+    <!-- 번들된 JS 파일을 불러오기 -->
+    <script src="http://localhost:8082/bundle.js"></script>
+
     <style data-tag="reset-style-sheet">
         html {
             line-height: 1.15;
@@ -138,8 +141,8 @@
                                     <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-container14">
                                         <form action="/usr/member/doLogin" method="post">
                                             <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-container15">
-                                                <button type="button" class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-form-button1">
-                                                    <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-image1">
+                                                <button type="button" class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-form-button1" onclick="googleLogin()">
+                                                <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-image1">
                                                         <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-imagefill1">
                                                             <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-image2">
                                                                 <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-clippathgroup1">

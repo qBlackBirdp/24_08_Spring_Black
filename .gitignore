@@ -7,8 +7,10 @@ target/
 ### 파이어베이스 JZON ###
 blackbirdlofi-firebase-adminsdk-ia8s9-81614c0382.json
 
-### firebase.js ###
-firebase.js
+
+
+### index.js ###
+index.js
 
 ### STS ###
 .apt_generated
