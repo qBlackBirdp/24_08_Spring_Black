@@ -17,9 +17,9 @@ import java.io.IOException;
 public class Rq {
 
 	@Getter
-	private boolean isLogined;
+	private boolean isLogined = false;  // 초기화를 명시적으로 수행
 	@Getter
-	private int loginedMemberId;
+	private int loginedMemberId = 0;    // 초기화를 명시적으로 수행
 	@Getter
 	private Member loginedMember;
 
@@ -33,12 +33,12 @@ public class Rq {
 		this.resp = resp;
 		this.session = req.getSession();
 
-		HttpSession httpSession = req.getSession();
+		System.out.println("Rq 객체 생성됨");
 
-		if (httpSession.getAttribute("loginedMemberId") != null) {
+		if (session.getAttribute("loginedMemberId") != null) {
 			isLogined = true;
-			loginedMemberId = (int) httpSession.getAttribute("loginedMemberId");
-//			loginedMember = memberService.getMemberById(loginedMemberId);
+			loginedMemberId = (int) session.getAttribute("loginedMemberId");
+			loginedMember = memberService.getMemberById(loginedMemberId);
 		}
 
 		this.req.setAttribute("rq", this);
@@ -69,11 +69,17 @@ public class Rq {
 	public void logout() {
 		session.removeAttribute("loginedMemberId");
 		session.removeAttribute("loginedMember");
+		isLogined = false;
+		loginedMemberId = 0;
+		loginedMember = null;
 	}
 
 	public void login(Member member) {
 		session.setAttribute("loginedMemberId", member.getId());
 		session.setAttribute("loginedMember", member);
+		isLogined = true;
+		loginedMemberId = member.getId();
+		loginedMember = member;
 	}
 
 	public void initBeforeActionInterceptor() {
@@ -90,14 +96,9 @@ public class Rq {
 		String currentUri = req.getRequestURI();
 		String queryString = req.getQueryString();
 
-		System.err.println(currentUri);
-		System.err.println(queryString);
-
 		if (currentUri != null && queryString != null) {
 			currentUri += "?" + queryString;
 		}
-
-		System.out.println(currentUri);
 
 		return currentUri;
 	}

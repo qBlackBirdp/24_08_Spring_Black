@@ -98,7 +98,7 @@
     />
     <link
             rel="stylesheet"
-            href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
+            href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&amp;display=swap"
             data-tag="font"
     />
     <link
@@ -130,197 +130,128 @@
                                     <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-header">
                                         <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-spliceauth03xpng"></div>
                                         <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-heading1">
-                          <span class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-text10 splice.comInterBold20">
-                            <span>Log into your account</span>
-                          </span>
+                                            <span class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-text10 splice.comInterBold20">
+                                                <span>Log into your account</span>
+                                            </span>
                                         </div>
                                     </div>
                                     <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-container14">
-                                        <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-container15">
-                                            <button class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-form-button1">
-                                                <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-image1">
-                                                    <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-imagefill1">
-                                                        <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-image2">
-                                                            <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-clippathgroup1">
-                                                                <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmtb1">
-                                                                    <img
-                                                                            src="/external/vector7364-6soc.svg"
-                                                                            alt="Vector7364"
-                                                                            class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-vector10"
-                                                                    />
-                                                                </div>
-                                                                <img
-                                                                        src="/external/vector7364-5lyd.svg"
-                                                                        alt="Vector7364"
-                                                                        class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-vector11"
-                                                                />
-                                                            </div>
-                                                            <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-clippathgroup2">
-                                                                <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmtb2">
-                                                                    <img
-                                                                            src="/external/vector7364-hura.svg"
-                                                                            alt="Vector7364"
-                                                                            class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-vector12"
-                                                                    />
-                                                                </div>
-                                                                <img
-                                                                        src="/external/vector7364-ich.svg"
-                                                                        alt="Vector7364"
-                                                                        class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-vector13"
-                                                                />
-                                                            </div>
-                                                            <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-clippathgroup3">
-                                                                <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmtb3">
-                                                                    <img
-                                                                            src="/external/vector7365-qxjg.svg"
-                                                                            alt="Vector7365"
-                                                                            class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-vector14"
-                                                                    />
-                                                                </div>
-                                                                <img
-                                                                        src="/external/vector7365-a2ga.svg"
-                                                                        alt="Vector7365"
-                                                                        class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-vector15"
-                                                                />
-                                                            </div>
-                                                            <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-clippathgroup4">
-                                                                <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmtb4">
-                                                                    <img
-                                                                            src="/external/vector7365-jvdfg.svg"
-                                                                            alt="Vector7365"
-                                                                            class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-vector16"
-                                                                    />
-                                                                </div>
-                                                                <img
-                                                                        src="/external/vector7365-7x8q.svg"
-                                                                        alt="Vector7365"
-                                                                        class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-vector17"
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-container16">
-                              <span class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-text12 splice.comInterRegular16">
-                                <span>Continue with Google</span>
-                              </span>
-                                                </div>
-                                            </button>
-                                            <button class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-form-button2">
-                                                <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-image3">
-                                                    <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-imagefill2">
-                                                        <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-image4">
-                                                            <img
-                                                                    src="/images/spofitylogo7377-9doi-200h.png"
-                                                                    alt="spofityLogo7377"
-                                                                    class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-spofity-logo"
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-container17">
-                              <span class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-text14 splice.comInterRegular16">
-                                <span>Continue with Spotify</span>
-                              </span>
-                                                </div>
-                                            </button>
-                                        </div>
-                                        <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-margin1">
-                                            <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-container18">
-                                                <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-container19">
-                              <span class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-text16 splice.comInterMedium12upper">
-                                <span>Or</span>
-                              </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-form">
-                                            <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-container20">
-                                                <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-background2">
-                                                    <input
-                                                            type="email"
-                                                            placeholder="Email address"
-                                                            class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-input1"
-                                                    />
-                                                    <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-label1"></div>
-                                                    <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-background3">
-                                <span class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-text18 splice.comInterRegular14.08">
-                                </span>
-                                                    </div>
-                                                </div>
-                                                <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-background-border">
-                                                    <input
-                                                            type="password"
-                                                            placeholder="password"
-                                                            class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-input2"
-                                                    />
-                                                    <button class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-button1">
-                                                        <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-mask-group">
-                                                            <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-mask">
-                                                                <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-imagefill3">
-                                                                    <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-image5">
-                                                                        <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-group1">
-                                                                            <img
-                                                                                    src="/external/vector7370-g8td.svg"
-                                                                                    alt="Vector7370"
-                                                                                    class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-vector18"
-                                                                            />
-                                                                            <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-maskgroup">
-                                                                                <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-group2">
-                                                                                    <img
-                                                                                            src="/external/vector7370-so5l.svg"
-                                                                                            alt="Vector7370"
-                                                                                            class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-vector19"
-                                                                                    />
-                                                                                </div>
-                                                                                <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-group3">
-                                                                                    <img
-                                                                                            src="/external/vector7370-1hq8j.svg"
-                                                                                            alt="Vector7370"
-                                                                                            class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-vector20"
-                                                                                    />
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
+                                        <form action="/usr/member/doLogin" method="post">
+                                            <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-container15">
+                                                <button type="button" class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-form-button1">
+                                                    <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-image1">
+                                                        <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-imagefill1">
+                                                            <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-image2">
+                                                                <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-clippathgroup1">
+                                                                    <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmtb1">
+                                                                        <img src="/external/vector7364-6soc.svg" alt="Vector7364" class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-vector10"/>
                                                                     </div>
+                                                                    <img src="/external/vector7364-5lyd.svg" alt="Vector7364" class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-vector11"/>
                                                                 </div>
-                                                                <img
-                                                                        src="/images/background7371-1f3-200h.png"
-                                                                        alt="Background7371"
-                                                                        class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-background4"
-                                                                />
+                                                                <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-clippathgroup2">
+                                                                    <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmtb2">
+                                                                        <img src="/external/vector7364-hura.svg" alt="Vector7364" class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-vector12"/>
+                                                                    </div>
+                                                                    <img src="/external/vector7364-ich.svg" alt="Vector7364" class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-vector13"/>
+                                                                </div>
+                                                                <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-clippathgroup3">
+                                                                    <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmtb3">
+                                                                        <img src="/external/vector7365-qxjg.svg" alt="Vector7365" class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-vector14"/>
+                                                                    </div>
+                                                                    <img src="/external/vector7365-a2ga.svg" alt="Vector7365" class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-vector15"/>
+                                                                </div>
+                                                                <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-clippathgroup4">
+                                                                    <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmtb4">
+                                                                        <img src="/external/vector7365-jvdfg.svg" alt="Vector7365" class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-vector16"/>
+                                                                    </div>
+                                                                    <img src="/external/vector7365-7x8q.svg" alt="Vector7365" class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-vector17"/>
+                                                                </div>
                                                             </div>
-                                                    </button>
-                                                    <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-label2"></div>
-                                                    <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-background5">
-                                <span class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-text20 splice.comInterRegular161">
-                                </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-container16">
+                                                        <span class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-text12 splice.comInterRegular16">
+                                                            <span>Continue with Google</span>
+                                                        </span>
+                                                    </div>
+                                                </button>
+                                                <button type="button" class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-form-button2">
+                                                    <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-image3">
+                                                        <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-imagefill2">
+                                                            <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-image4">
+                                                                <img src="/images/spofitylogo7377-9doi-200h.png" alt="spofityLogo7377" class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-spofity-logo"/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-container17">
+                                                        <span class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-text14 splice.comInterRegular16">
+                                                            <span>Continue with Spotify</span>
+                                                        </span>
+                                                    </div>
+                                                </button>
+                                            </div>
+                                            <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-margin1">
+                                                <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-container18">
+                                                    <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-container19">
+                                                        <span class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-text16 splice.comInterMedium12upper">
+                                                            <span>Or</span>
+                                                        </span>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-container21">
-                            <span class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-text22 splice.comInterRegular14">
-                              <span>Forgot password?</span>
-                            </span>
+                                            <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-form">
+                                                <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-container20">
+                                                    <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-background2">
+                                                        <input
+                                                                type="email"
+                                                                name="email"
+                                                                placeholder="Email address"
+                                                                class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-input1"
+                                                                required
+                                                        />
+                                                        <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-label1"></div>
+                                                        <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-background3">
+                                                            <span class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-text18 splice.comInterRegular14.08">
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-background-border">
+                                                        <input
+                                                                type="password"
+                                                                name="loginPw"
+                                                                placeholder="password"
+                                                                class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-input2"
+                                                                required
+                                                        />
+                                                        <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-label2"></div>
+                                                        <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-background5">
+                                                            <span class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-text20 splice.comInterRegular161">
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-container21">
+                                                    <span class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-text22 splice.comInterRegular14">
+                                                        <span>Forgot password?</span>
+                                                    </span>
+                                                </div>
+                                                <button type="submit" class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-button2">
+                                                    <span class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-text24 splice.comInterRegular16">
+                                                        <span>Continue</span>
+                                                    </span>
+                                                </button>
                                             </div>
-                                            <button class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-button2">
-                            <span class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-text24 splice.comInterRegular16">
-                              <span>Continue</span>
-                            </span>
-                                            </button>
-                                        </div>
-                                        <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-margin2">
-                                            <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-paragraph">
-                            <span class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-text26 splice.comInterRegular141">
-                              <span>Don't have an account?&nbsp;</span>
-                            </span>
-                                                <span class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-text28 splice.comInterRegular14">
-                              <span class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-text28 splice.comInterRegular14">
-    <a href="/usr/member/join">Sign up</a>
-</span>
-                            </span>
+                                            <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-margin2">
+                                                <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-paragraph">
+                                                    <span class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-text26 splice.comInterRegular141">
+                                                        <span>Don't have an account?&nbsp;</span>
+                                                    </span>
+                                                    <span class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-text28 splice.comInterRegular14">
+                                                        <a href="/usr/member/join">Sign up</a>
+                                                    </span>
+                                                </div>
                                             </div>
-                                        </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>

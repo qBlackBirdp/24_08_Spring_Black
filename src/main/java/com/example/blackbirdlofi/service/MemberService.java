@@ -34,6 +34,10 @@ public class MemberService {
         return ResultData.from("S-1", "회원가입이 완료되었습니다.", "생성된 회원 id", newMember.getId());
     }
 
+    public Member getMemberById(int id) {
+        return memberRepository.getMemberById(id);
+    }
+
 
 //    public Member getMemberById(int data1) {
 //    }

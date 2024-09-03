@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.*;
 public interface MemberRepository {
 
     @Select("""
-            SELECT email
+            SELECT *
             FROM users
             WHERE email = #{email}
             """)
@@ -21,4 +21,7 @@ public interface MemberRepository {
             """)
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void doJoin(Member newMember);
+
+    @Select("SELECT * FROM `users` WHERE id = #{id}")
+    Member getMemberById(int id);
 }

@@ -80,6 +80,8 @@ public class MemberController {
         rq = (Rq) req.getAttribute("rq");
 
         Member member = memberService.getMemberByEmail(email);
+        System.out.println("Fetched Member: " + member);
+        System.out.println("Fetched Password: " + member.getLoginPw());
 
         if (member == null) {
             return Ut.jsHistoryBack("F-3", Ut.f("%s는(은) 존재하지 않습니다.", email));
@@ -91,7 +93,7 @@ public class MemberController {
 
         rq.login(member);
 
-        if (!afterLoginUri.isEmpty()) {
+        if (afterLoginUri != null && !afterLoginUri.isEmpty()) {
             return Ut.jsReplace("S-1", Ut.f("%s님 환영합니다", member.getNickname()), afterLoginUri);
         }
 
