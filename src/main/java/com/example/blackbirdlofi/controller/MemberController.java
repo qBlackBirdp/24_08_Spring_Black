@@ -1,8 +1,8 @@
 package com.example.blackbirdlofi.controller;
 
+import com.example.blackbirdlofi.JPAentity.Member;
 import com.example.blackbirdlofi.service.MemberService;
 import com.example.blackbirdlofi.util.Ut;
-import com.example.blackbirdlofi.vo.Member;
 import com.example.blackbirdlofi.vo.ResultData;
 import com.example.blackbirdlofi.vo.Rq;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,7 +27,7 @@ public class MemberController {
 
     @RequestMapping("/usr/member/join")
     public String showJoin() {
-        return "/usr/member/join";
+        return "usr/member/join";
     }
 
     @RequestMapping("/usr/member/doJoin")
@@ -65,12 +65,12 @@ public class MemberController {
 
 //        Member member = memberService.getMemberById((int) doJoinRd.getData1());
 
-        return Ut.jsReplace(doJoinRd.getResultCode(), doJoinRd.getMsg(), "/usr/member/login");
+        return Ut.jsReplace(doJoinRd.getResultCode(), doJoinRd.getMsg(), "usr/member/login");
     }
 
     @RequestMapping("/usr/member/login")
     public String showLogin(HttpServletRequest req) {
-        return "/usr/member/login";
+        return "usr/member/login";
     }
 
     @RequestMapping("/usr/member/doLogin")

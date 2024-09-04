@@ -1,27 +1,16 @@
 package com.example.blackbirdlofi.repository;
 
-import com.example.blackbirdlofi.vo.Member;
-import org.apache.ibatis.annotations.*;
+import com.example.blackbirdlofi.JPAentity.Member;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-@Mapper
-public interface MemberRepository {
+import java.util.Optional;
 
-    @Select("""
-            SELECT *
-            FROM users
-            WHERE email = #{email}
-            """)
-    Member findByEmail(String email);
+@Repository
+public interface MemberRepository extends JpaRepository<Member, Integer> {
 
-    @Insert("""
-            INSERT INTO users 
-            (loginId, loginPw, u_name, nickname, email, regDate, updateDate) 
-            VALUES 
-            (#{loginId}, #{loginPw}, #{uName}, #{nickname}, #{email}, NOW(), NOW())
-            """)
-    @Options(useGeneratedKeys = true, keyProperty = "id")
-    void doJoin(Member newMember);
+    Optional<Member> findByEmail(String email); // 이메일로 회원 찾기
 
-    @Select("SELECT * FROM `users` WHERE id = #{id}")
-    Member getMemberById(int id);
+    Optional<Member> findByGoogleLoginId(String googleLoginId); // 구글 로그인 ID로 회원 찾기
+
 }

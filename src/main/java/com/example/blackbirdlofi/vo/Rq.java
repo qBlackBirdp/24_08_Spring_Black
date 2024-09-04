@@ -1,5 +1,6 @@
 package com.example.blackbirdlofi.vo;
 
+import com.example.blackbirdlofi.JPAentity.Member;
 import com.example.blackbirdlofi.service.MemberService;
 import com.example.blackbirdlofi.util.Ut;
 import jakarta.servlet.http.HttpServletRequest;

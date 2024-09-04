@@ -3,7 +3,7 @@ CREATE DATABASE `24_08_Spring_Black`;
 USE `24_08_Spring_Black`;
 
 CREATE TABLE `samples` (
-                           `id` int(10) NOT NULL,
+                           `id` int(10) NOT NULL AUTO_INCREMENT,
                            `u_id` int(10) NOT NULL,
                            `istm_id` int(10) NOT NULL,
                            `regDate` DATETIME NOT NULL,
@@ -41,7 +41,7 @@ CREATE TABLE `users` (
 
 
 CREATE TABLE `instruments` (
-                               `id` int(10) NOT NULL,
+                               `id` int(10) NOT NULL  AUTO_INCREMENT,
                                `istm_id` int(10) NOT NULL,
                                `istm_name` char(10) NOT NULL COMMENT 'Drums, Vocals, Synth, Keys, Guitar, Bass, FX, Strings',
                                `istm_type` char(10) NOT NULL COMMENT 'Drums, Vocals, Synth, Keys, Guitar, Bass, FX, Strings',
@@ -49,7 +49,7 @@ CREATE TABLE `instruments` (
 );
 
 CREATE TABLE `instruments_items` (
-                                     `id` int(10) NOT NULL,
+                                     `id` int(10) NOT NULL AUTO_INCREMENT,
                                      `items_name` char(10) NOT NULL,
                                      PRIMARY KEY (`id`)
 );
