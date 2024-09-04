@@ -104,7 +104,7 @@ public class MemberController {
     @ResponseBody
     public String doLogout(HttpServletRequest req, SessionStatus sessionStatus) {
 
-        // 로그아웃 처리
+        // 로그아웃 처리1
         rq.logout();
         sessionStatus.setComplete();
 
