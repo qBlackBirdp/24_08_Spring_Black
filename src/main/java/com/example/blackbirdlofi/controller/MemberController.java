@@ -36,12 +36,15 @@ public class MemberController {
                          String name, String nickname, String email) {
         rq = (Rq) req.getAttribute("rq");
 
-        if (Ut.isEmptyOrNull(email))
+        if (Ut.isEmptyOrNull(email)) {
+            System.out.println("이메일이 비었습니다.");
             return Ut.jsHistoryBack("F-6", Ut.f("이메일을 입력해주세요."));
+        }
 
-        if (Ut.isEmptyOrNull(loginPw))
+        if (Ut.isEmptyOrNull(loginPw)) {
+            System.out.println("비번이 비었습니다.");
             return Ut.jsHistoryBack("F-2", Ut.f("비밀번호를 입력해주세요."));
-
+        }
         if (Ut.isEmptyOrNull(name))
             return Ut.jsHistoryBack("F-3", Ut.f("이름을 입력해주세요."));
 

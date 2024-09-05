@@ -9,5 +9,4 @@ public class ursHomeController {
     public String showMain() {
         return "usr/home/main";
     }
-
 }

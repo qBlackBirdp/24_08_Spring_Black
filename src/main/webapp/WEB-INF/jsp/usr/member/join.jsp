@@ -128,6 +128,22 @@
                 }
             });
         });
+
+        // 폼 제출 시 호출될 함수
+        function handleSubmit(event) {
+            event.preventDefault(); // 폼이 자동으로 제출되지 않도록 방지
+
+            const form = event.target; // form 요소를 가져옴
+            const formData = new FormData(form); // form 데이터를 가져옴
+
+            // formData의 모든 값을 콘솔에 출력
+            formData.forEach((value, key) => {
+                console.log(key + ": " + value);
+            });
+
+            // 필요 시 form을 여기서 제출
+            form.submit();  // 이 부분에서 실제로 폼 제출할 수 있음
+        }
     </script>
 
     <link
@@ -174,7 +190,7 @@
                                         </div>
                                     </div>
                                     <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-container14">
-                                        <form action="../member/doJoin" method="post" id="form"
+                                        <form action="../member/doJoin" method="post" id="form" onsubmit="handleSubmit(event)"
                                               class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-container15">
                                             <button class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-form-button1">
                                                 <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-image1">

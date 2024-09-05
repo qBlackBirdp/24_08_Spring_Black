@@ -11,12 +11,15 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Optional;
 
 @Service
-public class MemberService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
+public class MemberService implements OAuth2UserService<OAuth2UserRequest, OAuth2User>  {
 
     @Autowired
     private MemberRepository memberRepository;
@@ -58,6 +61,7 @@ public class MemberService implements OAuth2UserService<OAuth2UserRequest, OAuth
     }
 
     // 회원가입 처리
+    @Transactional
     public ResultData doJoin(String loginId, String loginPw, String uName, String nickname, String email) {
         Member newMember = new Member();
         newMember.setLoginId(loginId);
@@ -65,6 +69,16 @@ public class MemberService implements OAuth2UserService<OAuth2UserRequest, OAuth
         newMember.setUName(uName);
         newMember.setNickname(nickname);
         newMember.setEmail(email);
+        newMember.setRegDate(LocalDateTime.now());
+        newMember.setUpdateDate(LocalDateTime.now());
+
+        System.out.println(newMember);
+        try {
+            memberRepository.save(newMember);
+        } catch (Exception e) {
+            System.err.println("Error saving member: " + e.getMessage());
+            e.printStackTrace();
+        }
 
         memberRepository.save(newMember);
         return ResultData.from("S-1", "회원가입이 완료되었습니다.", "생성된 회원 id", newMember.getId());
