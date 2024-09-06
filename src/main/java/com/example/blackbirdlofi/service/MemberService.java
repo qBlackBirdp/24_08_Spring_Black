@@ -4,6 +4,7 @@ import com.example.blackbirdlofi.JPAentity.Member;
 import com.example.blackbirdlofi.repository.MemberRepository;
 import com.example.blackbirdlofi.vo.ResultData;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
@@ -12,7 +13,6 @@ import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -23,6 +23,8 @@ public class MemberService implements OAuth2UserService<OAuth2UserRequest, OAuth
 
     @Autowired
     private MemberRepository memberRepository;
+
+
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -87,6 +89,8 @@ public class MemberService implements OAuth2UserService<OAuth2UserRequest, OAuth
     public Member getMemberById(int id) {
         return memberRepository.findById(id).orElse(null);
     }
+
+
 //    public Member getMemberById(int data1) {
 //    }
 }

@@ -7,16 +7,16 @@ import com.example.blackbirdlofi.vo.ResultData;
 import com.example.blackbirdlofi.vo.Rq;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 
 import java.util.UUID;
 
 @Controller
 @SessionAttributes("member")
+@RequestMapping("/usr/member/")
 public class MemberController {
 
     @Autowired
@@ -25,12 +25,15 @@ public class MemberController {
     @Autowired
     private Rq rq;
 
-    @RequestMapping("/usr/member/join")
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;  // BCryptPasswordEncoder 주입
+
+    @RequestMapping("join")
     public String showJoin() {
         return "usr/member/join";
     }
 
-    @RequestMapping("/usr/member/doJoin")
+    @RequestMapping("doJoin")
     @ResponseBody
     public String doJoin(HttpServletRequest req, String loginPw,
                          String name, String nickname, String email) {
@@ -60,6 +63,9 @@ public class MemberController {
         // 자동 생성된 loginId (user-랜덤UUID 형식)
         String loginId = "user-" + UUID.randomUUID().toString().substring(0, 8);
 
+        // 비밀번호 암호화
+        String encodedPassword = passwordEncoder.encode(loginPw);
+
         ResultData doJoinRd = memberService.doJoin(loginId, loginPw, name, nickname, email);
 
         if (doJoinRd.isFail()) {
@@ -71,39 +77,46 @@ public class MemberController {
         return Ut.jsReplace(doJoinRd.getResultCode(), doJoinRd.getMsg(), "usr/member/login");
     }
 
-    @RequestMapping("/usr/member/login")
+    @RequestMapping("login")
     public String showLogin(HttpServletRequest req) {
+        System.err.println("+++++++++++++로그인 실행.+++++++++");
         return "usr/member/login";
     }
 
-    @RequestMapping("/usr/member/doLogin")
-    @ResponseBody
-    public String doLogin(HttpServletRequest req, String email, String loginPw, String afterLoginUri) {
+//  로컬 로그인 메서드
+//    @RequestMapping("doLocalLogin")
+//    @ResponseBody
+//    public String doLocalLogin(HttpServletRequest req, @RequestParam("username") String email, @RequestParam("password") String loginPw, String afterLoginUri) {
+//        System.err.println("+++++++++++++DO 로컬 로그인 실행.+++++++++");
+//        rq = (Rq) req.getAttribute("rq");
+//
+//        Member member = memberService.getMemberByEmail(email);
+//        System.out.println("Fetched Member: " + member);
+//        System.out.println("Fetched Password: " + member.getLoginPw());
+//
+//        if (member == null) {
+//            return Ut.jsHistoryBack("F-3", Ut.f("%s는(은) 존재하지 않습니다.", email));
+//        }
+//
+//        if (!member.getLoginPw().equals(loginPw)) {
+//            return Ut.jsHistoryBack("F-4", Ut.f("비밀번호가 틀렸습니다."));
+//        }
+//
+//        rq.login(member);
+//
+//        if (afterLoginUri != null && !afterLoginUri.isEmpty()) {
+//            return Ut.jsReplace("S-1", Ut.f("%s님 환영합니다", member.getNickname()), afterLoginUri);
+//        }
+//
+//        return Ut.jsReplace("S-1", Ut.f("%s님 환영합니다", member.getNickname()), "/");
+//    }
 
-        rq = (Rq) req.getAttribute("rq");
-
-        Member member = memberService.getMemberByEmail(email);
-        System.out.println("Fetched Member: " + member);
-        System.out.println("Fetched Password: " + member.getLoginPw());
-
-        if (member == null) {
-            return Ut.jsHistoryBack("F-3", Ut.f("%s는(은) 존재하지 않습니다.", email));
-        }
-
-        if (!member.getLoginPw().equals(loginPw)) {
-            return Ut.jsHistoryBack("F-4", Ut.f("비밀번호가 틀렸습니다."));
-        }
-
-        rq.login(member);
-
-        if (afterLoginUri != null && !afterLoginUri.isEmpty()) {
-            return Ut.jsReplace("S-1", Ut.f("%s님 환영합니다", member.getNickname()), afterLoginUri);
-        }
-
-        return Ut.jsReplace("S-1", Ut.f("%s님 환영합니다", member.getNickname()), "/");
+    //구글 로그인 메서드
+    public String doGLogin(HttpServletRequest req, @RequestParam("username") String email, @RequestParam("password") String password) {
+        return "google";
     }
 
-    @RequestMapping("/usr/member/doLogout")
+    @RequestMapping("doLogout")
     @ResponseBody
     public String doLogout(HttpServletRequest req, SessionStatus sessionStatus) {
 

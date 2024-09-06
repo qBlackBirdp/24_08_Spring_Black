@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDateTime;
 
@@ -41,6 +42,10 @@ public class Member {
 
     @Column(name = "login_pw", nullable = false, length = 100)
     private String loginPw;
+    // 비밀번호 암호화 저장
+    public void setLoginPw(String loginPw) {
+        this.loginPw = new BCryptPasswordEncoder().encode(loginPw);
+    }
 
     @Column(name = "u_name", nullable = false, length = 20)
     private String uName;

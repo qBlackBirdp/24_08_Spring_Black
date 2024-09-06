@@ -34,7 +34,7 @@ public class Rq {
 		this.resp = resp;
 		this.session = req.getSession();
 
-		System.out.println("Rq 객체 생성됨");
+//		System.out.println("Rq 객체 생성됨");
 
 		if (session.getAttribute("loginedMemberId") != null) {
 			isLogined = true;
