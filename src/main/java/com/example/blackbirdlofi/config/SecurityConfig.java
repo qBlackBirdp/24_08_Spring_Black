@@ -13,8 +13,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.SecurityFilterChain;
+
+import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity(debug = true) // Spring Security를 활성화하고 디버그 모드를 설정
@@ -40,7 +41,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // CSRF 비활성화: CSRF 공격 방어를 비활성화
+                .cors(withDefaults())  // CORS 설정 추가
+                // / CSRF 비활성화: CSRF 공격 방어를 비활성화
                 .csrf(AbstractHttpConfigurer::disable)
 
                 // 포워딩 요청 허용
@@ -48,7 +50,7 @@ public class SecurityConfig {
                         authorizeRequests
                                 .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll() // FORWARD 요청은 인증 없이 허용
                                 // 로그인/회원가입 및 로그인 처리 관련 페이지를 인증 없이 접근 허용
-                                .requestMatchers("/usr/member/login", "/usr/member/join", "/usr/member/doLocalLogin", "/usr/member/doGLogin", "/usr/member/doJoin").permitAll()
+                                .requestMatchers("/usr/member/login", "/usr/member/join", "/usr/member/doLocalLogin", "/usr/member/doGLogin", "/usr/member/doJoin", "/firebaseUser").permitAll()
                                 // 홈 페이지 및 특정 리소스 접근 허용
                                 .requestMatchers("/", "/usr/home/**").permitAll()
                                 .requestMatchers("/js/**", "/css/**", "/img/**", "/fontawesome-free-6.5.1-web/**").permitAll()

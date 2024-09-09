@@ -113,6 +113,36 @@
                 });
             }
         });
+
+        // 로그인 인증 관련 JS 코드.
+        let isLoginInProgress = false;
+
+            function googleLogin() {
+                if (isLoginInProgress) {
+                    console.log("로그인이 이미 진행 중입니다.");
+                    return;
+                }
+
+                isLoginInProgress = true;
+
+                signInWithPopup(auth, provider)
+                    .then((result) => {
+                        // 로그인 성공
+                        console.log("로그인 성공: ", result.user);
+                    })
+                    .catch((error) => {
+                        if (error.code === 'auth/cancelled-popup-request') {
+                            console.log("이미 진행 중인 요청이 있습니다.");
+                        } else if (error.code === 'auth/popup-closed-by-user') {
+                            console.log("사용자가 팝업을 닫았습니다.");
+                        } else {
+                            console.log("로그인 에러: ", error.message);
+                        }
+                    })
+                    .finally(() => {
+                        isLoginInProgress = false;
+                    });
+        }
     </script>
     <link
             rel="stylesheet"
@@ -138,8 +168,12 @@
             href="/css/style.css"
     />
 </head>
+<script>
+    console.log(${pageContext.request.contextPath});
+</script>
 <body>
 <link rel="stylesheet" href="/css/index.css"/>
+<button onclick="socialLogout()">로그아웃</button>
 <div>
     <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-container10">
         <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-splicecombyhtmltodesign-fre-eversion3008202485712gmt">
@@ -249,7 +283,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <form action="${pageContext.request.contextPath}/usr/member/doLocalLogin"
+                                    <form action="/usr/member/doLocalLogin"
                                           method="post" id="loginForm">
                                         <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-form">
                                             <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-container20">

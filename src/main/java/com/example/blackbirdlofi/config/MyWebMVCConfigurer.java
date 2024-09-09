@@ -6,6 +6,7 @@ import com.example.blackbirdlofi.interceptor.NeedLoginInterceptor;
 import com.example.blackbirdlofi.interceptor.NeedLogoutInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -23,6 +24,16 @@ public class MyWebMVCConfigurer implements WebMvcConfigurer {
 	// NeedLogoutInterceptor 불러오기(연결)
 	@Autowired
 	NeedLogoutInterceptor needLogoutInterceptor;
+
+	// CORS 설정 추가
+	@Override
+	public void addCorsMappings(CorsRegistry registry) {
+		registry.addMapping("/**") // 모든 경로에 대해 CORS 허용
+				.allowedOrigins("http://localhost:8081") // 허용할 도메인
+				.allowedMethods("GET", "POST", "PUT", "DELETE") // 허용할 HTTP 메서드
+				.allowedHeaders("*") // 허용할 헤더
+				.allowCredentials(true); // 자격증명(쿠키, 인증 정보) 허용
+	}
 
 	// 인터셉터 등록(적용)
 	public void addInterceptors(InterceptorRegistry registry) {
