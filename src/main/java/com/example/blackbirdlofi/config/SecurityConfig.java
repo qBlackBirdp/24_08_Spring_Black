@@ -1,6 +1,7 @@
 package com.example.blackbirdlofi.config;
 
 import com.example.blackbirdlofi.security.CustomUserDetailsService;
+import com.example.blackbirdlofi.security.SocialLoginFilter;
 import jakarta.servlet.DispatcherType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -14,6 +15,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -23,6 +25,9 @@ public class SecurityConfig {
 
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
+
+    @Autowired
+    private SocialLoginFilter socialLoginFilter;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -57,6 +62,10 @@ public class SecurityConfig {
                                 // 나머지 요청은 인증 필요
                                 .anyRequest().authenticated()
                 )
+
+                // 필터 적용
+                .addFilterBefore(socialLoginFilter, UsernamePasswordAuthenticationFilter.class)
+
 
                 // 로컬 로그인 설정
                 .formLogin(form -> form

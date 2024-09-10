@@ -103,13 +103,19 @@
                 form.addEventListener('submit', function (event) {
                     event.preventDefault();
 
+                    if (isLoginInProgress) {
+                        console.log("로그인이 이미 진행 중입니다.");
+                        return;
+                    }
+                    isLoginInProgress = true;
+
                     const email = document.querySelector('input[name="email"]').value;
                     const password = document.querySelector('input[name="loginPw"]').value;
 
                     console.log("Email:", email);
                     console.log("Password:", password);
 
-                    this.submit(); // 콘솔 보려면 주석 처리 해.
+                    this.submit(); // 주석 해제 시 실제 폼 제출 처리
                 });
             }
         });
@@ -129,6 +135,7 @@
                     .then((result) => {
                         // 로그인 성공
                         console.log("로그인 성공: ", result.user);
+                        window.location.href = "/usr/home/main";
                     })
                     .catch((error) => {
                         if (error.code === 'auth/cancelled-popup-request') {
