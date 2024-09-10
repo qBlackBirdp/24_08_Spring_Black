@@ -1,6 +1,6 @@
 package com.example.blackbirdlofi.config;
 
-import com.example.blackbirdlofi.service.CustomUserDetailsService;
+import com.example.blackbirdlofi.security.CustomUserDetailsService;
 import jakarta.servlet.DispatcherType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;

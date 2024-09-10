@@ -1,4 +1,4 @@
-package com.example.blackbirdlofi.service;
+package com.example.blackbirdlofi.service.firebase;
 
 import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.Bucket;

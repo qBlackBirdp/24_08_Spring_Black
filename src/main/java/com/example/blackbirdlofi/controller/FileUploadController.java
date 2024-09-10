@@ -1,6 +1,6 @@
 package com.example.blackbirdlofi.controller;
 
-import com.example.blackbirdlofi.service.FirebaseStorageService;
+import com.example.blackbirdlofi.service.firebase.FirebaseStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

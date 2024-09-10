@@ -1,6 +1,6 @@
-package com.example.blackbirdlofi.controller;
+package com.example.blackbirdlofi.controller.firebase;
 
-import com.example.blackbirdlofi.service.FirebaseUserService;
+import com.example.blackbirdlofi.service.firebase.FirebaseUserService;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
 import org.springframework.beans.factory.annotation.Autowired;

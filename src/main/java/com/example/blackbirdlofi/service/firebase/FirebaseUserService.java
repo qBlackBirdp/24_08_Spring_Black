@@ -1,4 +1,4 @@
-package com.example.blackbirdlofi.service;
+package com.example.blackbirdlofi.service.firebase;
 
 import com.example.blackbirdlofi.JPAentity.Member;
 import com.example.blackbirdlofi.repository.MemberRepository;
@@ -6,7 +6,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

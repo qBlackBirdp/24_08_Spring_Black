@@ -1,4 +1,4 @@
-package com.example.blackbirdlofi.service;
+package com.example.blackbirdlofi.security;
 
 import com.example.blackbirdlofi.JPAentity.Member;
 import com.example.blackbirdlofi.repository.MemberRepository;
