@@ -28,7 +28,7 @@ CREATE TABLE `users` (
                          `reg_date` DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
                          `update_date` DATETIME(6) NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '계정 정보 마지막 업데이트 일시',
                          `login_id` varchar(50) NOT NULL COMMENT '자동 생성된 로그인 ID, user-123456 형식',
-                         `login_pw` varchar(100) NOT NULL,
+                         `login_pw` varchar(100) NULL,
                          `u_name` varchar(20) NOT NULL,
                          `nickname` varchar(20) NOT NULL,
                          `email` varchar(50) NOT NULL UNIQUE COMMENT '로그인에 사용될 이메일 주소',
@@ -40,6 +40,8 @@ CREATE TABLE `users` (
                          `google_login_id` VARCHAR(100) NULL DEFAULT NULL COMMENT 'Google 소셜 로그인 ID',
                          PRIMARY KEY (`id`)
 );
+# ALTER TABLE `users`
+#     MODIFY COLUMN `login_pw` varchar(100) NULL;
 
 -- instruments 테이블 생성
 CREATE TABLE `instruments` (

@@ -21,13 +21,12 @@ public class FirebaseController {
     @GetMapping("/firebaseUser")
     public String getFirebaseUserByEmail(@RequestParam String email) {
         try {
-            // Firebase에서 사용자가 있는지 확인하고, 없으면 Firebase와 로컬 DB에 사용자 생성
+            // Firebase에서 사용자가 있는지 확인하고, 로컬 DB에도 없는 경우 추가
             UserRecord userRecord = firebaseUserService.getUserByEmail(email);
 
-            // 만약 로컬 DB에 없고 Firebase에서도 없으면 새 사용자를 추가
             if (userRecord == null) {
-                String password = "randomGeneratedPassword";  // 비밀번호가 필요할 경우 생성 (소셜 로그인 시에는 필요 없을 수 있음)
-                firebaseUserService.createUserInFirebase(email, password);
+                // 소셜 로그인 시에는 비밀번호를 넘기지 않음
+                firebaseUserService.createUserInFirebase(email, null);  // 비밀번호 없이 Firebase 및 로컬 DB에 사용자 추가
                 return "새 사용자가 Firebase와 로컬 DB에 추가되었습니다.";
             }
 

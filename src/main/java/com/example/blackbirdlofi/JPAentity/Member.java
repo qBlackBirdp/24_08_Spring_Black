@@ -40,7 +40,7 @@ public class Member {
     @Column(name = "login_id", nullable = false, length = 50)
     private String loginId;
 
-    @Column(name = "login_pw", nullable = false, length = 100)
+    @Column(name = "login_pw", nullable = true, length = 100)
     private String loginPw;
     // 비밀번호 암호화 저장
     public void setLoginPw(String loginPw) {
