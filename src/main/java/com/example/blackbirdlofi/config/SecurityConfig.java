@@ -66,7 +66,6 @@ public class SecurityConfig {
                 // 필터 적용
                 .addFilterBefore(socialLoginFilter, UsernamePasswordAuthenticationFilter.class)
 
-
                 // 로컬 로그인 설정
                 .formLogin(form -> form
                         .loginPage("/usr/member/login")  // 로그인 페이지 경로 설정

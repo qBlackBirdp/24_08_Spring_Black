@@ -9,6 +9,9 @@ import jakarta.servlet.http.HttpSession;
 import lombok.Getter;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -18,31 +21,62 @@ import java.io.IOException;
 public class Rq {
 
 	@Getter
-	private boolean isLogined = false;  // 초기화를 명시적으로 수행
+	private boolean isLogined;
 	@Getter
-	private int loginedMemberId = 0;    // 초기화를 명시적으로 수행
+	private int loginedMemberId;
 	@Getter
 	private Member loginedMember;
 
 	private HttpServletRequest req;
 	private HttpServletResponse resp;
 
-	private HttpSession session;
-
 	public Rq(HttpServletRequest req, HttpServletResponse resp, MemberService memberService) {
 		this.req = req;
 		this.resp = resp;
-		this.session = req.getSession();
 
-//		System.out.println("Rq 객체 생성됨");
-
-		if (session.getAttribute("loginedMemberId") != null) {
+		// 로그인 상태 확인
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication != null && authentication.isAuthenticated() && !authentication.getPrincipal().equals("anonymousUser")) {
 			isLogined = true;
-			loginedMemberId = (int) session.getAttribute("loginedMemberId");
-			loginedMember = memberService.getMemberById(loginedMemberId);
+			loginedMember = memberService.getMemberByEmail(((UserDetails) authentication.getPrincipal()).getUsername());
+			loginedMemberId = loginedMember.getId();
+		} else {
+			isLogined = false;
+			loginedMemberId = 0;
+			loginedMember = null;
 		}
 
 		this.req.setAttribute("rq", this);
+	}
+
+	// 세션에 로그인 정보 저장
+	public void login(Member member) {
+		HttpSession session = req.getSession();
+		session.setAttribute("loginedMemberId", member.getId());
+		session.setAttribute("loginedMemberEmail", member.getEmail());
+		isLogined = true;
+		loginedMemberId = member.getId();
+		loginedMember = member;
+	}
+
+	// 로그아웃 처리
+	public void logout() {
+		HttpSession session = req.getSession(false);
+		if (session != null) {
+			session.invalidate();  // 세션 무효화
+		}
+		isLogined = false;
+		loginedMemberId = 0;
+		loginedMember = null;
+		SecurityContextHolder.clearContext();  // Spring Security의 SecurityContext 초기화
+	}
+
+	public void initBeforeActionInterceptor() {
+		System.err.println("initBeforeActionInterceptor 실행");
+
+		// 현재 요청 경로를 세션에 저장할 수 있도록 설정
+		String currentUri = getCurrentUri();
+		req.setAttribute("currentUri", currentUri);
 	}
 
 	public void printHistoryBack(String msg) throws IOException {
@@ -65,26 +99,6 @@ public class Rq {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public void logout() {
-		session.removeAttribute("loginedMemberId");
-		session.removeAttribute("loginedMember");
-		isLogined = false;
-		loginedMemberId = 0;
-		loginedMember = null;
-	}
-
-	public void login(Member member) {
-		session.setAttribute("loginedMemberId", member.getId());
-		session.setAttribute("loginedMember", member);
-		isLogined = true;
-		loginedMemberId = member.getId();
-		loginedMember = member;
-	}
-
-	public void initBeforeActionInterceptor() {
-		System.err.println("initBeforeActionInterceptor 실행");
 	}
 
 	public String historyBackOnView(String msg) {

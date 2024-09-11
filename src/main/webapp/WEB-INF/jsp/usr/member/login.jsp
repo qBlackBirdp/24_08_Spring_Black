@@ -12,89 +12,107 @@
     <!-- 번들된 JS 파일을 불러오기 -->
     <script src="http://localhost:8082/bundle.js"></script>
 
-    <style data-tag="reset-style-sheet">
-        html {
-            line-height: 1.15;
-        }
-
+    <style>
+        /* 공통 스타일 */
         body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9f9f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
             margin: 0;
         }
 
-        * {
-            box-sizing: border-box;
-            border-width: 0;
-            border-style: solid;
+        .container {
+            text-align: center;
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
-        p, li, ul, pre, div, h1, h2, h3, h4, h5, h6, figure, blockquote, figcaption {
-            margin: 0;
-            padding: 0;
+        h1 {
+            margin-bottom: 20px;
         }
 
-        button {
-            background-color: transparent;
-        }
-
-        button, input, optgroup, select, textarea {
-            font-family: inherit;
-            font-size: 100%;
-            line-height: 1.15;
-            margin: 0;
-        }
-
-        button, select {
-            text-transform: none;
-        }
-
-        button, [type="button"], [type="reset"], [type="submit"] {
-            -webkit-appearance: button;
-        }
-
-        button::-moz-focus-inner, [type="button"]::-moz-focus-inner, [type="reset"]::-moz-focus-inner, [type="submit"]::-moz-focus-inner {
-            border-style: none;
-            padding: 0;
-        }
-
-        button:focus, [type="button"]:focus, [type="reset"]:focus, [type="submit"]:focus {
-            outline: 1px dotted ButtonText;
-        }
-
-        a {
-            color: inherit;
-            text-decoration: inherit;
-        }
-
-        input {
-            padding: 2px 4px;
-        }
-
-        img {
-            display: block;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-    </style>
-    <style data-tag="default-style-sheet">
-        html {
-            font-family: Inter;
+        .button {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: none;
+            border-radius: 4px;
             font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        body {
-            font-weight: 400;
-            font-style: normal;
-            text-decoration: none;
-            text-transform: none;
-            letter-spacing: normal;
-            line-height: 1.15;
-            color: var(--dl-color-theme-neutral-dark);
-            background: var(--dl-color-theme-neutral-light);
-            fill: var(--dl-color-theme-neutral-dark);
+        .google-button {
+            background-color: #4285f4;
+            color: white;
         }
+
+        .spotify-button {
+            background-color: #1db954;
+            color: white;
+        }
+
+        .local-login-form input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .local-login-form button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .local-login-form button:hover {
+            background-color: #45a049;
+        }
+
+        /* 아이콘 스타일 */
+        .icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+        }
+
+        .link {
+            display: block;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #007BFF;
+            text-decoration: none;
+        }
+
+        .link:hover {
+            text-decoration: underline;
+        }
+
+        .logout-btn {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
     </style>
+
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const form = document.getElementById('loginForm');
@@ -103,262 +121,101 @@
                 form.addEventListener('submit', function (event) {
                     event.preventDefault();
 
-                    if (isLoginInProgress) {
-                        console.log("로그인이 이미 진행 중입니다.");
-                        return;
-                    }
-                    isLoginInProgress = true;
-
                     const email = document.querySelector('input[name="email"]').value;
                     const password = document.querySelector('input[name="loginPw"]').value;
 
-                    console.log("Email:", email);
-                    console.log("Password:", password);
+                    // Ajax 요청으로 로그인 처리
+                    fetch('/usr/member/doLocalLogin', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: new URLSearchParams({
+                            email: email,
+                            loginPw: password
+                        })
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.ResultCode.startsWith('S-')) {
+                                console.log("로그인 성공: ", data.data1);  // 로그인된 사용자 정보 콘솔 출력
+                                window.location.href = "/usr/home/main";  // 로그인 성공 후 메인 페이지로 리다이렉트
+                            } else {
+                                console.error("로그인 실패: ", data.msg);
+                                alert(data.msg);  // 실패 메시지 표시
+                            }
+                        })
+                        .catch(error => {
+                            console.error("로그인 에러: ", error);
+                        });
+                });
+            }
 
-                    this.submit(); // 주석 해제 시 실제 폼 제출 처리
+            // 로그아웃 버튼 클릭 이벤트
+            const logoutButton = document.getElementById('logoutBtn');
+            if (logoutButton) {
+                logoutButton.addEventListener('click', function () {
+                    fetch('/usr/member/doLogout', {
+                        method: 'POST',
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.ResultCode.startsWith('S-')) {
+                                console.log("로그아웃 성공");
+                                window.location.href = "/usr/member/login";  // 로그아웃 후 로그인 페이지로 리다이렉트
+                            } else {
+                                console.error("로그아웃 실패: ", data.msg);
+                            }
+                        })
+                        .catch(error => {
+                            console.error("로그아웃 에러: ", error);
+                        });
                 });
             }
         });
 
-        // 로그인 인증 관련 JS 코드.
-        let isLoginInProgress = false;
-
-            function googleLogin() {
-                if (isLoginInProgress) {
-                    console.log("로그인이 이미 진행 중입니다.");
-                    return;
-                }
-
-                isLoginInProgress = true;
-
-                signInWithPopup(auth, provider)
-                    .then((result) => {
-                        // 로그인 성공
-                        console.log("로그인 성공: ", result.user);
-                        window.location.href = "/usr/home/main";
-                    })
-                    .catch((error) => {
-                        if (error.code === 'auth/cancelled-popup-request') {
-                            console.log("이미 진행 중인 요청이 있습니다.");
-                        } else if (error.code === 'auth/popup-closed-by-user') {
-                            console.log("사용자가 팝업을 닫았습니다.");
-                        } else {
-                            console.log("로그인 에러: ", error.message);
-                        }
-                    })
-                    .finally(() => {
-                        isLoginInProgress = false;
-                    });
+        function googleLogin() {
+            signInWithPopup(auth, provider)
+                .then((result) => {
+                    console.log("로그인 성공: ", result.user);
+                    window.location.href = "/usr/home/main";
+                })
+                .catch((error) => {
+                    console.error("Google 로그인 에러: ", error);
+                });
         }
     </script>
-    <link
-            rel="stylesheet"
-            href="https://unpkg.com/animate.css@4.1.1/animate.css"
-    />
-    <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&amp;display=swap"
-            data-tag="font"
-    />
-    <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&amp;display=swap"
-            data-tag="font"
-    />
-    <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
-            data-tag="font"
-    />
-    <link
-            rel="stylesheet"
-            href="/css/style.css"
-    />
 </head>
-<script>
-    console.log(${pageContext.request.contextPath});
-</script>
 <body>
-<link rel="stylesheet" href="/css/index.css"/>
-<button onclick="socialLogout()">로그아웃</button>
-<div>
-    <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-container10">
-        <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-splicecombyhtmltodesign-fre-eversion3008202485712gmt">
-            <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-container11">
-                <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-container12">
-                    <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-main">
-                        <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-section">
-                            <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-background1">
-                                <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-container13">
-                                    <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-header">
-                                        <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-spliceauth03xpng"></div>
-                                        <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-heading1">
-                                            <span class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-text10 splice.comInterBold20">
-                                                <span>Log into your account</span>
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-container14">
+<div class="container">
+    <h1>Log into your account</h1>
 
-                                        <form class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-container15">
-                                            <form action="${pageContext.request.contextPath}/usr/member/doGLogin"
-                                                  method="post">
-                                                <button type="button"
-                                                        class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-form-button1"
-                                                        onclick="googleLogin()">
-                                                    <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-image1">
-                                                        <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-imagefill1">
-                                                            <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-image2">
-                                                                <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-clippathgroup1">
-                                                                    <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmtb1">
-                                                                        <img src="/external/vector7364-6soc.svg"
-                                                                             alt="Vector7364"
-                                                                             class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-vector10"/>
-                                                                    </div>
-                                                                    <img src="/external/vector7364-5lyd.svg"
-                                                                         alt="Vector7364"
-                                                                         class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-vector11"/>
-                                                                </div>
-                                                                <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-clippathgroup2">
-                                                                    <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmtb2">
-                                                                        <img src="/external/vector7364-hura.svg"
-                                                                             alt="Vector7364"
-                                                                             class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-vector12"/>
-                                                                    </div>
-                                                                    <img src="/external/vector7364-ich.svg"
-                                                                         alt="Vector7364"
-                                                                         class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-vector13"/>
-                                                                </div>
-                                                                <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-clippathgroup3">
-                                                                    <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmtb3">
-                                                                        <img src="/external/vector7365-qxjg.svg"
-                                                                             alt="Vector7365"
-                                                                             class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-vector14"/>
-                                                                    </div>
-                                                                    <img src="/external/vector7365-a2ga.svg"
-                                                                         alt="Vector7365"
-                                                                         class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-vector15"/>
-                                                                </div>
-                                                                <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-clippathgroup4">
-                                                                    <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmtb4">
-                                                                        <img src="/external/vector7365-jvdfg.svg"
-                                                                             alt="Vector7365"
-                                                                             class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-vector16"/>
-                                                                    </div>
-                                                                    <img src="/external/vector7365-7x8q.svg"
-                                                                         alt="Vector7365"
-                                                                         class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-vector17"/>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+    <!-- Google 로그인 버튼 -->
+    <button class="button google-button" onclick="googleLogin()">
+        <img src="/path/to/your/google-logo.png" alt="Google Logo" class="icon"/>
+        Continue with Google
+    </button>
 
-                                                    <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-container16">
-                                                        <span class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-text12 splice.comInterRegular16">
-                                                            <span>Continue with Google</span>
-                                                        </span>
-                                                    </div>
-                                                </button>
-                                            </form>
-                                        </form>
-                                        <%--                                        <form action="${pageContext.request.contextPath}/usr/member/doSLogin" method="post">--%>
-                                        <button type="button"
-                                                class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-form-button2">
-                                            <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-image3">
-                                                <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-imagefill2">
-                                                    <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-image4">
-                                                        <img src="/images/spofitylogo7377-9doi-200h.png"
-                                                             alt="spofityLogo7377"
-                                                             class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-spofity-logo"/>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-container17">
-                                                        <span class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-text14 splice.comInterRegular16">
-                                                            <span>Continue with Spotify</span>
-                                                        </span>
-                                            </div>
-                                        </button>
-                                        <%--                                        </form>--%>
-                                    </div>
-                                    <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-margin1">
-                                        <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-container18">
-                                            <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-container19">
-                                                        <span class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-text16 splice.comInterMedium12upper">
-                                                            <span>Or</span>
-                                                        </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <form action="/usr/member/doLocalLogin"
-                                          method="post" id="loginForm">
-                                        <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-form">
-                                            <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-container20">
-                                                <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-background2">
-                                                    <input
-                                                            type="email"
-                                                            name="email"
-                                                            placeholder="Email address"
-                                                            class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-input1"
-                                                            required
-                                                    />
-                                                    <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-label1"></div>
-                                                    <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-background3">
-                                                            <span class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-text18 splice.comInterRegular14.08">
-                                                            </span>
-                                                    </div>
-                                                </div>
-                                                <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-background-border">
-                                                    <input
-                                                            type="password"
-                                                            name="loginPw"
-                                                            placeholder="password"
-                                                            class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-input2"
-                                                            required
-                                                    />
-                                                    <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-label2"></div>
-                                                    <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-background5">
-                                                            <span class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-text20 splice.comInterRegular161">
-                                                            </span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-container21">
-                                                    <span class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-text22 splice.comInterRegular14">
-                                                        <span>Forgot password?</span>
-                                                    </span>
-                                            </div>
-                                            <button type="submit"
-                                                    class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-button2">
-                                                    <span class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-text24 splice.comInterRegular16">
-                                                        <span>Continue</span>
-                                                    </span>
-                                            </button>
-                                        </div>
+    <!-- Spotify 로그인 버튼 -->
+    <button class="button spotify-button">
+        <img src="/images/spofitylogo7377-9doi-200h.png" alt="Spotify Logo" class="icon"/>
+        Continue with Spotify
+    </button>
 
-                                    </form>
-                                        <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-margin2">
-                                            <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-paragraph">
-                                                    <span class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-text26 splice.comInterRegular141">
-                                                        <span>Don't have an account?&nbsp;</span>
-                                                    </span>
-                                                <span class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-text28 splice.comInterRegular14">
-                                                        <a href="/usr/member/join">Sign up</a>
-                                                    </span>
-                                            </div>
-                                        </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-margin3">
-                <div class="splicecombyhtmltodesign-fre-eversion3008202485712gmt-container22"></div>
-            </div>
-        </div>
-    </div>
-</div>
+    <!-- 구분선 -->
+    <div>or</div>
+
+    <!-- 로컬 로그인 폼 -->
+    <form class="local-login-form" id="loginForm">
+        <input type="email" name="email" placeholder="Email address" required/>
+        <input type="password" name="loginPw" placeholder="Password" required/>
+        <button type="submit">Continue</button>
+    </form>
+
+    <a href="/usr/member/join" class="link">Don't have an account? Sign up</a>
+
+    <!-- 로그아웃 버튼 -->
+    <button id="logoutBtn" class="logout-btn">로그아웃</button>
 </div>
 </body>
 </html>

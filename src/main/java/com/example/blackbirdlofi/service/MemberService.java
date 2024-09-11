@@ -24,7 +24,8 @@ public class MemberService implements OAuth2UserService<OAuth2UserRequest, OAuth
     @Autowired
     private MemberRepository memberRepository;
 
-
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;  // BCryptPasswordEncoder 주입
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -65,24 +66,26 @@ public class MemberService implements OAuth2UserService<OAuth2UserRequest, OAuth
     // 회원가입 처리
     @Transactional
     public ResultData doJoin(String loginId, String loginPw, String uName, String nickname, String email) {
+        // 비밀번호 암호화 처리
+        String encodedPassword = passwordEncoder.encode(loginPw);
+
         Member newMember = new Member();
         newMember.setLoginId(loginId);
-        newMember.setLoginPw(loginPw);
+        newMember.setLoginPw(encodedPassword);  // 암호화된 비밀번호 저장
         newMember.setUName(uName);
         newMember.setNickname(nickname);
         newMember.setEmail(email);
         newMember.setRegDate(LocalDateTime.now());
         newMember.setUpdateDate(LocalDateTime.now());
 
-        System.out.println(newMember);
         try {
             memberRepository.save(newMember);
         } catch (Exception e) {
             System.err.println("Error saving member: " + e.getMessage());
             e.printStackTrace();
+            return ResultData.from("F-1", "회원가입 실패");
         }
 
-        memberRepository.save(newMember);
         return ResultData.from("S-1", "회원가입이 완료되었습니다.", "생성된 회원 id", newMember.getId());
     }
 
@@ -90,7 +93,19 @@ public class MemberService implements OAuth2UserService<OAuth2UserRequest, OAuth
         return memberRepository.findById(id).orElse(null);
     }
 
+    public ResultData<Member> doLogin(String email, String loginPw) {
+        // 이메일로 사용자를 찾음
+        Member member = getMemberByEmail(email);
+        if (member == null) {
+            return ResultData.from("F-1", "해당 이메일로 가입된 사용자가 없습니다.");
+        }
 
-//    public Member getMemberById(int data1) {
-//    }
+        // 비밀번호가 일치하는지 확인
+        if (!passwordEncoder.matches(loginPw, member.getLoginPw())) {
+            return ResultData.from("F-2", "비밀번호가 일치하지 않습니다.");
+        }
+
+        // 로그인 성공 시
+        return ResultData.from("S-1", "로그인 성공", "member", member);
+    }
 }
