@@ -1,4 +1,4 @@
-package com.example.blackbirdlofi.security;
+package com.example.blackbirdlofi.filter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

@@ -1,13 +1,17 @@
 package com.example.blackbirdlofi.config;
 
+import com.example.blackbirdlofi.filter.CustomLoginFilter;
+import com.example.blackbirdlofi.filter.CustomLogoutFilter;
 import com.example.blackbirdlofi.security.CustomUserDetailsService;
-import com.example.blackbirdlofi.security.SocialLoginFilter;
+import com.example.blackbirdlofi.filter.SocialLoginFilter;
 import jakarta.servlet.DispatcherType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -28,6 +32,12 @@ public class SecurityConfig {
 
     @Autowired
     private SocialLoginFilter socialLoginFilter;
+
+    @Autowired
+    private CustomLoginFilter customLoginFilter;
+
+    @Autowired
+    private CustomLogoutFilter customLogoutFilter;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -63,19 +73,35 @@ public class SecurityConfig {
                                 .anyRequest().authenticated()
                 )
 
+                // 커스텀 필터 적용
+                .addFilterBefore(socialLoginFilter, UsernamePasswordAuthenticationFilter.class)  // 소셜 로그인 필터 추가
+                .addFilterBefore(customLoginFilter, UsernamePasswordAuthenticationFilter.class)  // 커스텀 로그인 필터 추가
+                .addFilterBefore(customLogoutFilter, UsernamePasswordAuthenticationFilter.class)  // 커스텀 로그아웃 필터 추가
+
+                .formLogin(AbstractHttpConfigurer::disable)  // 로컬 로그인 직접 처리
+
                 // 필터 적용
                 .addFilterBefore(socialLoginFilter, UsernamePasswordAuthenticationFilter.class)
 
-                // 로컬 로그인 설정
-                .formLogin(form -> form
-                        .loginPage("/usr/member/login")  // 로그인 페이지 경로 설정
-                        .loginProcessingUrl("/usr/member/doLocalLogin")  // 로그인 처리 URL 경로
-                        .usernameParameter("email")  // 폼에서 사용자명을 "email"로 사용
-                        .passwordParameter("loginPw")  // 폼에서 비밀번호를 "loginPw"로 사용
-                        .defaultSuccessUrl("/usr/home/main", true)  // 로그인 성공 시 이동할 경로
-                        .failureUrl("/usr/member/login?error=true")  // 로그인 실패 시 이동할 경로
-                        .permitAll()  // 이 설정들 모두 인증 없이 접근 허용
-                )
+                // 로컬 로그인 설정 (비활성화 함.)
+//                .formLogin(form -> form
+//                        .loginPage("/usr/member/login")  // 로그인 페이지 경로 설정
+//                        .loginProcessingUrl("/usr/member/doLocalLogin")  // 로그인 처리 URL 경로
+//                        .usernameParameter("email")  // 폼에서 사용자명을 "email"로 사용
+//                        .passwordParameter("loginPw")  // 폼에서 비밀번호를 "loginPw"로 사용
+//                        .successHandler((request, response, authentication) -> {
+//                            // 로그인 성공 시 JSON 응답
+//                            response.setContentType("application/json;charset=UTF-8");
+//                            response.getWriter().write("{\"ResultCode\": \"S-1\", \"msg\": \"로그인 성공\"}");
+//                        })
+//                        .failureHandler((request, response, exception) -> {
+//                            // 로그인 실패 시 JSON 응답
+//                            response.setContentType("application/json;charset=UTF-8");
+//                            response.getWriter().write("{\"ResultCode\": \"F-1\", \"msg\": \"로그인 실패\"}");
+//                        })
+//                        .permitAll()  // 이 설정들 모두 인증 없이 접근 허용
+//                )
+
 
                 // OAuth2 로그인 설정 (구글 로그인)
                 .oauth2Login(oauth2 -> oauth2
@@ -107,5 +133,11 @@ public class SecurityConfig {
                 .requestMatchers(
                         PathRequest.toStaticResources().atCommonLocations()  // 정적 리소스에 대한 보안 검사를 무시
                 );
+    }
+
+    // AuthenticationManager 빈 설정
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 }

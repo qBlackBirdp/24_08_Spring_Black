@@ -5,9 +5,13 @@ import com.example.blackbirdlofi.service.MemberService;
 import com.example.blackbirdlofi.util.Ut;
 import com.example.blackbirdlofi.vo.ResultData;
 import com.example.blackbirdlofi.vo.Rq;
+import jakarta.servlet.http.Cookie;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +34,10 @@ public class MemberController {
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     @RequestMapping("join")
     public String showJoin() {
@@ -82,20 +90,38 @@ public class MemberController {
     @PostMapping("/doLocalLogin")
     @ResponseBody
     public ResultData<Member> doLocalLogin(@RequestParam String email, @RequestParam String loginPw) {
-        // 로그인 시도
-        ResultData<Member> loginResult = memberService.doLogin(email, loginPw);
+        try {
+            System.err.println("=============로그인 컨트롤러 작동.============");
 
-        // 로그인 성공 시 처리
-        if (loginResult.isSuccess()) {
-            // 세션에 로그인 정보를 저장
-            rq.login(loginResult.getData1());
+            // 인증 객체 생성
+            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(email, loginPw);
 
-            // 로그인된 사용자 정보를 함께 반환 (JSON)
-            return ResultData.from("S-1", "로그인 성공", "member", loginResult.getData1());
+            // 인증 요청 및 처리
+            Authentication authentication = authenticationManager.authenticate(token);
+
+            // 인증 성공 시, SecurityContext에 저장
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            // 로그인된 사용자 정보 가져오기
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            System.err.println("=============유저 정보 가져오기 성공.============");
+            System.err.println("유저 이름: " + userDetails.getUsername());
+
+            Member loginedMember = memberService.getMemberByEmail(userDetails.getUsername());
+
+            // 세션에 로그인 정보 저장
+            rq.login(loginedMember);
+            System.err.println("=============세션 저장 성공.============");
+
+            return ResultData.from("S-1", "로그인 성공", "member", loginedMember);
+
+        } catch (Exception e) {
+            // 상세한 오류 메시지 및 스택 트레이스 출력
+            e.printStackTrace();
+            System.err.println("로그인 실패: " + e.getMessage());
+
+            return ResultData.from("F-1", "로그인 실패: " + e.getMessage());
         }
-
-        // 로그인 실패 시 실패 결과 반환
-        return loginResult;
     }
 
     // 로그인 페이지 렌더링
@@ -113,9 +139,11 @@ public class MemberController {
     @RequestMapping("/doLogout")
     @ResponseBody
     public String doLogout(HttpServletRequest req, SessionStatus sessionStatus) {
-        rq.logout();  // Rq에서 세션과 Spring Security 로그아웃 처리
-        sessionStatus.setComplete();
 
-        return Ut.jsReplace("S-1", Ut.f("로그아웃 성공"), "/");
+        System.out.println("================== 로그아웃 컨트롤러 실행 ========================");
+        // Rq 클래스를 사용해 로그아웃 처리
+        rq.logout();  // 세션 무효화 및 쿠키 삭제
+
+        return Ut.jsReplace("S-1", "로그아웃 성공", "/usr/member/login");
     }
 }

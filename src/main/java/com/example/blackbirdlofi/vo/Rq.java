@@ -1,17 +1,16 @@
 package com.example.blackbirdlofi.vo;
 
 import com.example.blackbirdlofi.JPAentity.Member;
-import com.example.blackbirdlofi.service.MemberService;
 import com.example.blackbirdlofi.util.Ut;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -20,63 +19,38 @@ import java.io.IOException;
 @Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class Rq {
 
-	@Getter
-	private boolean isLogined;
-	@Getter
-	private int loginedMemberId;
-	@Getter
-	private Member loginedMember;
+	private final HttpServletRequest req;
+	private final HttpServletResponse resp;
 
-	private HttpServletRequest req;
-	private HttpServletResponse resp;
-
-	public Rq(HttpServletRequest req, HttpServletResponse resp, MemberService memberService) {
+	// 생성자에 @Autowired 적용하여 Request와 Response를 주입받음
+	@Autowired
+	public Rq(HttpServletRequest req, HttpServletResponse resp) {
 		this.req = req;
 		this.resp = resp;
-
-		// 로그인 상태 확인
+	}
+	// 로그인 여부 확인: SecurityContextHolder 사용
+	public boolean isLogined() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if (authentication != null && authentication.isAuthenticated() && !authentication.getPrincipal().equals("anonymousUser")) {
-			isLogined = true;
-			loginedMember = memberService.getMemberByEmail(((UserDetails) authentication.getPrincipal()).getUsername());
-			loginedMemberId = loginedMember.getId();
-		} else {
-			isLogined = false;
-			loginedMemberId = 0;
-			loginedMember = null;
-		}
-
-		this.req.setAttribute("rq", this);
+		return authentication != null && authentication.isAuthenticated() && !"anonymousUser".equals(authentication.getPrincipal());
 	}
 
-	// 세션에 로그인 정보 저장
+	// 로그인 처리 시 호출 (세션에 사용자 정보 저장할 때 사용)
 	public void login(Member member) {
-		HttpSession session = req.getSession();
-		session.setAttribute("loginedMemberId", member.getId());
-		session.setAttribute("loginedMemberEmail", member.getEmail());
-		isLogined = true;
-		loginedMemberId = member.getId();
-		loginedMember = member;
+		// 필요시 세션에 사용자 정보 추가
+		req.getSession().setAttribute("loginedMember", member);
 	}
 
 	// 로그아웃 처리
 	public void logout() {
-		HttpSession session = req.getSession(false);
-		if (session != null) {
-			session.invalidate();  // 세션 무효화
-		}
-		isLogined = false;
-		loginedMemberId = 0;
-		loginedMember = null;
-		SecurityContextHolder.clearContext();  // Spring Security의 SecurityContext 초기화
-	}
+		// Spring Security 로그아웃 처리
+		SecurityContextHolder.clearContext();  // SecurityContext 초기화
+		req.getSession().invalidate();  // 세션 무효화
 
-	public void initBeforeActionInterceptor() {
-		System.err.println("initBeforeActionInterceptor 실행");
-
-		// 현재 요청 경로를 세션에 저장할 수 있도록 설정
-		String currentUri = getCurrentUri();
-		req.setAttribute("currentUri", currentUri);
+		// JSESSIONID 쿠키 삭제
+		Cookie cookie = new Cookie("JSESSIONID", null);
+		cookie.setPath("/");  // 쿠키 경로 설정 (전역 경로로 설정)
+		cookie.setMaxAge(0);  // 쿠키 즉시 삭제
+		resp.addCookie(cookie);  // 응답에 쿠키 추가
 	}
 
 	public void printHistoryBack(String msg) throws IOException {
@@ -101,17 +75,11 @@ public class Rq {
 		}
 	}
 
-	public String historyBackOnView(String msg) {
-		req.setAttribute("msg", msg);
-		req.setAttribute("historyBack", true);
-		return "usr/common/js";
-	}
-
 	public String getCurrentUri() {
 		String currentUri = req.getRequestURI();
 		String queryString = req.getQueryString();
 
-		if (currentUri != null && queryString != null) {
+		if (queryString != null && !queryString.isEmpty()) {
 			currentUri += "?" + queryString;
 		}
 

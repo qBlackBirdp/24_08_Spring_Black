@@ -12,103 +12,159 @@
     <!-- 번들된 JS 파일을 불러오기 -->
     <script src="http://localhost:8082/bundle.js"></script>
 
+    <!-- CSS 추가 -->
     <style>
-        /* 공통 스타일 */
+        /* 전체 레이아웃 설정 */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f9f9f9;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
+            background-color: #f5f5f5;
             margin: 0;
         }
 
-        .container {
-            text-align: center;
-            background-color: #fff;
-            padding: 40px;
-            border-radius: 8px;
+        .login-container {
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 12px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 400px;
         }
 
-        h1 {
+        .login-container img {
+            margin-bottom: 15px;
+        }
+
+        /* 메인 로고 크기 조정 */
+        .login-container img[alt="Main Logo"] {
+            width: 250px;
+            height: auto;
             margin-bottom: 20px;
         }
 
-        .button {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 15px;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .login-container h2 {
+            margin-bottom: 20px;
+            font-size: 1.75rem;
+            font-weight: bold;
         }
 
-        .google-button {
-            background-color: #4285f4;
+        /* 로그인 버튼 공통 스타일 */
+        .login-button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        /* 구글 및 스포티파이 버튼 색상 */
+        .google-btn {
+            background-color: #357ae8;
             color: white;
         }
 
-        .spotify-button {
+        .spotify-btn {
             background-color: #1db954;
             color: white;
         }
 
-        .local-login-form input {
+        /* 버튼 안의 이미지 스타일 */
+        .login-button img {
+            width: 20px;
+            height: 20px; /* 아이콘의 크기를 고정 */
+            margin-right: 10px; /* 이미지와 텍스트 사이 간격 */
+            display: inline-block;
+            vertical-align: middle; /* 이미지와 텍스트를 수평으로 맞춤 */
+            position: relative;
+            top: 7px; /* 텍스트와 이미지를 더 잘 맞추기 위해 미세 조정 */
+        }
+
+        /* 로컬 로그인 폼 스타일 */
+        .local-login input {
             width: 100%;
             padding: 12px;
             margin-bottom: 15px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 1rem;
         }
 
-        .local-login-form button {
-            width: 100%;
-            padding: 12px;
-            background-color: #4CAF50;
+        .local-login button {
+            background-color: #1db954;
             color: white;
             border: none;
-            border-radius: 4px;
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
             cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
         }
 
-        .local-login-form button:hover {
-            background-color: #45a049;
-        }
-
-        /* 아이콘 스타일 */
-        .icon {
-            width: 20px;
-            height: 20px;
-            margin-right: 8px;
-        }
-
-        .link {
-            display: block;
-            margin-top: 10px;
-            font-size: 14px;
-            color: #007BFF;
+        .login-container a {
+            color: #007bff;
             text-decoration: none;
+            font-size: 0.9rem;
         }
 
-        .link:hover {
+        .login-container a:hover {
             text-decoration: underline;
         }
 
         .logout-btn {
             margin-top: 20px;
-            padding: 10px;
             background-color: #e74c3c;
             color: white;
             border: none;
-            border-radius: 4px;
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
             cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        hr {
+            margin: 20px 0;
+            border: none;
+            border-top: 1px solid #ddd;
+        }
+
+        .divider-text {
+            position: relative;
+            font-size: 0.9rem;
+            color: #aaa;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .divider-text::before,
+        .divider-text::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 45%;
+            height: 1px;
+            background: #ddd;
+        }
+
+        .divider-text::before {
+            left: 0;
+        }
+
+        .divider-text::after {
+            right: 0;
         }
 
     </style>
@@ -135,14 +191,30 @@
                             loginPw: password
                         })
                     })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.ResultCode.startsWith('S-')) {
-                                console.log("로그인 성공: ", data.data1);  // 로그인된 사용자 정보 콘솔 출력
-                                window.location.href = "/usr/home/main";  // 로그인 성공 후 메인 페이지로 리다이렉트
+                        .then(response => {
+                            // JSON인지 HTML인지 확인하여 처리
+                            const contentType = response.headers.get('content-type');
+                            if (contentType && contentType.indexOf('application/json') !== -1) {
+                                return response.json();  // JSON 응답 처리
                             } else {
-                                console.error("로그인 실패: ", data.msg);
-                                alert(data.msg);  // 실패 메시지 표시
+                                return response.text();  // HTML 응답 처리 (에러 페이지일 수 있음)
+                            }
+                        })
+                        .then(data => {
+                            // 데이터 타입이 object일 경우 JSON 응답이므로 처리
+                            if (typeof data === 'object' && data.resultCode && data.resultCode.startsWith('S-')) {
+                                // 로그인 성공 시 처리
+                                console.log("로그인 성공: ", data.data1);  // 로그인된 사용자 정보 콘솔 출력
+                                    window.location.href = "/usr/home/main";  // 5초 후 리디렉션
+                                // window.location.href = "/usr/home/main";  // 로그인 성공 후 리다이렉트
+                            } else if (typeof data === 'object' && data.resultCode) {
+                                // 로그인 실패 시 처리 (JSON 응답인 경우)
+                                console.error("로그인 실패: ", data.msg);  // 실패 메시지 출력
+                                alert(data.msg);  // 에러 메시지 표시
+                            } else {
+                                // HTML 응답인 경우 (예: 에러 페이지)
+                                console.error("예상치 못한 응답 형식: ", data);  // HTML 에러 메시지 출력
+                                alert("Unexpected response: " + data);  // HTML 응답을 표시
                             }
                         })
                         .catch(error => {
@@ -151,7 +223,7 @@
                 });
             }
 
-            // 로그아웃 버튼 클릭 이벤트
+        // 로그아웃 버튼 클릭 이벤트
             const logoutButton = document.getElementById('logoutBtn');
             if (logoutButton) {
                 logoutButton.addEventListener('click', function () {
@@ -187,35 +259,41 @@
     </script>
 </head>
 <body>
-<div class="container">
-    <h1>Log into your account</h1>
 
-    <!-- Google 로그인 버튼 -->
-    <button class="button google-button" onclick="googleLogin()">
-        <img src="/path/to/your/google-logo.png" alt="Google Logo" class="icon"/>
+<div class="login-container">
+    <!-- 메인 로고 -->
+    <img src="/images/Main_logo.png" alt="Main Logo" width="250" height="auto">
+
+    <h2>Log into your account</h2>
+
+    <!-- 구글 로그인 버튼 -->
+    <button class="login-button google-btn" onclick="googleLogin()">
+        <img src="/images/google_logo.png" alt="Google Logo">
         Continue with Google
     </button>
 
-    <!-- Spotify 로그인 버튼 -->
-    <button class="button spotify-button">
-        <img src="/images/spofitylogo7377-9doi-200h.png" alt="Spotify Logo" class="icon"/>
+    <!-- 스포티파이 로그인 버튼 -->
+    <button class="login-button spotify-btn">
+        <img src="/images/spofitylogo7377-9doi-200h.png" alt="Spotify Logo">
         Continue with Spotify
     </button>
 
-    <!-- 구분선 -->
-    <div>or</div>
+    <!-- 구분선 및 or 텍스트 -->
+    <div class="divider-text">or</div>
 
     <!-- 로컬 로그인 폼 -->
-    <form class="local-login-form" id="loginForm">
-        <input type="email" name="email" placeholder="Email address" required/>
-        <input type="password" name="loginPw" placeholder="Password" required/>
+    <form class="local-login" id="loginForm">
+        <input type="email" name="email" placeholder="Email address" required>
+        <input type="password" name="loginPw" placeholder="Password" required>
         <button type="submit">Continue</button>
     </form>
 
-    <a href="/usr/member/join" class="link">Don't have an account? Sign up</a>
+    <div>
+        <p>Don't have an account? <a href="/usr/member/join">Sign up</a></p>
+    </div>
 
     <!-- 로그아웃 버튼 -->
-    <button id="logoutBtn" class="logout-btn">로그아웃</button>
+    <button class="logout-btn" onclick="socialLogout()">로그아웃</button>
 </div>
 </body>
 </html>
