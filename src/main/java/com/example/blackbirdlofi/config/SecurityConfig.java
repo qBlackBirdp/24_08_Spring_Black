@@ -20,6 +20,8 @@ import org.springframework.security.config.annotation.web.configurers.HeadersCon
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.context.SecurityContextHolderFilter;
+import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -57,7 +59,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .cors(withDefaults())  // CORS 설정 추가
-                // / CSRF 비활성화: CSRF 공격 방어를 비활성화
+                // CSRF 비활성화: CSRF 공격 방어를 비활성화
                 .csrf(AbstractHttpConfigurer::disable)
 
                 // 포워딩 요청 허용
@@ -73,35 +75,19 @@ public class SecurityConfig {
                                 .anyRequest().authenticated()
                 )
 
-                // 커스텀 필터 적용
+                // 익명 사용자 처리 비활성화
+                .anonymous(AbstractHttpConfigurer::disable)
+
+                // SecurityContextPersistenceFilter 추가
+                .addFilterBefore(new SecurityContextPersistenceFilter(), SecurityContextHolderFilter.class)  // SecurityContext를 세션과 동기화
+
+                // 커스텀 필터 적용 (필터 중복 제거)
                 .addFilterBefore(socialLoginFilter, UsernamePasswordAuthenticationFilter.class)  // 소셜 로그인 필터 추가
                 .addFilterBefore(customLoginFilter, UsernamePasswordAuthenticationFilter.class)  // 커스텀 로그인 필터 추가
                 .addFilterBefore(customLogoutFilter, UsernamePasswordAuthenticationFilter.class)  // 커스텀 로그아웃 필터 추가
 
-                .formLogin(AbstractHttpConfigurer::disable)  // 로컬 로그인 직접 처리
-
-                // 필터 적용
-                .addFilterBefore(socialLoginFilter, UsernamePasswordAuthenticationFilter.class)
-
-                // 로컬 로그인 설정 (비활성화 함.)
-//                .formLogin(form -> form
-//                        .loginPage("/usr/member/login")  // 로그인 페이지 경로 설정
-//                        .loginProcessingUrl("/usr/member/doLocalLogin")  // 로그인 처리 URL 경로
-//                        .usernameParameter("email")  // 폼에서 사용자명을 "email"로 사용
-//                        .passwordParameter("loginPw")  // 폼에서 비밀번호를 "loginPw"로 사용
-//                        .successHandler((request, response, authentication) -> {
-//                            // 로그인 성공 시 JSON 응답
-//                            response.setContentType("application/json;charset=UTF-8");
-//                            response.getWriter().write("{\"ResultCode\": \"S-1\", \"msg\": \"로그인 성공\"}");
-//                        })
-//                        .failureHandler((request, response, exception) -> {
-//                            // 로그인 실패 시 JSON 응답
-//                            response.setContentType("application/json;charset=UTF-8");
-//                            response.getWriter().write("{\"ResultCode\": \"F-1\", \"msg\": \"로그인 실패\"}");
-//                        })
-//                        .permitAll()  // 이 설정들 모두 인증 없이 접근 허용
-//                )
-
+                // 로컬 로그인 직접 처리
+                .formLogin(AbstractHttpConfigurer::disable)
 
                 // OAuth2 로그인 설정 (구글 로그인)
                 .oauth2Login(oauth2 -> oauth2

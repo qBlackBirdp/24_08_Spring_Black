@@ -93,6 +93,19 @@ public class MemberController {
         try {
             System.err.println("=============로그인 컨트롤러 작동.============");
 
+            // 이메일로 사용자를 조회
+            Member member = memberService.getMemberByEmail(email);
+
+            // 사용자가 존재하지 않는 경우 처리
+            if (member == null) {
+                return ResultData.from("F-1", "해당 이메일로 등록된 사용자가 없습니다.");
+            }
+
+            // 비밀번호가 일치하지 않는 경우 처리 (비밀번호는 암호화된 상태로 비교)
+            if (!passwordEncoder.matches(loginPw, member.getLoginPw())) {
+                return ResultData.from("F-2", "비밀번호가 일치하지 않습니다.");
+            }
+
             // 인증 객체 생성
             UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(email, loginPw);
 
@@ -101,26 +114,20 @@ public class MemberController {
 
             // 인증 성공 시, SecurityContext에 저장
             SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            // 로그인된 사용자 정보 가져오기
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            System.err.println("=============유저 정보 가져오기 성공.============");
-            System.err.println("유저 이름: " + userDetails.getUsername());
-
-            Member loginedMember = memberService.getMemberByEmail(userDetails.getUsername());
+            System.err.println("=============SecurityContext에 인증 정보 저장 완료============");
 
             // 세션에 로그인 정보 저장
-            rq.login(loginedMember);
-            System.err.println("=============세션 저장 성공.============");
+            rq.login(member);  // 이 부분에서 member가 null이면 예외 발생
+            System.err.println("=============세션 저장 성공=============");
 
-            return ResultData.from("S-1", "로그인 성공", "member", loginedMember);
+            return ResultData.from("S-1", "로그인 성공", "member", member);
 
         } catch (Exception e) {
             // 상세한 오류 메시지 및 스택 트레이스 출력
             e.printStackTrace();
             System.err.println("로그인 실패: " + e.getMessage());
 
-            return ResultData.from("F-1", "로그인 실패: " + e.getMessage());
+            return ResultData.from("F-3", "로그인 실패: " + e.getMessage());
         }
     }
 

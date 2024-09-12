@@ -6,8 +6,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -32,10 +30,8 @@ public class CustomLoginFilter extends OncePerRequestFilter {
             return;
         }
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (authentication == null || !authentication.isAuthenticated() || "anonymousUser".equals(authentication.getPrincipal())) {
-            // Rq 클래스를 사용해 경고 메시지 출력
+        // rq 객체를 사용해 로그인 여부를 확인
+        if (!rq.isLogined()) {
             rq.printHistoryBack("로그인 후 이용해주세요.");
             return;
         }

@@ -20,9 +20,12 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         System.err.println("로그인 시도 (시큐리티 커스텀)");
+
+        // 이메일로 사용자를 조회
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        return new User(member.getEmail(), member.getLoginPw(), new ArrayList<>());  // Spring Security에서 인증할 User 객체 반환
+        // CustomUserDetails 객체로 반환하여 사용자 정보 관리
+        return new CustomUserDetails(member);
     }
 }

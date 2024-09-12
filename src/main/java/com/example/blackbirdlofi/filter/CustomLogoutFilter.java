@@ -6,8 +6,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -32,12 +30,8 @@ public class CustomLogoutFilter extends OncePerRequestFilter {
             return;
         }
 
-        // SecurityContext에서 현재 인증된 사용자 정보를 가져옴
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        // 로그인이 되어 있다면
-        if (authentication != null && authentication.isAuthenticated() && !"anonymousUser".equals(authentication.getPrincipal())) {
-            // Rq 객체를 생성하고 메시지 출력
+        // rq 객체를 사용해 로그인 여부를 확인
+        if (rq.isLogined()) {
             rq.printHistoryBack("로그아웃 후 이용해주세요.");
             return;  // 요청 중단
         }
