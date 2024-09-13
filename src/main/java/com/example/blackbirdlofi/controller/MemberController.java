@@ -21,11 +21,7 @@ public class MemberController {
     private MemberService memberService;
 
     @Autowired
-    private Rq rq;
-
-    @Autowired
     private BCryptPasswordEncoder passwordEncoder;
-
 
     @Autowired
     private AuthenticationManager authenticationManager;

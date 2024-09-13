@@ -13,7 +13,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -25,12 +28,6 @@ public class SecurityConfig {
 
     @Autowired
     private SocialLoginFilter socialLoginFilter;
-
-    @Autowired
-    private CustomLoginFilter customLoginFilter;
-
-    @Autowired
-    private CustomLogoutFilter customLogoutFilter;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -72,6 +69,14 @@ public class SecurityConfig {
                         .loginPage("/usr/member/login")  // 소셜 로그인 페이지 경로
                         .defaultSuccessUrl("/usr/home/main", true)  // 로그인 성공 시 이동할 경로
                         .failureUrl("/usr/member/login?error=true")  // 로그인 실패 시 이동할 경로
+                        .successHandler((request, response, authentication) -> {
+                            System.err.println("로그인 성공: " + authentication.getName());
+
+                            // 사용자 정보 확인
+                            checkAuthentication();  // 로그인 성공 후 사용자 정보 확인
+
+                            response.sendRedirect("/usr/home/main");  // 메인 페이지로 리다이렉트
+                        })
                 )
 
                 // H2 콘솔의 프레임 옵션 설정
@@ -103,5 +108,15 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
+    }
+
+    public void checkAuthentication() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
+            System.out.println("사용자 정보: " + oAuth2User.getAttributes());
+        } else {
+            System.out.println("인증되지 않은 사용자입니다.");
+        }
     }
 }

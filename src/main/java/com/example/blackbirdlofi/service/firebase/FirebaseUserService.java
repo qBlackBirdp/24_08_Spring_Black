@@ -1,9 +1,11 @@
 package com.example.blackbirdlofi.service.firebase;
 
 import com.example.blackbirdlofi.JPAentity.Member;
+import com.example.blackbirdlofi.jwt.JwtTokenProvider;
 import com.example.blackbirdlofi.repository.MemberRepository;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseToken;
 import com.google.firebase.auth.UserRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,55 +19,78 @@ public class FirebaseUserService {
     @Autowired
     private MemberRepository memberRepository;
 
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
+
     // 이메일로 Firebase에서 사용자 정보 가져오기
     public UserRecord getUserByEmail(String email) throws FirebaseAuthException {
-        // 먼저 로컬 DB에서 사용자를 확인
+        System.err.println("이메일로 Firebase 사용자 조회: " + email);
+
         Optional<Member> localUser = memberRepository.findByEmail(email);
         if (localUser.isPresent()) {
             System.out.println("로컬 DB에서 사용자 발견: " + localUser.get().getEmail());
-            return null;  // 로컬 DB에서 사용자를 찾으면 Firebase 조회를 건너뜀
+            return null;
         }
 
-        // 로컬 DB에 없으면 Firebase에서 사용자 정보 조회
         UserRecord userRecord = FirebaseAuth.getInstance().getUserByEmail(email);
         System.err.println("Firebase에서 사용자 발견: " + userRecord.getEmail());
 
-        // Firebase에서 가져온 사용자 정보를 로컬 DB에 저장 (uName 추가)
-        String displayName = userRecord.getDisplayName() != null ? userRecord.getDisplayName() : "사용자";  // displayName이 없을 경우 기본값 설정
-        String nickname = email.split("@")[0];  // 이메일의 '@' 이전 부분을 닉네임으로 사용
-        createUserInLocalDB(userRecord.getEmail(), displayName, nickname, userRecord.getUid());  // Google 로그인 ID를 UID로 저장
+        String displayName = userRecord.getDisplayName() != null ? userRecord.getDisplayName() : "사용자";
+        String nickname = email.split("@")[0];
+        createUserInLocalDB(userRecord.getEmail(), displayName, nickname, userRecord.getUid());
         return userRecord;
     }
 
-    // Firebase에서 가져온 사용자 정보를 로컬 DB에 저장하는 메소드 (loginPw 제거)
-    private void createUserInLocalDB(String email, String uName, String nickname, String googleLoginId) {
-        Member newUser = new Member();
-        newUser.setEmail(email);
-        newUser.setUName(uName);  // Firebase에서 가져온 displayName을 uName으로 저장
-        newUser.setNickname(nickname);  // 이메일 앞부분을 닉네임으로 저장
-        newUser.setGoogleLoginId(googleLoginId);
-
-        // 랜덤으로 생성된 loginId
-        String loginId = "user-" + UUID.randomUUID().toString().substring(0, 8);  // UUID의 앞부분을 잘라서 사용
-        newUser.setLoginId(loginId);
-
-        // 비밀번호가 필요하지 않으므로 설정하지 않음
-
-        memberRepository.save(newUser);  // 로컬 DB에 사용자 저장
-        System.out.println("로컬 DB에 사용자 저장 완료: " + email);
-    }
-
-    // Firebase에 새 사용자 추가 (로컬 DB에도 추가)
+    // Firebase에 새 사용자 추가
     public void createUserInFirebase(String email, String loginPw) throws FirebaseAuthException {
         UserRecord.CreateRequest request = new UserRecord.CreateRequest()
                 .setEmail(email)
-                .setPassword(loginPw != null ? loginPw : "defaultPassword");  // Firebase에서는 비밀번호가 필요
+                .setPassword(loginPw != null ? loginPw : "defaultPassword");
 
         UserRecord userRecord = FirebaseAuth.getInstance().createUser(request);
         System.out.println("Firebase에 새 사용자 생성 완료: " + userRecord.getUid());
 
-        // 로컬 DB에도 사용자 정보 추가
-        String nickname = email.split("@")[0];  // 이메일의 '@' 이전 부분을 닉네임으로 사용
+        String nickname = email.split("@")[0];
         createUserInLocalDB(email, userRecord.getDisplayName(), nickname, userRecord.getUid());
+    }
+
+    // 구글 로그인 처리 및 JWT 발급
+    public String googleLogin(String idToken) throws FirebaseAuthException {
+        System.err.println("구글 로그인 처리 시작 - Firebase ID 토큰 검증: " + idToken);
+        FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(idToken);
+        String uid = decodedToken.getUid();
+        String email = decodedToken.getEmail();
+        System.out.println("Firebase에서 검증된 사용자 UID: " + uid);
+        System.out.println("Firebase에서 검증된 사용자 이메일: " + email);
+
+        Optional<Member> localUser = memberRepository.findByGoogleLoginId(uid);
+        if (localUser.isPresent()) {
+            System.err.println("로컬 DB에 사용자가 존재합니다. UID: " + uid);
+            String token = jwtTokenProvider.createToken(email);
+            System.err.println("기존 사용자에 대한 JWT 토큰 발급 완료: " + token);
+            return token;  // JWT 발급
+        } else {
+            System.err.println("로컬 DB에 사용자가 존재하지 않아 새로 등록합니다.");
+            createUserInFirebase(email, null);
+            String token = jwtTokenProvider.createToken(email);
+            System.err.println("새 사용자에 대한 JWT 토큰 발급 완료: " + token);
+            return token;  // 회원가입 후 JWT 발급
+        }
+    }
+
+    // firebase에 존재하지만 local DB에는 존재하지 않을 시 사용될 메서드
+    private void createUserInLocalDB(String email, String uName, String nickname, String googleLoginId) {
+        System.err.println("로컬 DB에 사용자 생성: email=" + email + ", 닉네임=" + nickname);
+        Member newUser = new Member();
+        newUser.setEmail(email);
+        newUser.setUName(uName != null ? uName : "사용자");
+        newUser.setNickname(nickname);
+        newUser.setGoogleLoginId(googleLoginId);
+
+        String loginId = "user-" + UUID.randomUUID().toString().substring(0, 8);
+        newUser.setLoginId(loginId);
+
+        memberRepository.save(newUser);
+        System.err.println("로컬 DB에 사용자 저장 완료: " + email);
     }
 }

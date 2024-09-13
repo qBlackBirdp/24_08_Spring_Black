@@ -168,95 +168,78 @@
         }
 
     </style>
-
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            const form = document.getElementById('loginForm');
-
-            if (form) {
-                form.addEventListener('submit', function (event) {
-                    event.preventDefault();
-
-                    const email = document.querySelector('input[name="email"]').value;
-                    const password = document.querySelector('input[name="loginPw"]').value;
-
-                    // Ajax 요청으로 로그인 처리
-                    fetch('/usr/member/doLocalLogin', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                        },
-                        body: new URLSearchParams({
-                            email: email,
-                            loginPw: password
-                        })
-                    })
-                        .then(response => {
-                            // JSON인지 HTML인지 확인하여 처리
-                            const contentType = response.headers.get('content-type');
-                            if (contentType && contentType.indexOf('application/json') !== -1) {
-                                return response.json();  // JSON 응답 처리
-                            } else {
-                                return response.text();  // HTML 응답 처리 (에러 페이지일 수 있음)
-                            }
-                        })
-                        .then(data => {
-                            // 데이터 타입이 object일 경우 JSON 응답이므로 처리
-                            if (typeof data === 'object' && data.resultCode && data.resultCode.startsWith('S-')) {
-                                // 로그인 성공 시 처리
-                                console.log("로그인 성공: ", data.data1);  // 로그인된 사용자 정보 콘솔 출력
-                                    window.location.href = "/usr/home/main";  // 5초 후 리디렉션
-                                // window.location.href = "/usr/home/main";  // 로그인 성공 후 리다이렉트
-                            } else if (typeof data === 'object' && data.resultCode) {
-                                // 로그인 실패 시 처리 (JSON 응답인 경우)
-                                console.error("로그인 실패: ", data.msg);  // 실패 메시지 출력
-                                alert(data.msg);  // 에러 메시지 표시
-                            } else {
-                                // HTML 응답인 경우 (예: 에러 페이지)
-                                console.error("예상치 못한 응답 형식: ", data);  // HTML 에러 메시지 출력
-                                alert("Unexpected response: " + data);  // HTML 응답을 표시
-                            }
-                        })
-                        .catch(error => {
-                            console.error("로그인 에러: ", error);
-                        });
-                });
-            }
-
-        // 로그아웃 버튼 클릭 이벤트
+            // 로그아웃 버튼 클릭 이벤트
             const logoutButton = document.getElementById('logoutBtn');
             if (logoutButton) {
                 logoutButton.addEventListener('click', function () {
+                    console.log('로그아웃 버튼 클릭됨');
                     fetch('/usr/member/doLogout', {
                         method: 'POST',
                     })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.ResultCode.startsWith('S-')) {
+                        .then(response => {
+                            if (response.ok) {
                                 console.log("로그아웃 성공");
                                 window.location.href = "/usr/member/login";  // 로그아웃 후 로그인 페이지로 리다이렉트
                             } else {
-                                console.error("로그아웃 실패: ", data.msg);
+                                console.error("로그아웃 실패: ", response.status);
                             }
                         })
                         .catch(error => {
-                            console.error("로그아웃 에러: ", error);
+                            console.error("로그아웃 에러 발생: ", error);
                         });
                 });
             }
         });
 
+        // 구글 로그인 처리 함수
         function googleLogin() {
+            console.log('Google 로그인 시도');
             signInWithPopup(auth, provider)
-                .then((result) => {
+                .then(async (result) => {
                     console.log("로그인 성공: ", result.user);
-                    window.location.href = "/usr/home/main";
+
+                    // Firebase에서 idToken 가져오기
+                    const idToken = await result.user.getIdToken();
+                    console.log('Firebase ID Token: ', idToken);
+
+                    // 서버로 idToken 전송
+                    console.log('서버로 ID Token 전송 중...');
+                    fetch('/firebaseUser', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'  // JSON 형식으로 전송
+                        },
+                        body: JSON.stringify({ idToken })  // 서버로 idToken 전송
+                    })
+                        .then(response => {
+                            console.log('서버 응답 상태: ', response.status);
+                            if (response.ok) {
+                                return response.json();  // JSON 응답으로 변환
+                            } else {
+                                throw new Error(`서버 응답 실패 - 상태 코드: ${response.status}`);
+                            }
+                        })
+                        .then(data => {
+                            console.log('서버 응답 데이터: ', data);
+                            if (data.resultCode && data.resultCode.startsWith('S-')) {
+                                console.log("서버에서 JWT 발급 성공");
+                                window.location.href = "/usr/home/main";  // JWT 발급 후 리다이렉트
+                            } else {
+                                console.error("로그인 실패: ", data.message);
+                            }
+                        })
+                        .catch(error => {
+                            console.error("서버로 idToken 전송 중 에러 발생: ", error);
+                        });
                 })
                 .catch((error) => {
-                    console.error("Google 로그인 에러: ", error);
+                    console.error("Google 로그인 에러 발생: ", error);
                 });
         }
     </script>
+
 </head>
 <body>
 
@@ -278,18 +261,10 @@
         Continue with Spotify
     </button>
 
-    <!-- 구분선 및 or 텍스트 -->
-    <div class="divider-text">or</div>
-
-    <!-- 로컬 로그인 폼 -->
-    <form class="local-login" id="loginForm">
-        <input type="email" name="email" placeholder="Email address" required>
-        <input type="password" name="loginPw" placeholder="Password" required>
-        <button type="submit">Continue</button>
-    </form>
-
     <div>
-        <p>Don't have an account? <a href="/usr/member/join">Sign up</a></p>
+        <span>Don't have an account?
+        <p> If you don't have account, try google, or spotify login!! </p>
+        </span>
     </div>
 
     <!-- 로그아웃 버튼 -->
