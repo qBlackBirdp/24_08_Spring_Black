@@ -4,7 +4,6 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -22,17 +21,10 @@ public class SocialLoginFilter extends OncePerRequestFilter {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
+        // 소셜 로그인 세션이 유지 중일 때 로그인 페이지 접근을 막음
         if (auth != null && auth instanceof OAuth2AuthenticationToken) {
-            // 소셜 로그인 상태라면 로컬 로그인을 막기 위한 로직을 추가
-            if (request.getRequestURI().contains("/usr/member/doLocalLogin")) {
-                response.sendRedirect("/usr/home/main");
-                return;
-            }
-        }
-
-        // 로컬 로그인 상태에서 소셜 로그인을 막기 위한 로직
-        if (auth != null && auth instanceof UsernamePasswordAuthenticationToken) {
-            if (request.getRequestURI().contains("/oauth2/authorization/google")) {
+            // 사용자가 소셜 로그인 상태에서 로그인 페이지에 접근하려고 하면 메인 페이지로 리디렉션
+            if (request.getRequestURI().contains("/usr/member/login")) {
                 response.sendRedirect("/usr/home/main");
                 return;
             }
@@ -41,4 +33,3 @@ public class SocialLoginFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 }
-

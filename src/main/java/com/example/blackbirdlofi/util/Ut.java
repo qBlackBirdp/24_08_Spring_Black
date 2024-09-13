@@ -1,7 +1,10 @@
 package com.example.blackbirdlofi.util;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.lang.reflect.Array;
 import java.util.Map;
+import jakarta.servlet.http.HttpServletResponse;
 
 public class Ut {
 
@@ -74,4 +77,16 @@ public class Ut {
         return String.format(format, args);
     }
 
+    // 새로 추가된 메서드: HttpServletResponse로 메시지를 출력하는 메서드
+    public static void printHistoryBack(HttpServletResponse resp, String msg) throws IOException {
+        resp.setContentType("text/html; charset=UTF-8");
+        PrintWriter out = resp.getWriter();
+        out.println("<script>");
+        if (!Ut.isEmpty(msg)) {
+            out.println("alert('" + msg + "');");
+        }
+        out.println("history.back();");
+        out.println("</script>");
+        out.flush();
+    }
 }
