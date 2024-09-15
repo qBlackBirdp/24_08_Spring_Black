@@ -84,13 +84,14 @@ ALTER TABLE `samples` ADD CONSTRAINT `FK_instruments_TO_samples_1` FOREIGN KEY (
 ALTER TABLE `instruments` ADD CONSTRAINT `FK_instruments_items_TO_instruments_1` FOREIGN KEY (`istm_id`) REFERENCES `instruments_items` (`id`);
 ALTER TABLE `coin` ADD CONSTRAINT `FK_users_TO_coin_1` FOREIGN KEY (`u_id`) REFERENCES `users` (`id`);
 ALTER TABLE `coin_transactions` ADD CONSTRAINT `FK_users_TO_coin_transactions_1` FOREIGN KEY (`id2`) REFERENCES `users` (`id`);
+ALTER TABLE users ADD CONSTRAINT unique_google_login_id UNIQUE (google_login_id);
 
 -- 테스트 데이터 삽입
-INSERT INTO users (reg_date, update_date, login_id, login_pw, u_name, nickname, email, del_status, sell_level, auth_level, spotify_login_id, google_login_id)
-VALUES
-    (NOW(), NOW(), 'user-1a2b3c4d', 'password1', 'John Doe', 'johnny', 'john@example.com', 0, 3, 3, NULL, null),
-    (NOW(), NOW(), 'user-5f6g7h8i', 'password2', 'Jane Smith', 'janey', 'jane@example.com', 0, 3, 3, NULL, null),
-    (NOW(), NOW(), 'user-9j0k1l2m', 'password3', 'Jim Brown', 'jimbo', 'jim@example.com', 0, 3, 3, NULL, null);
+# INSERT INTO users (reg_date, update_date, login_id, login_pw, u_name, nickname, email, del_status, sell_level, auth_level, spotify_login_id, google_login_id)
+# VALUES
+#     (NOW(), NOW(), 'user-1a2b3c4d', 'password1', 'John Doe', 'johnny', 'john@example.com', 0, 3, 3, NULL, null),
+#     (NOW(), NOW(), 'user-5f6g7h8i', 'password2', 'Jane Smith', 'janey', 'jane@example.com', 0, 3, 3, NULL, null),
+#     (NOW(), NOW(), 'user-9j0k1l2m', 'password3', 'Jim Brown', 'jimbo', 'jim@example.com', 0, 3, 3, NULL, null);
 
 -- 데이터 조회
 SELECT * FROM users;

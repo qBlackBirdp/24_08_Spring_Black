@@ -64,6 +64,12 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     // 로컬 DB에 사용자 생성
     private void createUserInLocalDB(String email, String uName, String nickname, String googleLoginId) {
+        // 기존 사용자 중복 확인
+        if (memberRepository.findByGoogleLoginId(googleLoginId).isPresent()) {
+            System.out.println("이미 존재하는 사용자: " + googleLoginId);
+            return; // 중복된 사용자면 추가로 생성하지 않고 그냥 리턴
+        }
+
         System.out.println("로컬 DB에 사용자 생성 요청: email=" + email + ", 닉네임=" + nickname);
         Member newUser = new Member();
         newUser.setEmail(email);
