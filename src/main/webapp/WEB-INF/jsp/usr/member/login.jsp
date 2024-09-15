@@ -169,76 +169,31 @@
 
     </style>
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            // 로그아웃 버튼 클릭 이벤트
-            const logoutButton = document.getElementById('logoutBtn');
-            if (logoutButton) {
-                logoutButton.addEventListener('click', function () {
-                    console.log('로그아웃 버튼 클릭됨');
-                    fetch('/usr/member/doLogout', {
-                        method: 'POST',
-                    })
-                        .then(response => {
-                            if (response.ok) {
-                                console.log("로그아웃 성공");
-                                window.location.href = "/usr/member/login";  // 로그아웃 후 로그인 페이지로 리다이렉트
-                            } else {
-                                console.error("로그아웃 실패: ", response.status);
-                            }
-                        })
-                        .catch(error => {
-                            console.error("로그아웃 에러 발생: ", error);
-                        });
-                });
-            }
-        });
-
-        // 구글 로그인 처리 함수
+        // 구글 OAuth2 로그인 처리 (Spring Security를 통해 처리)
         function googleLogin() {
-            console.log('Google 로그인 시도');
-            signInWithPopup(auth, provider)
-                .then(async (result) => {
-                    console.log("로그인 성공: ", result.user);
+            // Spring Security의 OAuth2 로그인 엔드포인트로 리다이렉트
+            window.location.href = "/oauth2/authorization/google";
+        }
 
-                    // Firebase에서 idToken 가져오기
-                    const idToken = await result.user.getIdToken();
-                    console.log('Firebase ID Token: ', idToken);
-
-                    // 서버로 idToken 전송
-                    console.log('서버로 ID Token 전송 중...');
-                    fetch('/firebaseUser', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'  // JSON 형식으로 전송
-                        },
-                        body: JSON.stringify({ idToken })  // 서버로 idToken 전송
-                    })
-                        .then(response => {
-                            console.log('서버 응답 상태: ', response.status);
-                            if (response.ok) {
-                                return response.json();  // JSON 응답으로 변환
-                            } else {
-                                throw new Error(`서버 응답 실패 - 상태 코드: ${response.status}`);
-                            }
-                        })
-                        .then(data => {
-                            console.log('서버 응답 데이터: ', data);
-                            if (data.resultCode && data.resultCode.startsWith('S-')) {
-                                console.log("서버에서 JWT 발급 성공");
-                                window.location.href = "/usr/home/main";  // JWT 발급 후 리다이렉트
-                            } else {
-                                console.error("로그인 실패: ", data.message);
-                            }
-                        })
-                        .catch(error => {
-                            console.error("서버로 idToken 전송 중 에러 발생: ", error);
-                        });
+        // 로그아웃 함수는 유지
+        function socialLogout() {
+            fetch('/usr/member/doLogout', {
+                method: 'POST',
+            })
+                .then(response => {
+                    if (response.ok) {
+                        console.log("로그아웃 성공");
+                        window.location.href = "/usr/member/login";
+                    } else {
+                        console.error("로그아웃 실패: ", response.status);
+                    }
                 })
-                .catch((error) => {
-                    console.error("Google 로그인 에러 발생: ", error);
+                .catch(error => {
+                    console.error("로그아웃 에러 발생: ", error);
                 });
         }
     </script>
+
 
 </head>
 <body>
