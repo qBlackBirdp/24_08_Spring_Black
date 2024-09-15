@@ -1,6 +1,7 @@
 package com.example.blackbirdlofi.config;
 
 import com.example.blackbirdlofi.filter.JwtAuthenticationFilter;
+import com.example.blackbirdlofi.security.CustomOAuth2UserService;
 import com.example.blackbirdlofi.security.OAuth2AuthenticationSuccessHandler;
 import jakarta.servlet.DispatcherType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,9 @@ public class SecurityConfig {
 
     @Autowired
     private OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+
+    @Autowired
+    private CustomOAuth2UserService customOAuth2UserService;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -68,6 +72,9 @@ public class SecurityConfig {
                         .successHandler(oAuth2AuthenticationSuccessHandler)  // 로그인 성공 후 핸들러
                         .defaultSuccessUrl("/usr/home/main", true)  // 성공 후 리다이렉트 경로
                         .failureUrl("/usr/member/login?error=true")  // 실패 시 경로
+                        .userInfoEndpoint(userInfoEndpoint ->  // 사용자 정보 서비스 설정
+                                userInfoEndpoint.userService(customOAuth2UserService)  // CustomOAuth2UserService 등록
+                        )
                 )
 
                 // JWT 필터를 추가하여 토큰 인증만 처리
