@@ -11,22 +11,14 @@ public class ursHomeController {
 
 
     @RequestMapping("/usr/home/main")
-    public String showMain(@AuthenticationPrincipal OAuth2User oAuth2User, Model model ) {
-        System.err.println("========================메인 페이지 접근============================");
+    public String showMain(@AuthenticationPrincipal OAuth2User oAuth2User, Model model) {
+        System.err.println("===================메인페이지 접근=====================");
         if (oAuth2User != null) {
-            // 사용자의 이름과 이메일을 가져옴 (필요에 따라 수정)
-            String userName = oAuth2User.getAttribute("name");
-            String userEmail = oAuth2User.getAttribute("email");
-
-            // 사용자 정보를 모델에 추가하여 JSP에서 출력 가능
-            model.addAttribute("userName", userName);
-            model.addAttribute("userEmail", userEmail);
-
-            // 콘솔로그
-            System.err.println("로그인된 사용자 이름: " + userName);
-            System.err.println("로그인된 사용자 이메일: " + userEmail);
+            model.addAttribute("userName", oAuth2User.getAttribute("name"));  // 로그인한 사용자 정보 전달
+            model.addAttribute("userEmail", oAuth2User.getAttribute("email")); // 사용자 이메일
+            System.err.println("userEmail : " + oAuth2User.getAttribute("email"));
         } else {
-            System.err.println("로그인된 사용자가 없습니다.");
+            model.addAttribute("userName", "Guest");
         }
 
         return "usr/home/main";

@@ -169,30 +169,13 @@
 
     </style>
     <script>
-        // 구글 OAuth2 로그인 처리 (Spring Security를 통해 처리)
-        function googleLogin() {
-            // Spring Security의 OAuth2 로그인 엔드포인트로 리다이렉트
-            window.location.href = "/oauth2/authorization/google";
-        }
-
-        // 로그아웃 함수는 유지
-        function socialLogout() {
-            fetch('/usr/member/doLogout', {
-                method: 'POST',
-            })
-                .then(response => {
-                    if (response.ok) {
-                        console.log("로그아웃 성공");
-                        window.location.href = "/usr/member/login";
-                    } else {
-                        console.error("로그아웃 실패: ", response.status);
-                    }
-                })
-                .catch(error => {
-                    console.error("로그아웃 에러 발생: ", error);
-                });
-        }
+        // // 구글 OAuth2 로그인 처리 (Spring Security를 통해 처리)
+        // function googleLogin() {
+        //     // Spring Security의 OAuth2 로그인 엔드포인트로 리다이렉트
+        //     window.location.href = "/oauth2/authorization/google";
+        // }
     </script>
+
 
 
 </head>
@@ -222,8 +205,7 @@
         </span>
     </div>
 
-    <!-- 로그아웃 버튼 -->
-    <button class="logout-btn" onclick="socialLogout()">로그아웃</button>
+
 </div>
 </body>
 </html>

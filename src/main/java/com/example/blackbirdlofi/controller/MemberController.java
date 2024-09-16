@@ -1,7 +1,11 @@
 package com.example.blackbirdlofi.controller;
 
 import com.example.blackbirdlofi.service.MemberService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -10,7 +14,9 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -128,33 +134,31 @@ public class MemberController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         // 소셜 로그인 여부 확인 (OAuth2)
-        if (authentication != null && authentication.isAuthenticated()) {
+        if (authentication != null && authentication.isAuthenticated()
+                && !(authentication instanceof AnonymousAuthenticationToken)) {
+            System.err.println("Authentication class: " + authentication.getClass().getName());
             if (authentication instanceof OAuth2AuthenticationToken) {
-                // OAuth2User를 통해 소셜 로그인 사용자 정보 확인
                 OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-                String email = oAuth2User.getAttribute("email");  // 소셜 로그인 사용자의 이메일 가져오기 (구글, 페이스북 등에 따라 키 값이 다를 수 있음)
-
+                String email = oAuth2User.getAttribute("email");
                 System.err.println("소셜 로그인된 사용자 이메일: " + email);
                 return new ModelAndView("redirect:/usr/home/main");
             } else {
-                // 소셜 로그인이 아닌 경우 다른 처리 (필요시)
                 System.err.println("소셜 로그인 아님");
             }
         }
 
-        return new ModelAndView("usr/member/login");  // 로그인 페이지 렌더링
+        return new ModelAndView("usr/member/login");
     }
 
-
-//    // 로그아웃 처리
-//    @RequestMapping("/doLogout")
-//    @ResponseBody
-//    public String doLogout(HttpServletRequest req, SessionStatus sessionStatus) {
-//
-//        System.out.println("================== 로그아웃 컨트롤러 실행 ========================");
-//        // Rq 클래스를 사용해 로그아웃 처리
-//        rq.logout();  // 세션 무효화 및 쿠키 삭제
-//
-//        return Ut.jsReplace("S-1", "로그아웃 성공", "/usr/member/login");
-//    }
+    // 로그아웃
+    @PostMapping("/doLogout")
+    public String logout(HttpServletRequest request) {
+        System.err.println("================== 로그 아웃 ==================");
+        // 세션 무효화
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+        return "redirect:/usr/member/login?logout";  // 로그아웃 후 로그인 페이지로 이동
+    }
 }

@@ -3,6 +3,7 @@ package com.example.blackbirdlofi.security;
 import com.example.blackbirdlofi.JPAentity.Member;
 import com.example.blackbirdlofi.jwt.JwtTokenProvider;
 import com.example.blackbirdlofi.repository.MemberRepository;
+import com.example.blackbirdlofi.service.firebase.FirebaseUserService;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -18,10 +19,12 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final MemberRepository memberRepository;
     private final JwtTokenProvider jwtTokenProvider;
+    private final FirebaseUserService firebaseUserService;  // FirebaseUserService 추가
 
-    public CustomOAuth2UserService(MemberRepository memberRepository, JwtTokenProvider jwtTokenProvider) {
+    public CustomOAuth2UserService(MemberRepository memberRepository, JwtTokenProvider jwtTokenProvider, FirebaseUserService firebaseUserService) {
         this.memberRepository = memberRepository;
         this.jwtTokenProvider = jwtTokenProvider;
+        this.firebaseUserService = firebaseUserService;
     }
 
     @Override
@@ -34,6 +37,14 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         System.out.println("Google OAuth2로 가져온 사용자 이메일: " + email);
         System.out.println("Google OAuth2로 가져온 사용자 ID: " + googleLoginId);
+
+        // Firebase JWT 검증
+        String firebaseJwt = userRequest.getAccessToken().getTokenValue();
+        boolean isFirebaseTokenValid = firebaseUserService.verifyToken(firebaseJwt);
+
+        if (!isFirebaseTokenValid) {
+            throw new OAuth2AuthenticationException("Invalid Firebase Token");
+        }
 
         // 로컬 DB에서 사용자 확인
         Optional<Member> localUser = memberRepository.findByGoogleLoginId(googleLoginId);

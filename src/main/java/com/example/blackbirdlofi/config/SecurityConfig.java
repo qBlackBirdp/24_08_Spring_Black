@@ -50,7 +50,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll() // FORWARD 요청은 인증 없이 허용
-                                .requestMatchers("/usr/member/login", "/usr/member/doGLogin", "/firebaseUser").permitAll()  // 소셜 로그인 관련 경로 허용
+                                .requestMatchers("/usr/member/login", "/usr/member/doGLogin", "/firebaseUser", "/usr/member/doLogout").permitAll()  // 소셜 로그인 관련 경로 허용
                                 .requestMatchers("/", "/usr/home/**").permitAll()  // 홈 페이지 및 특정 리소스 접근 허용
                                 .requestMatchers("/js/**", "/css/**", "/img/**", "/fontawesome-free-6.5.1-web/**").permitAll()  // 정적 리소스 허용
                                 .anyRequest().authenticated()  // 나머지 요청은 인증 필요
@@ -60,25 +60,23 @@ public class SecurityConfig {
                 .anonymous(AbstractHttpConfigurer::disable)
 
                 // 세션 관리 설정
-                // JWT는 세션을 사용하지 않고 stateless로 설정
-                .sessionManagement(sessionManagement ->
-                        sessionManagement
-                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)  // JWT에서는 세션 사용 안 함
-                )
-
-                // OAuth2 로그인 설정 - OAuth2는 세션 유지
+                // OAuth2 로그인 설정
                 .oauth2Login(oauth2 -> oauth2
-                        .loginPage("/usr/member/login")  // 로그인 페이지 설정
-                        .successHandler(oAuth2AuthenticationSuccessHandler)  // 로그인 성공 후 핸들러
-                        .defaultSuccessUrl("/usr/home/main", true)  // 성공 후 리다이렉트 경로
-                        .failureUrl("/usr/member/login?error=true")  // 실패 시 경로
-                        .userInfoEndpoint(userInfoEndpoint ->  // 사용자 정보 서비스 설정
-                                userInfoEndpoint.userService(customOAuth2UserService)  // CustomOAuth2UserService 등록
-                        )
+                        .loginPage("/usr/member/login")
+                        .successHandler(oAuth2AuthenticationSuccessHandler) // 로그인 성공 후 핸들러
+                        .defaultSuccessUrl("/usr/home/main", true)
+                        .failureUrl("/usr/member/login?error=true")
+                        .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint.userService(customOAuth2UserService))
                 )
-
+                // 세션 상태 관리 (JWT는 stateless, OAuth2는 세션 사용)
+                .sessionManagement(sessionManagement ->
+                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)  // OAuth2는 세션 사용
+                )
                 // JWT 필터를 추가하여 토큰 인증만 처리
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .headers(headersConfigurer ->
+                        headersConfigurer.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
+                )
 
                 // H2 콘솔의 프레임 옵션 설정
                 .headers(headersConfigurer ->
@@ -88,7 +86,7 @@ public class SecurityConfig {
                 // 로그아웃 설정
                 .logout(logout ->
                         logout
-                                .logoutUrl("/logout")  // 로그아웃 URL 설정
+                                .logoutUrl("/usr/member/doLogout")  // 로그아웃 URL 설정
                                 .logoutSuccessUrl("/usr/member/login?logout")  // 로그아웃 성공 시 이동할 경로
                                 .invalidateHttpSession(true)  // 로그아웃 시 세션 무효화
                                 .deleteCookies("JSESSIONID")  // 쿠키 삭제
