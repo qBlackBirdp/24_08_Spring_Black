@@ -205,7 +205,8 @@
         </span>
     </div>
 
-
+    <!-- 로그아웃 버튼 -->
+    <button class="logout-btn" onclick="socialLogout()">로그아웃</button>
 </div>
 </body>
 </html>

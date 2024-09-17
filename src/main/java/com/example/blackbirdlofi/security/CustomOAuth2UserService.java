@@ -1,16 +1,13 @@
 package com.example.blackbirdlofi.security;
 
 import com.example.blackbirdlofi.JPAentity.Member;
-import com.example.blackbirdlofi.jwt.JwtTokenProvider;
 import com.example.blackbirdlofi.repository.MemberRepository;
-import com.example.blackbirdlofi.service.firebase.FirebaseUserService;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -18,13 +15,9 @@ import java.util.UUID;
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final MemberRepository memberRepository;
-    private final JwtTokenProvider jwtTokenProvider;
-    private final FirebaseUserService firebaseUserService;  // FirebaseUserService 추가
 
-    public CustomOAuth2UserService(MemberRepository memberRepository, JwtTokenProvider jwtTokenProvider, FirebaseUserService firebaseUserService) {
+    public CustomOAuth2UserService(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
-        this.jwtTokenProvider = jwtTokenProvider;
-        this.firebaseUserService = firebaseUserService;
     }
 
     @Override
@@ -38,22 +31,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         System.out.println("Google OAuth2로 가져온 사용자 이메일: " + email);
         System.out.println("Google OAuth2로 가져온 사용자 ID: " + googleLoginId);
 
-        // Firebase JWT 검증
-        String firebaseJwt = userRequest.getAccessToken().getTokenValue();
-        boolean isFirebaseTokenValid = firebaseUserService.verifyToken(firebaseJwt);
-
-        if (!isFirebaseTokenValid) {
-            throw new OAuth2AuthenticationException("Invalid Firebase Token");
-        }
-
         // 로컬 DB에서 사용자 확인
         Optional<Member> localUser = memberRepository.findByGoogleLoginId(googleLoginId);
         if (localUser.isPresent()) {
-            // JWT 발급
-            String token = jwtTokenProvider.createToken(email, List.of("ROLE_USER"));
-            System.out.println("기존 사용자에 대한 JWT 토큰 발급 완료: " + token);
-
-            // 이미 존재하는 사용자 정보 반환
+            // 기존 사용자 정보를 반환
             return new CustomOAuth2User(localUser.get(), oAuth2User.getAttributes());
         } else {
             System.out.println("로컬 DB에 사용자가 존재하지 않음, 새로운 사용자 등록 시작");
@@ -62,10 +43,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             String displayName = oAuth2User.getAttribute("name") != null ? oAuth2User.getAttribute("name") : "사용자";
             String nickname = email.split("@")[0];
             createUserInLocalDB(email, displayName, nickname, googleLoginId);
-
-            // JWT 발급
-            String token = jwtTokenProvider.createToken(email, List.of("ROLE_USER"));
-            System.out.println("새로운 사용자에 대한 JWT 토큰 발급 완료: " + token);
 
             // 새로 생성한 사용자 정보 반환
             Member newUser = memberRepository.findByGoogleLoginId(googleLoginId).orElseThrow();
