@@ -1,27 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <html>
 <head>
     <title>Main</title>
 
     <!-- 번들된 JS 파일을 불러오기 -->
     <script src="http://localhost:8082/bundle.js"></script>
-
-    <!-- 자바스크립트를 통해 콘솔에 출력 -->
-    <script>
-        // document.addEventListener("DOMContentLoaded", function() {
-        //     // JSP에서 전달된 사용자 정보를 JavaScript 변수로 가져옴
-        //     const userName = document.getElementById('userName').textContent;
-        //     const userEmail = document.getElementById('userEmail').textContent;
-        //
-        //     // 브라우저 콘솔에 사용자 정보 출력
-        //     if (userName && userEmail) {
-        //         console.log("로그인된 사용자 이름: " + userName);
-        //         console.log("로그인된 사용자 이메일: " + userEmail);
-        //     } else {
-        //         console.log("로그인된 사용자가 없습니다.");
-        //     }
-        // });
-    </script>
 
     <script>
 
@@ -33,6 +18,19 @@
 
 <p>로그인된 사용자: <span id="userName">${userName}</span></p>
 <p>사용자 이메일: <span id="userEmail">${userEmail}</span></p>
+
+<!-- 로그인 제공자가 구글인지 스포티파이인지 확인 -->
+<c:choose>
+    <c:when test="${provider == 'google'}">
+        <p>Google 사용자입니다.</p>
+    </c:when>
+    <c:when test="${provider == 'spotify'}">
+        <p>Spotify 사용자입니다.</p>
+    </c:when>
+    <c:otherwise>
+        <p>알 수 없는 로그인 제공자입니다.</p>
+    </c:otherwise>
+</c:choose>
 
 <!-- 로그아웃 버튼 -->
 <button class="logout-btn" onclick="socialLogout()">로그아웃</button>

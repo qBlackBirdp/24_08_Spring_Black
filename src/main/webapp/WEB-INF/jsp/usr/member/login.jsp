@@ -194,7 +194,7 @@
     </button>
 
     <!-- 스포티파이 로그인 버튼 -->
-    <button class="login-button spotify-btn">
+    <button class="login-button spotify-btn" onclick="spotifyLogin()">
         <img src="/images/spofitylogo7377-9doi-200h.png" alt="Spotify Logo">
         Continue with Spotify
     </button>

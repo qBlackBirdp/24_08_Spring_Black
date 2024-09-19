@@ -13,4 +13,5 @@ public interface MemberRepository extends JpaRepository<Member, Integer> {
 
     Optional<Member> findByGoogleLoginId(String googleLoginId); // 구글 로그인 ID로 회원 찾기
 
+    Optional<Member> findBySpotifyLoginId(String spotifyLoginId); // 스포티파이 로그인 ID로 회원 찾기
 }

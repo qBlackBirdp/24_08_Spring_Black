@@ -25,40 +25,74 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         // 기본적으로 OAuth2User 정보를 가져옴
         OAuth2User oAuth2User = super.loadUser(userRequest);
 
-        String email = oAuth2User.getAttribute("email");
-        String googleLoginId = oAuth2User.getAttribute("sub"); // Google ID
+        // 어느 OAuth2 제공자인지 확인 (Google, Spotify 등)
+        String registrationId = userRequest.getClientRegistration().getRegistrationId();
+        String email;
+        String externalLoginId;
 
-        System.out.println("Google OAuth2로 가져온 사용자 이메일: " + email);
-        System.out.println("Google OAuth2로 가져온 사용자 ID: " + googleLoginId);
+        // 구글인지 스포티파이인지 확인하여 처리
+        if ("google".equals(registrationId)) {
+            email = oAuth2User.getAttribute("email");
+            externalLoginId = oAuth2User.getAttribute("sub"); // Google ID
+            System.out.println("Google OAuth2로 가져온 사용자 이메일: " + email);
+            System.out.println("Google OAuth2로 가져온 사용자 ID: " + externalLoginId);
 
-        // 로컬 DB에서 사용자 확인
+            return processGoogleUser(oAuth2User, email, externalLoginId);
+        } else if ("spotify".equals(registrationId)) {
+            email = oAuth2User.getAttribute("email");  // Spotify에서 제공되는 email
+            externalLoginId = oAuth2User.getAttribute("id");  // Spotify 사용자 ID
+            System.out.println("Spotify OAuth2로 가져온 사용자 이메일: " + email);
+            System.out.println("Spotify OAuth2로 가져온 사용자 ID: " + externalLoginId);
+
+            return processSpotifyUser(oAuth2User, email, externalLoginId);
+        } else {
+            throw new OAuth2AuthenticationException("Unknown registrationId: " + registrationId);
+        }
+    }
+
+    // Google 사용자 처리
+    private OAuth2User processGoogleUser(OAuth2User oAuth2User, String email, String googleLoginId) {
         Optional<Member> localUser = memberRepository.findByGoogleLoginId(googleLoginId);
+
         if (localUser.isPresent()) {
-            // 기존 사용자 정보를 반환
             return new CustomOAuth2User(localUser.get(), oAuth2User.getAttributes());
         } else {
-            System.out.println("로컬 DB에 사용자가 존재하지 않음, 새로운 사용자 등록 시작");
+            System.out.println("로컬 DB에 Google 사용자가 존재하지 않음, 새로운 사용자 등록 시작");
 
-            // 새로운 사용자 생성
             String displayName = oAuth2User.getAttribute("name") != null ? oAuth2User.getAttribute("name") : "사용자";
             String nickname = email.split("@")[0];
-            createUserInLocalDB(email, displayName, nickname, googleLoginId);
+            createGoogleUserInLocalDB(email, displayName, nickname, googleLoginId);
 
-            // 새로 생성한 사용자 정보 반환
             Member newUser = memberRepository.findByGoogleLoginId(googleLoginId).orElseThrow();
             return new CustomOAuth2User(newUser, oAuth2User.getAttributes());
         }
     }
 
-    // 로컬 DB에 사용자 생성
-    private void createUserInLocalDB(String email, String uName, String nickname, String googleLoginId) {
-        // 기존 사용자 중복 확인
+    // Spotify 사용자 처리
+    private OAuth2User processSpotifyUser(OAuth2User oAuth2User, String email, String spotifyLoginId) {
+        Optional<Member> localUser = memberRepository.findBySpotifyLoginId(spotifyLoginId);
+
+        if (localUser.isPresent()) {
+            return new CustomOAuth2User(localUser.get(), oAuth2User.getAttributes());
+        } else {
+            System.out.println("로컬 DB에 Spotify 사용자가 존재하지 않음, 새로운 사용자 등록 시작");
+
+            String displayName = oAuth2User.getAttribute("display_name") != null ? oAuth2User.getAttribute("display_name") : "사용자";
+            String nickname = email.split("@")[0];
+            createSpotifyUserInLocalDB(email, displayName, nickname, spotifyLoginId);
+
+            Member newUser = memberRepository.findBySpotifyLoginId(spotifyLoginId).orElseThrow();
+            return new CustomOAuth2User(newUser, oAuth2User.getAttributes());
+        }
+    }
+
+    // 로컬 DB에 Google 사용자 생성
+    private void createGoogleUserInLocalDB(String email, String uName, String nickname, String googleLoginId) {
         if (memberRepository.findByGoogleLoginId(googleLoginId).isPresent()) {
-            System.out.println("이미 존재하는 사용자: " + googleLoginId);
-            return; // 중복된 사용자면 추가로 생성하지 않고 그냥 리턴
+            System.out.println("이미 존재하는 Google 사용자: " + googleLoginId);
+            return;
         }
 
-        System.out.println("로컬 DB에 사용자 생성 요청: email=" + email + ", 닉네임=" + nickname);
         Member newUser = new Member();
         newUser.setEmail(email);
         newUser.setUName(uName != null ? uName : "사용자");
@@ -69,6 +103,26 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         newUser.setLoginId(loginId);
 
         memberRepository.save(newUser);
-        System.out.println("로컬 DB에 사용자 저장 완료: " + email);
+        System.out.println("로컬 DB에 Google 사용자 저장 완료: " + email);
+    }
+
+    // 로컬 DB에 Spotify 사용자 생성
+    private void createSpotifyUserInLocalDB(String email, String uName, String nickname, String spotifyLoginId) {
+        if (memberRepository.findBySpotifyLoginId(spotifyLoginId).isPresent()) {
+            System.out.println("이미 존재하는 Spotify 사용자: " + spotifyLoginId);
+            return;
+        }
+
+        Member newUser = new Member();
+        newUser.setEmail(email);
+        newUser.setUName(uName != null ? uName : "사용자");
+        newUser.setNickname(nickname);
+        newUser.setSpotifyLoginId(spotifyLoginId);
+
+        String loginId = "user-" + UUID.randomUUID().toString().substring(0, 8);
+        newUser.setLoginId(loginId);
+
+        memberRepository.save(newUser);
+        System.out.println("로컬 DB에 Spotify 사용자 저장 완료: " + email);
     }
 }
