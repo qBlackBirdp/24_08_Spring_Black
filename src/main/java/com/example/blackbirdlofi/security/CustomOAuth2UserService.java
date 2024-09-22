@@ -2,12 +2,17 @@ package com.example.blackbirdlofi.security;
 
 import com.example.blackbirdlofi.JPAentity.Member;
 import com.example.blackbirdlofi.repository.MemberRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -29,25 +34,53 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
         String email;
         String externalLoginId;
+        String profileImageUrl;
 
         // 구글인지 스포티파이인지 확인하여 처리
         if ("google".equals(registrationId)) {
             email = oAuth2User.getAttribute("email");
             externalLoginId = oAuth2User.getAttribute("sub"); // Google ID
+            profileImageUrl = oAuth2User.getAttribute("picture"); // Google 프로필 이미지 URL
             System.out.println("Google OAuth2로 가져온 사용자 이메일: " + email);
             System.out.println("Google OAuth2로 가져온 사용자 ID: " + externalLoginId);
+
+            // 세션에 프로필 이미지 URL 저장
+            storeProfileImageInSession(profileImageUrl);
 
             return processGoogleUser(oAuth2User, email, externalLoginId);
         } else if ("spotify".equals(registrationId)) {
             email = oAuth2User.getAttribute("email");  // Spotify에서 제공되는 email
             externalLoginId = oAuth2User.getAttribute("id");  // Spotify 사용자 ID
+            profileImageUrl = getSpotifyProfileImage(oAuth2User); // Spotify 프로필 이미지 URL
             System.out.println("Spotify OAuth2로 가져온 사용자 이메일: " + email);
             System.out.println("Spotify OAuth2로 가져온 사용자 ID: " + externalLoginId);
+
+            // 세션에 프로필 이미지 URL 저장
+            storeProfileImageInSession(profileImageUrl);
 
             return processSpotifyUser(oAuth2User, email, externalLoginId);
         } else {
             throw new OAuth2AuthenticationException("Unknown registrationId: " + registrationId);
         }
+    }
+
+    // Spotify 프로필 이미지 가져오기
+    private String getSpotifyProfileImage(OAuth2User oAuth2User) {
+        List<Map<String, Object>> images = oAuth2User.getAttribute("images");
+        if (images != null && !images.isEmpty()) {
+            return (String) images.get(0).get("url"); // 첫 번째 이미지 URL 가져오기
+        }
+        return null; // 이미지가 없으면 null 반환
+    }
+
+    // 세션에 프로필 이미지 URL 저장하는 메서드
+    private void storeProfileImageInSession(String profileImageUrl) {
+        // 현재 세션을 가져옴
+        HttpSession session = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
+                .getRequest().getSession();
+
+        // 세션에 프로필 이미지 URL을 저장
+        session.setAttribute("profileImageUrl", profileImageUrl);
     }
 
     // Google 사용자 처리

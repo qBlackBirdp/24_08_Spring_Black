@@ -28,7 +28,7 @@
             <div style="position: relative;">
                 <!-- 사용자 아바타 버튼 -->
                 <button onclick="toggleDropdown()" style="background: none; border: none; cursor: pointer;">
-                    <img src="/path/to/avatar.png" alt="User Avatar" style="width: 40px; height: 40px; border-radius: 50%;">
+                    <img src="${sessionScope.profileImageUrl}" alt="User Avatar" style="width: 40px; height: 40px; border-radius: 50%;">
                 </button>
 
                 <!-- 드롭다운 메뉴 -->
@@ -42,29 +42,30 @@
                 </div>
             </div>
 
+            <!-- 로그인 상태일 때만 실행되는 스크립트 -->
+            <script>
+                function toggleDropdown() {
+                    const dropdownMenu = document.getElementById('dropdownMenu');
+                    // 드롭다운 메뉴 표시/숨기기
+                    dropdownMenu.style.display = dropdownMenu.style.display === 'none' ? 'block' : 'none';
+                }
+
+                // 페이지 클릭 시 드롭다운 자동 닫기
+                window.onclick = function(event) {
+                    const dropdownMenu = document.getElementById('dropdownMenu');
+                    if (dropdownMenu && !event.target.matches('.logout-btn') && !event.target.closest('button')) {
+                        dropdownMenu.style.display = 'none';
+                    }
+                }
+            </script>
         </c:if>
+
         <c:if test="${empty pageContext.request.userPrincipal}">
             <!-- 사용자가 로그인하지 않은 경우 -->
             <a href="/login" style="color: #fff; text-decoration: none;">Login</a>
             <button style="background-color: #00bfff; color: #fff; padding: 10px 20px; border: none; cursor: pointer;">Try free</button>
         </c:if>
     </div>
-
-    <script>
-        function toggleDropdown() {
-            const dropdownMenu = document.getElementById('dropdownMenu');
-            // 드롭다운 메뉴 표시/숨기기
-            dropdownMenu.style.display = dropdownMenu.style.display === 'none' ? 'block' : 'none';
-        }
-
-        // 페이지 클릭 시 드롭다운 자동 닫기
-        window.onclick = function(event) {
-            const dropdownMenu = document.getElementById('dropdownMenu');
-            if (!event.target.matches('.logout-btn') && !event.target.closest('button')) {
-                dropdownMenu.style.display = 'none';
-            }
-        }
-    </script>
 
     <style>
         /* 드롭다운 메뉴 기본 스타일 */

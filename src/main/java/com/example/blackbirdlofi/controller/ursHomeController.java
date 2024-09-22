@@ -1,7 +1,11 @@
 package com.example.blackbirdlofi.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.client.OAuth2AuthorizeRequest;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,37 +14,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class ursHomeController {
 
+    @Autowired
+    private OAuth2AuthorizedClientManager authorizedClientManager;
+
 
     @RequestMapping("/usr/home/main")
-    public String showMain(@AuthenticationPrincipal OAuth2User oAuth2User, Model model) {
+    public String showMain(@AuthenticationPrincipal OAuth2User principal, Model model, OAuth2AuthenticationToken authentication) {
         System.err.println("===================메인페이지 접근=====================");
-        if (oAuth2User != null) {
-            String userName = oAuth2User.getAttribute("name");
-            String userEmail = oAuth2User.getAttribute("email");
 
-            // OAuth2 로그인 제공자 구분
-            String provider = "";  // 로그인 제공자 구분 로직 추가
-            if (oAuth2User.getAttributes().containsKey("sub")) { // 구글 로그인일 경우 "sub" 속성 존재
-                provider = "google";
-            } else if (oAuth2User.getAttributes().containsKey("id")) { // 스포티파이 로그인일 경우 "id" 속성 존재
-                provider = "spotify";
-            }
+        // 토큰을 관리하고 자동으로 갱신 처리
+        OAuth2AuthorizedClient authorizedClient = authorizedClientManager.authorize(
+                OAuth2AuthorizeRequest.withClientRegistrationId("spotify")
+                        .principal(authentication)
+                        .build());
 
-            model.addAttribute("provider", provider);  // 구글 or 스포티파이 제공자 정보
-            model.addAttribute("userName", userName);  // 로그인한 사용자 이름
-            model.addAttribute("userEmail", userEmail); // 로그인한 사용자 이메일
-
-
-            // 세션 유지 확인 로그
-            System.err.println("로그인된 사용자 이메일: " + userEmail);
-            System.err.println("로그인된 사용자 이름: " + userName);
-            System.err.println("OAuth2 로그인 제공자: " + provider);
-
+        if (authorizedClient != null && authorizedClient.getAccessToken() != null) {
+            String accessToken = authorizedClient.getAccessToken().getTokenValue();
+            model.addAttribute("accessToken", accessToken);
         } else {
-            model.addAttribute("userName", "Guest");
-            System.err.println("로그인되지 않은 사용자: Guest");
+            System.err.println("Authorized client or access token is null.");
         }
-
         return "usr/home/main"; // 메인 페이지 뷰
     }
 }
