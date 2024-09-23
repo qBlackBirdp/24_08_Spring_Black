@@ -145,12 +145,16 @@
                         let playlistImage = (playlist.images && playlist.images.length > 0) ? playlist.images[0].url : 'https://via.placeholder.com/150'; // 기본 이미지 URL
 
                         playlistListHTML += `
-                        <div class="playlist-card animate__animated animate__fadeInUp slide">
-                            <img src="${'${playlistImage}'}" alt="${'${playlistName}'}" width="150" height="150" onclick="playPlaylist('${'${playlistId}'}')">
-                            <p><strong>${'${playlistName}'}</strong></p>
-                            <button onclick="playPlaylist('${'${playlistId}'}')">Play</button>
-                        </div>
-                    `;
+                            <div class="playlist-card animate__animated animate__fadeInUp slide">
+                                <div style="position: relative; width: 100%; height: 150px;">
+                                    <img src="${'${playlistImage}'}" alt="${'${playlistName}'}" style="width: 100%; height: 100%; object-fit: cover;" onclick="playPlaylist('${'${playlistId}'}')">
+                                    <button class="play-button" onclick="playPlaylist('${'${playlistId}'}')">
+                                        ▶
+                                    </button>
+                                </div>
+                                <p><strong>${'${playlistName}'}</strong></p>
+                            </div>
+                            `;
                     });
 
                     document.getElementById('playlist-list').innerHTML = playlistListHTML;
@@ -222,22 +226,36 @@
         transform: scale(1.1); /* 호버 시 이미지 확대 */
     }
 
-    .playlist-card button {
-        background-color: #1db954; /* Spotify 색상 */
+    /* 재생 버튼 스타일 */
+    .play-button {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%); /* 버튼을 이미지의 정 중앙에 위치 */
+        background-color: rgba(30, 215, 96, 0.9); /* Spotify 초록색 */
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         color: white;
-        padding: 10px 20px;
-        font-size: 16px;
+        font-size: 20px;
         border: none;
-        border-radius: 20px;
         cursor: pointer;
-        margin-top: 10px;
-        transition: background-color 0.3s ease;
+        visibility: hidden; /* 처음에는 보이지 않게 설정 */
+    }
+
+    .playlist-card:hover .play-button {
+        visibility: visible; /* 카드에 마우스를 올렸을 때만 보이도록 */
     }
 
     .playlist-card button:hover {
         background-color: #1aa34a; /* Hover 시 더 어두운 초록색 */
+        transform: translate(-50%, -50%) scale(1.1); /* 약간 확대 */
     }
 
+    /* 텍스트 스타일 */
     .playlist-card p {
         font-size: 18px;
         margin-top: 10px;
@@ -248,6 +266,7 @@
         color: white;
     }
 
+    /* 슬라이더 관련 스타일 */
     .slider-container {
         width: 100%;
         overflow: hidden;
