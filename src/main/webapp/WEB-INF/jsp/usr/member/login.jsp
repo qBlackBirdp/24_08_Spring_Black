@@ -183,7 +183,10 @@
 
 <div class="login-container">
     <!-- 메인 로고 -->
-    <img src="/images/Main_logo.png" alt="Main Logo" width="250" height="auto">
+    <a href="/usr/home/main">
+        <img src="/images/Main_logo.png" alt="Main Logo" width="250" height="auto">
+    </a>
+
 
     <h2>Log into your account</h2>
 

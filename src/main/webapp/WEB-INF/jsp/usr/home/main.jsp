@@ -12,12 +12,25 @@
     <!-- JavaScript에서 사용할 Access Token 전달 -->
     <script type="text/javascript">
         var accessToken = "${accessToken}";  // Controller에서 전달된 Access Token
+        var provider = "${provider}";  // Controller에서 전달된 로그인 제공자
+
         console.log("Access Token: ", accessToken);
+        console.log("Provider: ", provider);
+
+        // 사용자가 인증되지 않았을 경우 안내 메시지 표시
+        if (!accessToken) {
+            console.log("사용자가 인증되지 않았습니다. 트랙 목록을 표시할 수 없습니다.");
+        }
     </script>
 
     <script type="text/javascript">
         // Spotify API로 Lofi 트랙 검색
         function searchLofiTracks() {
+            if (!accessToken || provider === "google") {
+                // 사용자가 인증되지 않았거나, 구글로 로그인한 경우 안내 메시지 표시
+                document.getElementById('track-list').innerHTML = "<p>Spotify 로그인 후 Spotify를 통해 트랙을 추천받을 수 있습니다.</p>";
+                return;
+            }
             fetch(`https://api.spotify.com/v1/search?q=lofi&type=track&limit=10`, {
                 method: 'GET',
                 headers: {
@@ -103,7 +116,6 @@
 
 <main>
     <h1>The Lofi best sample library</h1>
-    <p>Try free for 14 days</p>
 
     <div style="margin: 20px 0;">
         <input type="text" placeholder="Search any sound like 808 kick">
@@ -124,7 +136,7 @@
         </div>
     </div>
 
-    <div class="flex-container">
+    <div class="flex-container" style="margin-bottom: 20px;">
         <div>
             <h3>100% royalty free</h3>
             <p>Use your sounds anywhere, cleared for commercial use.</p>
@@ -144,7 +156,7 @@
     </div>
 
     <!-- Spotify 플레이어가 표시될 영역 -->
-    <div id="spotify-player" style="width: 100%; text-align: center; margin-top: 20px;">
+    <div id="spotify-player" style="width: 100%; text-align: center; margin-top: 30px;">
         <!-- 선택된 트랙 여기서 재생. -->
     </div>
 </main>

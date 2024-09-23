@@ -22,18 +22,29 @@ public class ursHomeController {
     public String showMain(@AuthenticationPrincipal OAuth2User principal, Model model, OAuth2AuthenticationToken authentication) {
         System.err.println("===================메인페이지 접근=====================");
 
-        // 토큰을 관리하고 자동으로 갱신 처리
-        OAuth2AuthorizedClient authorizedClient = authorizedClientManager.authorize(
-                OAuth2AuthorizeRequest.withClientRegistrationId("spotify")
-                        .principal(authentication)
-                        .build());
+        String provider = authentication.getAuthorizedClientRegistrationId(); // 로그인 제공자 감지
+        model.addAttribute("provider", provider);  // JSP 페이지에서 제공자 정보 활용 가능
 
-        if (authorizedClient != null && authorizedClient.getAccessToken() != null) {
-            String accessToken = authorizedClient.getAccessToken().getTokenValue();
-            model.addAttribute("accessToken", accessToken);
+        if ("spotify".equals(provider)) {
+            // Spotify 로그인일 때만 액세스 토큰 요청
+            OAuth2AuthorizedClient authorizedClient = authorizedClientManager.authorize(
+                    OAuth2AuthorizeRequest.withClientRegistrationId("spotify")
+                            .principal(authentication)
+                            .build());
+
+            if (authorizedClient != null && authorizedClient.getAccessToken() != null) {
+                String accessToken = authorizedClient.getAccessToken().getTokenValue();
+                model.addAttribute("accessToken", accessToken);
+                System.err.println("Spotify Access Token: " + accessToken);
+            } else {
+                System.err.println("Authorized client or access token is null.");
+            }
         } else {
-            System.err.println("Authorized client or access token is null.");
+            // Google 로그인일 경우에는 Spotify API 호출하지 않도록 설정
+            System.err.println("Google 로그인 감지 - Spotify API 호출 차단.");
+            model.addAttribute("accessToken", null);  // 액세스 토큰 비활성화
         }
+
         return "usr/home/main"; // 메인 페이지 뷰
     }
 }
