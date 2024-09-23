@@ -194,10 +194,9 @@
     #playlist-list {
         display: flex;
         gap: 20px;
-        transition: transform 10s ease; /* 부드러운 이동 애니메이션 */
+        transition: transform 1s ease-in-out; /* 슬라이드 이동 시 애니메이션 효과 */
     }
 
-    /* 다크 테마와 기본적인 카드 스타일 */
     .playlist-card {
         min-width: 200px;
         text-align: center;
@@ -221,10 +220,8 @@
 
     .playlist-card:hover img {
         transform: scale(1.1); /* 호버 시 이미지 확대 */
-        animation: animate__pulse; /* animate.css의 pulse 효과 */
     }
 
-    /* 플레이 버튼 스타일 */
     .playlist-card button {
         background-color: #1db954; /* Spotify 색상 */
         color: white;
@@ -241,7 +238,6 @@
         background-color: #1aa34a; /* Hover 시 더 어두운 초록색 */
     }
 
-    /* 텍스트 스타일 */
     .playlist-card p {
         font-size: 18px;
         margin-top: 10px;
@@ -249,9 +245,9 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis; /* 긴 텍스트 잘림 */
+        color: white;
     }
 
-    /* 슬라이더 관련 스타일 */
     .slider-container {
         width: 100%;
         overflow: hidden;
@@ -260,8 +256,8 @@
     .slider {
         display: flex;
         width: 500%; /* 5개의 아이템을 한 줄에 */
-        animation: slide 30s infinite;
-        animation-delay: 5s; /* 5초 후에 시작 */
+        animation: slide 50s infinite; /* 슬라이드 애니메이션 */
+        animation-delay: 8s; /* 8초 후에 시작 */
     }
 
     .slide {
@@ -284,11 +280,37 @@
         80% {
             transform: translateX(-80%);
         }
+        90% {
+            transform: translateX(-100%); /* 100% 위치까지 이동 */
+        }
         100% {
-            transform: translateX(-100%);
+            transform: translateX(0%); /* 다시 처음으로 이동 */
         }
     }
 </style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const playlistList = document.getElementById('playlist-list');
+        let isResetting = false; // 처음으로 돌아간 후 딜레이를 위한 변수
+
+        function resetDelay() {
+            if (!isResetting) {
+                isResetting = true; // 딜레이 시작
+                playlistList.style.animationPlayState = 'paused'; // 애니메이션 멈춤
+
+                setTimeout(() => {
+                    playlistList.style.animationPlayState = 'running'; // 딜레이 후 애니메이션 재개
+                    isResetting = false; // 딜레이 종료
+                }, 8000); // 8초 딜레이
+            }
+        }
+
+        // 슬라이드가 끝나고 다시 처음으로 돌아갈 때 호출
+        playlistList.addEventListener('animationiteration', resetDelay);
+    });
+
+</script>
 
 </body>
 </html>
