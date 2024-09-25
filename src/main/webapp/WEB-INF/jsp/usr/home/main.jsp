@@ -63,7 +63,9 @@
     <%--        <!-- JavaScript에서 생성된 트랙 목록이 여기에 표시. -->--%>
     <%--    </div>--%>
 
-
+<h2 style="float: left; margin-top: 20px;">
+    Recommend Lofi Music for Spotify,
+</h2>
     <div id="playlist-list-container" class="slider-container">
         <div id="playlist-list" class="slider">
             <!-- 각각의 플레이리스트 카드 -->

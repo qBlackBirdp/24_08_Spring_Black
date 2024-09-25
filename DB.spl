@@ -10,9 +10,10 @@ CREATE TABLE `samples` (
                            `istm_id` int(10) NOT NULL,
                            `reg_date` DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
                            `s_name` varchar(100) NOT NULL,
-                           `bpm` int(10) NOT NULL,
+                           `bpm` int(10) NULL,  -- BPM 필드는 NULL 가능하게 변경
                            `genres` varchar(100) NOT NULL,
                            `price` int NULL DEFAULT 0,
+                           `is_one_shot` TINYINT(1) NOT NULL DEFAULT 0 COMMENT 'one-shot 여부 (0=아님, 1=one-shot)',
                            `del_status` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '삭제 여부 (0=삭제 전, 1=삭제 후)',
                            `del_date` DATETIME(6) NULL COMMENT '삭제 날짜',
                            `field` VARCHAR(255) NULL,
@@ -60,30 +61,30 @@ CREATE TABLE `instruments_items` (
 );
 
 -- coin 테이블 생성
-CREATE TABLE `coin` (
-                        `id` int(10) NOT NULL,
-                        `u_id` int(10) NOT NULL,
-                        `balance` int NOT NULL,
-                        `update_date` DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                        PRIMARY KEY (`id`, `u_id`)
-);
-
--- coin_transactions 테이블 생성
-CREATE TABLE `coin_transactions` (
-                                     `tran_id` int(10) NOT NULL,
-                                     `id2` int(10) NOT NULL,
-                                     `tran_type` char(20) NOT NULL COMMENT 'spend coin, get coin, adjust',
-                                     `tran_date` DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                                     `amount` int NOT NULL,
-                                     PRIMARY KEY (`tran_id`, `id2`)
-);
+# CREATE TABLE `coin` (
+#                         `id` int(10) NOT NULL,
+#                         `u_id` int(10) NOT NULL,
+#                         `balance` int NOT NULL,
+#                         `update_date` DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+#                         PRIMARY KEY (`id`, `u_id`)
+# );
+#
+# -- coin_transactions 테이블 생성
+# CREATE TABLE `coin_transactions` (
+#                                      `tran_id` int(10) NOT NULL,
+#                                      `id2` int(10) NOT NULL,
+#                                      `tran_type` char(20) NOT NULL COMMENT 'spend coin, get coin, adjust',
+#                                      `tran_date` DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+#                                      `amount` int NOT NULL,
+#                                      PRIMARY KEY (`tran_id`, `id2`)
+# );
 
 -- 외래 키 제약 조건 추가
 ALTER TABLE `samples` ADD CONSTRAINT `FK_users_TO_samples_1` FOREIGN KEY (`u_id`) REFERENCES `users` (`id`);
 ALTER TABLE `samples` ADD CONSTRAINT `FK_instruments_TO_samples_1` FOREIGN KEY (`istm_id`) REFERENCES `instruments` (`id`);
 ALTER TABLE `instruments` ADD CONSTRAINT `FK_instruments_items_TO_instruments_1` FOREIGN KEY (`istm_id`) REFERENCES `instruments_items` (`id`);
-ALTER TABLE `coin` ADD CONSTRAINT `FK_users_TO_coin_1` FOREIGN KEY (`u_id`) REFERENCES `users` (`id`);
-ALTER TABLE `coin_transactions` ADD CONSTRAINT `FK_users_TO_coin_transactions_1` FOREIGN KEY (`id2`) REFERENCES `users` (`id`);
+# ALTER TABLE `coin` ADD CONSTRAINT `FK_users_TO_coin_1` FOREIGN KEY (`u_id`) REFERENCES `users` (`id`);
+# ALTER TABLE `coin_transactions` ADD CONSTRAINT `FK_users_TO_coin_transactions_1` FOREIGN KEY (`id2`) REFERENCES `users` (`id`);
 ALTER TABLE users ADD CONSTRAINT unique_google_login_id UNIQUE (google_login_id);
 
 -- 테스트 데이터 삽입
