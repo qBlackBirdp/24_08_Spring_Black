@@ -87,46 +87,48 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private OAuth2User processGoogleUser(OAuth2User oAuth2User, String email, String googleLoginId) {
         Optional<Member> localUser = memberRepository.findByGoogleLoginId(googleLoginId);
 
+        // 이미 기존 이메일로 로그인한 사용자가 있을 경우, 기존 사용자로 로그인 처리
+        if (localUser.isPresent()) {
+            return new CustomOAuth2User(localUser.get(), oAuth2User.getAttributes());
+        }
+
         if (memberRepository.findByEmail(email).isPresent()) {
             // 중복된 이메일이 존재할 경우 커스텀 예외를 발생시켜 Spring Security에서 실패로 처리하도록 함
             throw new EmailAlreadyExistsException("이미 사용 중인 이메일입니다.");
         }
 
-        if (localUser.isPresent()) {
-            return new CustomOAuth2User(localUser.get(), oAuth2User.getAttributes());
-        } else {
-            System.out.println("로컬 DB에 Google 사용자가 존재하지 않음, 새로운 사용자 등록 시작");
+        System.out.println("로컬 DB에 Google 사용자가 존재하지 않음, 새로운 사용자 등록 시작");
 
-            String displayName = oAuth2User.getAttribute("name") != null ? oAuth2User.getAttribute("name") : "사용자";
-            String nickname = email.split("@")[0];
-            createGoogleUserInLocalDB(email, displayName, nickname, googleLoginId);
+        String displayName = oAuth2User.getAttribute("name") != null ? oAuth2User.getAttribute("name") : "사용자";
+        String nickname = email.split("@")[0];
+        createGoogleUserInLocalDB(email, displayName, nickname, googleLoginId);
 
-            Member newUser = memberRepository.findByGoogleLoginId(googleLoginId).orElseThrow();
-            return new CustomOAuth2User(newUser, oAuth2User.getAttributes());
-        }
+        Member newUser = memberRepository.findByGoogleLoginId(googleLoginId).orElseThrow();
+        return new CustomOAuth2User(newUser, oAuth2User.getAttributes());
     }
 
     // Spotify 사용자 처리
     private OAuth2User processSpotifyUser(OAuth2User oAuth2User, String email, String spotifyLoginId) {
         Optional<Member> localUser = memberRepository.findBySpotifyLoginId(spotifyLoginId);
 
+        // 이미 기존 이메일로 로그인한 사용자가 있을 경우, 기존 사용자로 로그인 처리
+        if (localUser.isPresent()) {
+            return new CustomOAuth2User(localUser.get(), oAuth2User.getAttributes());
+        }
+
         if (memberRepository.findByEmail(email).isPresent()) {
             // 중복된 이메일이 존재할 경우 커스텀 예외를 발생시켜 Spring Security에서 실패로 처리하도록 함
             throw new EmailAlreadyExistsException("이미 사용 중인 이메일입니다.");
         }
 
-        if (localUser.isPresent()) {
-            return new CustomOAuth2User(localUser.get(), oAuth2User.getAttributes());
-        } else {
-            System.out.println("로컬 DB에 Spotify 사용자가 존재하지 않음, 새로운 사용자 등록 시작");
+        System.out.println("로컬 DB에 Spotify 사용자가 존재하지 않음, 새로운 사용자 등록 시작");
 
-            String displayName = oAuth2User.getAttribute("display_name") != null ? oAuth2User.getAttribute("display_name") : "사용자";
-            String nickname = email.split("@")[0];
-            createSpotifyUserInLocalDB(email, displayName, nickname, spotifyLoginId);
+        String displayName = oAuth2User.getAttribute("display_name") != null ? oAuth2User.getAttribute("display_name") : "사용자";
+        String nickname = email.split("@")[0];
+        createSpotifyUserInLocalDB(email, displayName, nickname, spotifyLoginId);
 
-            Member newUser = memberRepository.findBySpotifyLoginId(spotifyLoginId).orElseThrow();
-            return new CustomOAuth2User(newUser, oAuth2User.getAttributes());
-        }
+        Member newUser = memberRepository.findBySpotifyLoginId(spotifyLoginId).orElseThrow();
+        return new CustomOAuth2User(newUser, oAuth2User.getAttributes());
     }
 
     // 로컬 DB에 Google 사용자 생성

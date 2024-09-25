@@ -195,26 +195,27 @@
 
     <h2>Log into your account</h2>
 
-    <!-- 구글 로그인 버튼 -->
-    <button class="login-button google-btn" onclick="googleLogin()">
-        <img src="/images/google_logo.png" alt="Google Logo">
-        Continue with Google
-    </button>
-
     <!-- 스포티파이 로그인 버튼 -->
     <button class="login-button spotify-btn" onclick="spotifyLogin()">
         <img src="/images/spofitylogo7377-9doi-200h.png" alt="Spotify Logo">
         Continue with Spotify
     </button>
 
+    <!-- 구글 로그인 버튼 -->
+    <button class="login-button google-btn" onclick="googleLogin()">
+        <img src="/images/google_logo.png" alt="Google Logo">
+        Continue with Google
+    </button>
+
     <div>
         <span>Don't have an account?
         <p> If you don't have account, try google, or spotify login!! </p>
+        <p> We recommend logging into Spotify </p>
         </span>
     </div>
 
     <!-- 로그아웃 버튼 -->
-<%--    <button class="logout-btn" onclick="socialLogout()">로그아웃</button>--%>
+    <%--    <button class="logout-btn" onclick="socialLogout()">로그아웃</button>--%>
 </div>
 </body>
 </html>
