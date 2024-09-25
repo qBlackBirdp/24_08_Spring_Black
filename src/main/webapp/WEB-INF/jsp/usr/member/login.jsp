@@ -168,20 +168,25 @@
         }
 
     </style>
-    <script>
-        // // 구글 OAuth2 로그인 처리 (Spring Security를 통해 처리)
-        // function googleLogin() {
-        //     // Spring Security의 OAuth2 로그인 엔드포인트로 리다이렉트
-        //     window.location.href = "/oauth2/authorization/google";
-        // }
-    </script>
-
-
 
 </head>
 <body>
 
 <div class="login-container">
+    <!-- 오류 메시지 표시 -->
+    <c:if test="${param.error eq 'true'}">
+        <p style="color: red; font-weight: bold;">
+            <c:choose>
+                <c:when test="${not empty param.message}">
+                    ${param.message}
+                </c:when>
+                <c:otherwise>
+                    로그인에 실패했습니다.
+                </c:otherwise>
+            </c:choose>
+        </p>
+    </c:if>
+
     <!-- 메인 로고 -->
     <a href="/usr/home/main">
         <img src="/images/Main_logo.png" alt="Main Logo" width="250" height="auto">
@@ -209,7 +214,7 @@
     </div>
 
     <!-- 로그아웃 버튼 -->
-    <button class="logout-btn" onclick="socialLogout()">로그아웃</button>
+<%--    <button class="logout-btn" onclick="socialLogout()">로그아웃</button>--%>
 </div>
 </body>
 </html>

@@ -1,5 +1,6 @@
 package com.example.blackbirdlofi.config;
 
+import com.example.blackbirdlofi.security.CustomOAuth2FailureHandler;
 import com.example.blackbirdlofi.security.CustomOAuth2UserService;
 import com.example.blackbirdlofi.security.OAuth2AuthenticationSuccessHandler;
 import jakarta.servlet.DispatcherType;
@@ -35,7 +36,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationManager authenticationManager) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationManager authenticationManager, CustomOAuth2FailureHandler customOAuth2FailureHandler) throws Exception {
         http
                 .cors(withDefaults())  // CORS 설정 추가
                 .csrf(AbstractHttpConfigurer::disable)  // CSRF 비활성화
@@ -53,7 +54,7 @@ public class SecurityConfig {
                         .loginPage("/usr/member/login")
                         .successHandler(oAuth2AuthenticationSuccessHandler)  // 로그인 성공 후 핸들러
                         .defaultSuccessUrl("/usr/home/main", true)
-                        .failureUrl("/usr/member/login?error=true")
+                        .failureHandler(customOAuth2FailureHandler)
                         .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint.userService(customOAuth2UserService))
                 )
 

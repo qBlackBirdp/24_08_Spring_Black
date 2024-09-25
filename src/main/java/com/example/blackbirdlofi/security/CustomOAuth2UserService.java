@@ -2,8 +2,6 @@ package com.example.blackbirdlofi.security;
 
 import com.example.blackbirdlofi.JPAentity.Member;
 import com.example.blackbirdlofi.repository.MemberRepository;
-import com.example.blackbirdlofi.util.Ut;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -13,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -90,23 +87,14 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private OAuth2User processGoogleUser(OAuth2User oAuth2User, String email, String googleLoginId) {
         Optional<Member> localUser = memberRepository.findByGoogleLoginId(googleLoginId);
 
-        // 기존 Google 사용자가 있는 경우
+        if (memberRepository.findByEmail(email).isPresent()) {
+            // 중복된 이메일이 존재할 경우 커스텀 예외를 발생시켜 Spring Security에서 실패로 처리하도록 함
+            throw new EmailAlreadyExistsException("이미 사용 중인 이메일입니다.");
+        }
+
         if (localUser.isPresent()) {
             return new CustomOAuth2User(localUser.get(), oAuth2User.getAttributes());
         } else {
-            // 새로운 회원 등록 시 이메일 중복 확인
-            if (memberRepository.findByEmail(email).isPresent()) {
-                // 이메일 중복이 있을 때 Ut.jsHistoryBack()을 이용하여 메시지 출력
-                HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();
-                try {
-                    response.setContentType("text/html; charset=UTF-8");
-                    response.getWriter().write(Ut.jsHistoryBack("ERROR", "이미 사용 중인 이메일입니다."));
-                    response.getWriter().flush();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                return null; // 더 이상 진행하지 않음
-            }
             System.out.println("로컬 DB에 Google 사용자가 존재하지 않음, 새로운 사용자 등록 시작");
 
             String displayName = oAuth2User.getAttribute("name") != null ? oAuth2User.getAttribute("name") : "사용자";
@@ -122,24 +110,14 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private OAuth2User processSpotifyUser(OAuth2User oAuth2User, String email, String spotifyLoginId) {
         Optional<Member> localUser = memberRepository.findBySpotifyLoginId(spotifyLoginId);
 
+        if (memberRepository.findByEmail(email).isPresent()) {
+            // 중복된 이메일이 존재할 경우 커스텀 예외를 발생시켜 Spring Security에서 실패로 처리하도록 함
+            throw new EmailAlreadyExistsException("이미 사용 중인 이메일입니다.");
+        }
 
-        // 기존 Google 사용자가 있는 경우
         if (localUser.isPresent()) {
             return new CustomOAuth2User(localUser.get(), oAuth2User.getAttributes());
         } else {
-            // 새로운 회원 등록 시 이메일 중복 확인
-            if (memberRepository.findByEmail(email).isPresent()) {
-                // 이메일 중복이 있을 때 Ut.jsHistoryBack()을 이용하여 메시지 출력
-                HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();
-                try {
-                    response.setContentType("text/html; charset=UTF-8");
-                    response.getWriter().write(Ut.jsHistoryBack("ERROR", "이미 사용 중인 이메일입니다."));
-                    response.getWriter().flush();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                return null; // 더 이상 진행하지 않음
-            }
             System.out.println("로컬 DB에 Spotify 사용자가 존재하지 않음, 새로운 사용자 등록 시작");
 
             String displayName = oAuth2User.getAttribute("display_name") != null ? oAuth2User.getAttribute("display_name") : "사용자";
