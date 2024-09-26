@@ -54,7 +54,7 @@ public class SecurityConfig {
                         .loginPage("/usr/member/login")
                         .successHandler(oAuth2AuthenticationSuccessHandler)  // 로그인 성공 후 핸들러
                         .defaultSuccessUrl("/usr/home/main", true)
-                        .failureHandler(customOAuth2FailureHandler)
+                        .failureHandler(customOAuth2FailureHandler) // 로그인 실패 핸들러
                         .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint.userService(customOAuth2UserService))
                 )
 

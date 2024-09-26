@@ -12,8 +12,9 @@ CREATE TABLE `samples` (
                            `s_name` varchar(100) NOT NULL,
                            `bpm` int(10) NULL,  -- BPM 필드는 NULL 가능하게 변경
                            `genres` varchar(100) NOT NULL,
-                           `price` int NULL DEFAULT 0,
+#                             `price` int NULL DEFAULT 0,
                            `is_one_shot` TINYINT(1) NOT NULL DEFAULT 0 COMMENT 'one-shot 여부 (0=아님, 1=one-shot)',
+                           `url` VARCHAR(255) NOT NULL,  -- URL 필드 추가 (Firebase Storage 링크 저장)
                            `del_status` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '삭제 여부 (0=삭제 전, 1=삭제 후)',
                            `del_date` DATETIME(6) NULL COMMENT '삭제 날짜',
                            `field` VARCHAR(255) NULL,
