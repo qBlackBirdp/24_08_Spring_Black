@@ -65,10 +65,10 @@ CREATE TABLE `instruments`
 CREATE TABLE `instruments_items`
 (
     `id`            int(10)     NOT NULL AUTO_INCREMENT,
-    `instrument_id` int(10)     NOT NULL, -- instruments 테이블의 외래 키
+    `items_id` int(10)     NOT NULL, -- instruments 테이블의 외래 키
     `items_name`    VARCHAR(50) NOT NULL COMMENT '세부 항목: 예를 들어 Snare, Kick 등',
     PRIMARY KEY (`id`),
-    FOREIGN KEY (`instrument_id`) REFERENCES `instruments` (`id`) ON DELETE CASCADE
+    FOREIGN KEY (`items_id`) REFERENCES `instruments` (`id`) ON DELETE CASCADE
 );
 
 -- coin 테이블 생성
@@ -120,7 +120,7 @@ VALUES ('Drums', 'Snare'),
        ('Guitar', 'Electric');
 
 -- instruments_items 테이블에 데이터 삽입
-INSERT INTO `instruments_items` (`instrument_id`, `items_name`)
+INSERT INTO `instruments_items` (`items_id`, `items_name`)
 VALUES ((SELECT `id` FROM `instruments` WHERE `istm_name` = 'Drums' AND `istm_type` = 'Snare'), 'Snare'),
        ((SELECT `id` FROM `instruments` WHERE `istm_name` = 'Drums' AND `istm_type` = 'Kick'), 'Kick'),
        ((SELECT `id` FROM `instruments` WHERE `istm_name` = 'Drums' AND `istm_type` = 'Hi-Hat'), 'Hi-Hat'),
