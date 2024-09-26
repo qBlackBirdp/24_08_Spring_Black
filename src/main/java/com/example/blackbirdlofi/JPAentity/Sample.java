@@ -16,13 +16,13 @@ public class Sample {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Integer id;
 
     @Column(name = "u_id")
-    private long userId; // 유저 ID (FK)
+    private int userId; // 유저 ID (FK)
 
     @Column(name = "istm_id")
-    private long instrumentId; // 악기 ID (FK)
+    private int instrumentId; // 악기 ID (FK)
 
     @Column(name = "s_name")
     private String sName; // 샘플 이름
@@ -37,7 +37,7 @@ public class Sample {
 //    private Integer price; // 가격 (nullable)
 
     @Column(name = "is_one_shot")
-    private Boolean oneShot; // One-shot 여부
+    private Boolean isOneShot; // One-shot 여부
 
     @Column(name = "url")
     private String url; // Firebase Storage URL

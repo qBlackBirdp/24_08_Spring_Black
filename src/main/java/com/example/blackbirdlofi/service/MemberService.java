@@ -108,4 +108,5 @@ public class MemberService implements OAuth2UserService<OAuth2UserRequest, OAuth
         // 로그인 성공 시
         return ResultData.from("S-1", "로그인 성공", "member", member);
     }
+
 }
