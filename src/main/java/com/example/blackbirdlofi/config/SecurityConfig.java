@@ -1,5 +1,6 @@
 package com.example.blackbirdlofi.config;
 
+import com.example.blackbirdlofi.security.CustomLogoutHandler;
 import com.example.blackbirdlofi.security.CustomOAuth2FailureHandler;
 import com.example.blackbirdlofi.security.CustomOAuth2UserService;
 import com.example.blackbirdlofi.security.OAuth2AuthenticationSuccessHandler;
@@ -16,6 +17,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -36,7 +38,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationManager authenticationManager, CustomOAuth2FailureHandler customOAuth2FailureHandler) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, CustomOAuth2FailureHandler customOAuth2FailureHandler, CustomLogoutHandler customLogoutHandler) throws Exception {
         http
                 .cors(withDefaults())  // CORS 설정 추가
                 .csrf(AbstractHttpConfigurer::disable)  // CSRF 비활성화
@@ -66,6 +68,7 @@ public class SecurityConfig {
                 // 로그아웃 설정
                 .logout(logout ->
                         logout
+                                .addLogoutHandler(customLogoutHandler)  // 커스텀 로그아웃 핸들러 추가
                                 .logoutUrl("/usr/member/doLogout")  // 로그아웃 URL 설정
                                 .logoutSuccessUrl("/usr/member/login?logout")  // 로그아웃 성공 시 이동할 경로
                                 .invalidateHttpSession(true)  // 로그아웃 시 세션 무효화

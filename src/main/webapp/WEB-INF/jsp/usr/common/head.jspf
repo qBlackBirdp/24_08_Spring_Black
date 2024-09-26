@@ -14,7 +14,7 @@
     <nav>
         <ul style="list-style: none; display: flex; gap: 20px;">
             <li><a href="/sounds" style="color: #fff; text-decoration: none;">Sounds</a></li>
-            <li><a href="/create" style="color: #fff; text-decoration: none;">Create</a></li>
+            <li><a href="/usr/home/uploadForm" style="color: #fff; text-decoration: none;">Create</a></li>
             <li><a href="/community" style="color: #fff; text-decoration: none;">Community</a></li>
             <li><a href="/blog" style="color: #fff; text-decoration: none;">Blog</a></li>
             <li><a href="/pricing" style="color: #fff; text-decoration: none;">Pricing</a></li>
@@ -73,4 +73,11 @@
             background-color: #f0f0f0;
         }
     </style>
+
+    <script>
+        window.addEventListener('load', function() {
+            const headerHeight = document.querySelector('header').offsetHeight;  // 헤더 높이 계산
+            document.body.style.paddingTop = `${headerHeight}px`;  // body에 헤더 높이만큼 패딩 추가
+        });
+    </script>
 </header>

@@ -27,11 +27,12 @@ header {
   align-items: center;
 }
 
-/* 헤더 안의 메뉴 */
+/* 헤더 메뉴 */
 header nav ul {
   list-style: none;
   display: flex;
   gap: 20px;
+  margin: 0;  /* 헤더가 상단에 완전히 붙도록 함 */
 }
 
 header nav ul li a {
@@ -78,15 +79,16 @@ main {
   text-align: center;
   margin-top: 100px;
 }
- body, html {
-   height: 100%;
-   margin: 0;
- }
+body, html {
+  height: 100%;
+  margin: 0;
+}
 
 h1, h3 {
   color: #fdd835; /* Lofi 색상 강조 */
 }
 
+/* 인풋 및 버튼 스타일 */
 input[type="text"] {
   padding: 10px;
   width: 300px;
@@ -119,6 +121,7 @@ button.genre:hover, button.instrument:hover {
   background-color: #555;
 }
 
+/* Flexbox 레이아웃 */
 .flex-container {
   margin-top: 50px;
   display: flex;
@@ -140,4 +143,3 @@ button.genre:hover, button.instrument:hover {
 .flex-container div p {
   color: #ccc; /* 텍스트 대비 색상 조정 */
 }
-

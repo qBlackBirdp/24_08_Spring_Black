@@ -29,11 +29,11 @@ public class FileUploadController {
     }
 
     // 파일 업로드 화면
-    @GetMapping("/usr/home/uploadFormTest")
+    @GetMapping("/usr/home/uploadForm")
     public String showUploadForm(Model model) {
         List<String> files = storageService.listAllFiles();
         model.addAttribute("files", files);
-        return "usr/home/uploadFormTest";  // 업로드 폼 JSP 페이지를 반환
+        return "usr/home/uploadForm";  // 업로드 폼 JSP 페이지를 반환
     }
 
     // 파일 업로드 처리
@@ -69,7 +69,7 @@ public class FileUploadController {
     public String listUploadedFiles(Model model) {
         List<String> files = storageService.listAllFiles();
         model.addAttribute("files", files);
-        return "usr/home/uploadFormTest";  // 파일 목록을 보여줄 JSP 페이지
+        return "usr/home/uploadForm";  // 파일 목록을 보여줄 JSP 페이지
     }
 
     // 파일 다운로드 처리
