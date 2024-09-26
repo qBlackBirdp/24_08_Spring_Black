@@ -1,7 +1,7 @@
 <%@ include file="../common/head.jspf" %>
 
 
-<h1>Upload your WAV file</h1>
+<h1 style="margin-top: 100px;">Upload your WAV file</h1>
 
 <!-- 파일 업로드 폼 -->
 <form action="${pageContext.request.contextPath}/upload" method="post" enctype="multipart/form-data">

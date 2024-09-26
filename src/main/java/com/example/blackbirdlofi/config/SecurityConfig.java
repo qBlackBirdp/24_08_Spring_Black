@@ -1,9 +1,6 @@
 package com.example.blackbirdlofi.config;
 
-import com.example.blackbirdlofi.security.CustomLogoutHandler;
-import com.example.blackbirdlofi.security.CustomOAuth2FailureHandler;
-import com.example.blackbirdlofi.security.CustomOAuth2UserService;
-import com.example.blackbirdlofi.security.OAuth2AuthenticationSuccessHandler;
+import com.example.blackbirdlofi.security.*;
 import jakarta.servlet.DispatcherType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -17,8 +14,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -30,7 +27,10 @@ public class SecurityConfig {
     private OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
 
     @Autowired
-    private CustomOAuth2UserService customOAuth2UserService;  // @Lazy 제거
+    private CustomOAuth2UserService customOAuth2UserService;
+
+    @Autowired
+    private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -46,10 +46,20 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()  // FORWARD 요청은 인증 없이 허용
+                                .requestMatchers("/usr/home/uploadForm").authenticated()  // uploadForm 경로는 인증된 사용자만 접근 가능
                                 .requestMatchers("/usr/member/login", "/usr/member/doGLogin", "/firebaseUser", "/usr/member/doLogout").permitAll()  // 소셜 로그인 관련 경로 허용
                                 .requestMatchers("/", "/usr/home/**", "/usr/home/main").permitAll()  // 홈 페이지 및 특정 리소스 접근 허용
                                 .requestMatchers("/js/**", "/css/**", "/img/**", "/fontawesome-free-6.5.1-web/**").permitAll()  // 정적 리소스 허용
                                 .anyRequest().authenticated()  // 나머지 요청은 인증 필요
+                )
+
+                // 인증 실패 시 사용할 엔트리 포인트 등록
+                .exceptionHandling(exceptionHandling ->
+                        exceptionHandling
+                                .defaultAuthenticationEntryPointFor(
+                                        customAuthenticationEntryPoint,
+                                        new AntPathRequestMatcher("/usr/home/uploadForm")
+                                )
                 )
 
                 .oauth2Login(oauth2 -> oauth2

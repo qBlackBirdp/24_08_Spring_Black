@@ -186,6 +186,11 @@
             </c:choose>
         </p>
     </c:if>
+    <c:if test="${param.error eq 'true'}">
+        <script>
+            alert("${param.message != null ? param.message : '로그인이 필요합니다.'}");
+        </script>
+    </c:if>
 
     <!-- 메인 로고 -->
     <a href="/usr/home/main">
