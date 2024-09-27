@@ -18,11 +18,13 @@ public class InstrumentService {
     @Autowired
     private InstrumentItemRepository instrumentItemRepository;
 
+    // 모든 악기 리스트 반환
     public List<Instrument> getAllInstruments() {
         return instrumentRepository.findAll();
     }
 
-    public List<InstrumentItem> getInstrumentItemsByInstrumentId(int instrumentId) {
-        return instrumentItemRepository.findByInstrumentId(instrumentId);
+    // 선택된 악기의 항목 리스트 반환
+    public List<InstrumentItem> getInstrumentItemsByInstrumentId(int itemsId) {
+        return instrumentItemRepository.findByItemsId(itemsId);  // itemsId로 수정
     }
 }

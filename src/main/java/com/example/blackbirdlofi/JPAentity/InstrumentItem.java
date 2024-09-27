@@ -17,8 +17,8 @@ public class InstrumentItem {
     private int id;
 
     @Column(name = "items_id")
-    private int instrumentItemId; // 악기 ID
+    private int itemsId; // 악기 ID
 
     @Column(name = "items_name")
-    private int instrumentItemName; // 악기 ID
+    private String itemsName; // 악기 이름
 }

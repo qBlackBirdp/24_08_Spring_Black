@@ -11,13 +11,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Instrument {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)  // Primary Key 자동 생성
     private int id;
 
     @Column(name = "istm_name")
-    private int instrumentName;
+    private String istmName;
 
     @Column(name = "istm_type")
-    private int instrumentType;
+    private String istmType;
 }
