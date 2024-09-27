@@ -1,7 +1,9 @@
 package com.example.blackbirdlofi.controller;
 
+import com.example.blackbirdlofi.JPAentity.Instrument;
 import com.example.blackbirdlofi.JPAentity.Member;
 import com.example.blackbirdlofi.JPAentity.Sample;
+import com.example.blackbirdlofi.service.InstrumentService;
 import com.example.blackbirdlofi.service.MemberService;
 import com.example.blackbirdlofi.service.SampleService;
 import com.example.blackbirdlofi.service.firebase.FirebaseStorageService;
@@ -28,6 +30,9 @@ public class FileUploadController {
     private final MemberService memberService;
 
     @Autowired
+    private InstrumentService instrumentService;
+
+    @Autowired
     public FileUploadController(FirebaseStorageService storageService, SampleService sampleService, MemberService memberService) {
         this.storageService = storageService;
         this.sampleService = sampleService;
@@ -37,8 +42,15 @@ public class FileUploadController {
     // 파일 업로드 화면
     @GetMapping("/usr/home/uploadForm")
     public String showUploadForm(Model model) {
+        System.err.println("===============FileUploadController 작동================");
+
         List<String> files = storageService.listAllFiles();
         model.addAttribute("files", files);
+
+        List<Instrument> instruments = instrumentService.getAllInstruments();
+        model.addAttribute("instruments", instruments);
+
+        System.err.println("Instrument list: " + instruments);
         return "usr/home/uploadForm";  // 업로드 폼 JSP 페이지를 반환
     }
 
