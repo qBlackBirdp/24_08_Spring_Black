@@ -1,5 +1,6 @@
 package com.example.blackbirdlofi.controller;
 
+import com.example.blackbirdlofi.JPAentity.Instrument;
 import com.example.blackbirdlofi.JPAentity.InstrumentItem;
 import com.example.blackbirdlofi.service.InstrumentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.sound.midi.Instrument;
 import java.util.List;
 
 @Controller
