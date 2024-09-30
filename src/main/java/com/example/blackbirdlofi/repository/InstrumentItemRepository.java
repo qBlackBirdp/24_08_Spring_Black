@@ -8,5 +8,6 @@ import java.util.List;
 
 @Repository
 public interface InstrumentItemRepository extends JpaRepository<InstrumentItem, Integer> {
-    List<InstrumentItem> findByItemsId(int itemsId);  // itemsId에 맞춰 메서드 수정
+
+    List<InstrumentItem> findByInstrumentId(int instrumentId);
 }

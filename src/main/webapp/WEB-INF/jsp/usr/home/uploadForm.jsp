@@ -48,22 +48,18 @@
 </form>
 
 <script>
-    $(document).ready(function () {
-        $('#instrumentSelect').change(function () {
-            var instrumentId = $(this).val();
-            if (instrumentId) {
-                $.ajax({
-                    url: '/getInstrumentItems',
-                    data: {instrumentId: instrumentId},
-                    success: function (items) {
-                        $('#instrumentItemsSelect').empty();
-                        $.each(items, function (index, item) {
-                            $('#instrumentItemsSelect').append('<option value="' + item.id + '">' + item.itemsName + '</option>');
-                        });
-                    }
+    $('#instrumentSelect').change(function() {
+        var selectedInstrument = $(this).val();  // 선택된 대분류 이름
+        $.ajax({
+            url: '/getInstrumentItems',          // AJAX 요청 경로
+            type: 'GET',
+            data: { instrumentName: selectedInstrument },  // 선택된 대분류 이름을 파라미터로 전달
+            success: function(data) {
+                // 받아온 데이터로 세부 항목 드롭다운 갱신
+                $('#instrumentItems').empty();  // 기존 항목 제거
+                $.each(data, function(index, item) {
+                    $('#instrumentItems').append('<option value="'+item.id+'">'+item.itemsName+'</option>');
                 });
-            } else {
-                $('#instrumentItemsSelect').empty().append('<option value="">악기 항목을 선택하세요</option>');
             }
         });
     });

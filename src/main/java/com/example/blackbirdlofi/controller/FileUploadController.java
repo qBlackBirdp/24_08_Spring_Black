@@ -47,7 +47,7 @@ public class FileUploadController {
         List<String> files = storageService.listAllFiles();
         model.addAttribute("files", files);
 
-        List<Instrument> instruments = instrumentService.getAllInstruments();
+        List<String> instruments = instrumentService.getUniqueInstrumentNames();
         model.addAttribute("instruments", instruments);
 
         System.err.println("Instrument list: " + instruments);
