@@ -21,7 +21,7 @@ public class InstrumentController {
     @ResponseBody
     public List<InstrumentItem> getInstrumentItems(@RequestParam("instrumentId") int instrumentId) {
         System.err.println("======================getInstrumentItems 작동=======================");
-        // instrumentId로 세부 항목 검색
+        // 악기 ID로 세부 항목을 가져옴
         return instrumentService.getInstrumentItemsByInstrumentId(instrumentId);
     }
 }

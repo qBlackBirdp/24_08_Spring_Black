@@ -24,17 +24,22 @@ public class InstrumentService {
         return instrumentRepository.findAll();
     }
 
-    // 선택된 악기의 항목 리스트 반환
+    // 선택된 악기 ID로 세부 항목 리스트 반환
+    public List<InstrumentItem> getInstrumentItemsByInstrumentId(int instrumentId) {
+        // instrumentId로 Instrument 객체를 찾음
+        Instrument instrument = instrumentRepository.findById(instrumentId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid instrument ID"));
+
+        // Instrument 객체로 세부 항목 리스트를 조회
+        return instrumentItemRepository.findByItemsId(instrument);
+    }
+
+    // 모든 악기 이름(대분류)을 중복 없이 반환
     public List<String> getUniqueInstrumentNames() {
         List<Instrument> instruments = instrumentRepository.findAll();
         return instruments.stream()
-                .map(Instrument::getIstmName)
-                .distinct()
+                .map(Instrument::getIstmName)  // 악기 이름만 추출
+                .distinct()  // 중복 제거
                 .collect(Collectors.toList());
-    }
-
-    // 선택된 악기 대분류에 맞는 세부 항목 가져오기
-    public List<InstrumentItem> getInstrumentItemsByInstrumentId(int instrumentId) {
-        return instrumentItemRepository.findByInstrumentId(instrumentId);
     }
 }

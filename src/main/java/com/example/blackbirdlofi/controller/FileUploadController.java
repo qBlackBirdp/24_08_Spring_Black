@@ -44,9 +44,11 @@ public class FileUploadController {
     public String showUploadForm(Model model) {
         System.err.println("===============FileUploadController 작동================");
 
+        // 파일 리스트 가져오기
         List<String> files = storageService.listAllFiles();
         model.addAttribute("files", files);
 
+        // 중복 제거된 악기 이름 리스트 가져오기
         List<String> instruments = instrumentService.getUniqueInstrumentNames();
         model.addAttribute("instruments", instruments);
 

@@ -14,14 +14,15 @@
     <input type="file" name="file" accept=".wav" required>
     <br><br>
     <%--악기선택--%>
-    <select id="instrumentSelect">
+    <!-- 악기 대분류를 선택하는 드롭다운 -->
+    <select id="instrumentSelect" name="instrument">
+        <option value="">Select an instrument</option>
         <c:forEach var="instrument" items="${instruments}">
-            <option value="${instrument.id}">${instrument.istmName}</option>
+            <option value="${instrument.id}">${instrument.name}</option>
         </c:forEach>
     </select>
-    <%--항목선택--%>
-    <select id="instrumentItemsSelect">
-        <option value="">악기 항목을 선택하세요</option>
+    <select id="instrumentItemsSelect" name="instrumentItem">
+        <option value="">Select an instrument item</option>
     </select>
     <br><br>
     <label for="name">Sample Name:</label>
@@ -47,19 +48,29 @@
     <button type="submit">Upload</button>
 </form>
 
-<script>
-    $('#instrumentSelect').change(function() {
-        var selectedInstrument = $(this).val();  // 선택된 대분류 이름
-        $.ajax({
-            url: '/getInstrumentItems',          // AJAX 요청 경로
-            type: 'GET',
-            data: { instrumentName: selectedInstrument },  // 선택된 대분류 이름을 파라미터로 전달
-            success: function(data) {
-                // 받아온 데이터로 세부 항목 드롭다운 갱신
-                $('#instrumentItems').empty();  // 기존 항목 제거
-                $.each(data, function(index, item) {
-                    $('#instrumentItems').append('<option value="'+item.id+'">'+item.itemsName+'</option>');
+<script type="text/javascript">
+    $(document).ready(function() {
+        // 대분류 악기 선택 시 AJAX 요청
+        $('#instrumentSelect').change(function() {
+            var instrumentId = $(this).val();
+            if (instrumentId) {
+                $.ajax({
+                    url: '/getInstrumentItems',
+                    type: 'GET',
+                    data: { instrumentId: instrumentId },
+                    success: function(items) {
+                        // 세부 항목 셀렉트 박스 비우기
+                        $('#instrumentItemsSelect').empty();
+                        // 세부 항목 추가
+                        $.each(items, function(index, item) {
+                            $('#instrumentItemsSelect').append('<option value="' + item.id + '">' + item.itemsName + '</option>');
+                        });
+                    }
                 });
+            } else {
+                // 악기 선택 해제 시 세부 항목 비우기
+                $('#instrumentItemsSelect').empty();
+                $('#instrumentItemsSelect').append('<option value="">Select an instrument item</option>');
             }
         });
     });
