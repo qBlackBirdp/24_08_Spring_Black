@@ -19,26 +19,29 @@ public class InstrumentService {
     @Autowired
     private InstrumentItemRepository instrumentItemRepository;
 
-    // 모든 악기 리스트 반환
-    public List<Instrument> getAllInstruments() {
-        return instrumentRepository.findAll();
+    // 대분류 악기 타입만 반환
+    public List<String> getAllInstrumentTypes() {
+        return instrumentRepository.findDistinctInstrumentTypes();
     }
 
-    // 선택된 악기 ID로 세부 항목 리스트 반환
-    public List<InstrumentItem> getInstrumentItemsByInstrumentId(int instrumentId) {
-        // instrumentId로 Instrument 객체를 찾음
-        Instrument instrument = instrumentRepository.findById(instrumentId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid instrument ID"));
+    // 선택된 악기 타입으로 세부 항목 리스트 반환 (대분류 악기는 제외)
+    public List<InstrumentItem> getInstrumentItemsByInstrumentType(String instrumentType) {
+        // instrumentType으로 Instrument 리스트를 가져옴
+        List<Instrument> instruments = instrumentRepository.findByIstmType(instrumentType);
 
-        // Instrument 객체로 세부 항목 리스트를 조회
-        return instrumentItemRepository.findByItemsId(instrument);
+        if (instruments.isEmpty()) {
+            throw new IllegalArgumentException("Invalid instrument type: " + instrumentType);
+        }
+
+        // Instrument 리스트로 InstrumentItem 리스트를 조회
+        return instrumentItemRepository.findByInstrumentIn(instruments);
     }
 
-    // 모든 악기 이름(대분류)을 중복 없이 반환
-    public List<String> getUniqueInstrumentNames() {
+    // 모든 악기 타입(대분류)을 중복 없이 반환
+    public List<String> getUniqueInstrumentTypes() {
         List<Instrument> instruments = instrumentRepository.findAll();
         return instruments.stream()
-                .map(Instrument::getIstmName)  // 악기 이름만 추출
+                .map(Instrument::getIstmType)  // 악기 이름만 추출
                 .distinct()  // 중복 제거
                 .collect(Collectors.toList());
     }

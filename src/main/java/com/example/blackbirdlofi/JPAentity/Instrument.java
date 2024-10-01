@@ -16,9 +16,6 @@ public class Instrument {
     @GeneratedValue(strategy = GenerationType.IDENTITY)  // Primary Key 자동 생성
     private int id;
 
-    @Column(name = "istm_name")
-    private String istmName;
-
     @Column(name = "istm_type")
     private String istmType;
 }

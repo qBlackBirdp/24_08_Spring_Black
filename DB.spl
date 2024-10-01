@@ -56,8 +56,7 @@ ALTER TABLE users
 CREATE TABLE `instruments`
 (
     `id`        int(10)     NOT NULL AUTO_INCREMENT,
-    `istm_name` VARCHAR(50) NOT NULL COMMENT '악기 이름: Drums, Vocals, Synth, Keys 등',
-    `istm_type` VARCHAR(50) NOT NULL COMMENT '악기 타입: 드럼의 세부 유형 (Snare, Kick 등)',
+    `istm_type` VARCHAR(50) NOT NULL COMMENT '악기 타입: Drums, Vocals, Synth, Keys 등',
     PRIMARY KEY (`id`)
 );
 
@@ -66,10 +65,11 @@ CREATE TABLE `instruments_items`
 (
     `id`            int(10)     NOT NULL AUTO_INCREMENT,
     `items_id` int(10)     NOT NULL, -- instruments 테이블의 외래 키
-    `items_name`    VARCHAR(50) NOT NULL COMMENT '세부 항목: 예를 들어 Snare, Kick 등',
+    `istm_items_name`    VARCHAR(50) NOT NULL COMMENT '세부 항목: 예를 들어 Snare, Kick 등',
     PRIMARY KEY (`id`),
     FOREIGN KEY (`items_id`) REFERENCES `instruments` (`id`) ON DELETE CASCADE
 );
+
 
 -- coin 테이블 생성
 # CREATE TABLE `coin` (
@@ -107,57 +107,31 @@ ALTER TABLE `samples`
 #     (NOW(), NOW(), 'user-9j0k1l2m', 'password3', 'Jim Brown', 'jimbo', 'jim@example.com', 0, 3, 3, NULL, null);
 -- 샘플 데이터 삽입
 -- instruments 테이블에 데이터 삽입
-INSERT INTO `instruments` (`istm_name`, `istm_type`)
-VALUES ('Drums', 'Snare'),
-       ('Drums', 'Kick'),
-       ('Drums', 'Hi-Hat'),
-       ('Vocals', 'Female Vocal'),
-       ('Vocals', 'Male Vocal'),
-       ('Synth', 'Pads'),
-       ('Synth', 'Bass'),
-       ('Keys', 'Piano'),
-       ('Keys', 'Organ'),
-       ('Guitar', 'Electric');
+-- instruments 테이블에 대분류 악기 타입 데이터 삽입
+INSERT INTO `instruments` (`istm_type`)
+VALUES ('Drums'),
+       ('Vocals'),
+       ('Synth'),
+       ('Keys'),
+       ('Guitar');
 
--- instruments_items 테이블에 데이터 삽입
-INSERT INTO `instruments_items` (`items_id`, `items_name`)
-VALUES ((SELECT `id` FROM `instruments` WHERE `istm_name` = 'Drums' AND `istm_type` = 'Snare'), 'Snare'),
-       ((SELECT `id` FROM `instruments` WHERE `istm_name` = 'Drums' AND `istm_type` = 'Kick'), 'Kick'),
-       ((SELECT `id` FROM `instruments` WHERE `istm_name` = 'Drums' AND `istm_type` = 'Hi-Hat'), 'Hi-Hat'),
-       ((SELECT `id` FROM `instruments` WHERE `istm_name` = 'Vocals' AND `istm_type` = 'Female Vocal'), 'Female Vocal'),
-       ((SELECT `id` FROM `instruments` WHERE `istm_name` = 'Vocals' AND `istm_type` = 'Male Vocal'),
-        'Harmony Vocal'),
-       ((SELECT `id` FROM `instruments` WHERE `istm_name` = 'Synth' AND `istm_type` = 'Bass'), 'Bass'),
-       ((SELECT `id` FROM `instruments` WHERE `istm_name` = 'Synth' AND `istm_type` = 'Pads'), 'Pads'),
-       ((SELECT `id` FROM `instruments` WHERE `istm_name` = 'Keys' AND `istm_type` = 'Piano'), 'Piano'),
-       ((SELECT `id` FROM `instruments` WHERE `istm_name` = 'Keys' AND `istm_type` = 'Organ'), 'Organ'),
-       ((SELECT `id` FROM `instruments` WHERE `istm_name` = 'Guitar' AND `istm_type` = 'Electric'),
-        'Electric');
+-- instruments_items 테이블에 세부 항목 데이터 삽입
+INSERT INTO `instruments_items` (`items_id`, `istm_items_name`)
+VALUES ((SELECT `id` FROM `instruments` WHERE `istm_type` = 'Drums'), 'Snare'),
+       ((SELECT `id` FROM `instruments` WHERE `istm_type` = 'Drums'), 'Kick'),
+       ((SELECT `id` FROM `instruments` WHERE `istm_type` = 'Drums'), 'Hi-Hat'),
+       ((SELECT `id` FROM `instruments` WHERE `istm_type` = 'Vocals'), 'Female Vocal'),
+       ((SELECT `id` FROM `instruments` WHERE `istm_type` = 'Vocals'), 'Male Vocal'),
+       ((SELECT `id` FROM `instruments` WHERE `istm_type` = 'Synth'), 'Pads'),
+       ((SELECT `id` FROM `instruments` WHERE `istm_type` = 'Synth'), 'Bass'),
+       ((SELECT `id` FROM `instruments` WHERE `istm_type` = 'Keys'), 'Piano'),
+       ((SELECT `id` FROM `instruments` WHERE `istm_type` = 'Keys'), 'Organ'),
+       ((SELECT `id` FROM `instruments` WHERE `istm_type` = 'Guitar'), 'Electric');
 
--- samples 테이블에 데이터 삽입
-INSERT INTO `samples` (`u_id`, `istm_id`, `s_name`, `bpm`, `genres`, `is_one_shot`, `url`, `del_status`, `field`)
-VALUES (1, (SELECT `id` FROM `instruments` WHERE `istm_name` = 'Drums' AND `istm_type` = 'Snare'), 'Sample #1', 120,
-        'Genre #1', 1, 'https://dummyurl.com/sample1', 0, 'Field #1'),
-       (1, (SELECT `id` FROM `instruments` WHERE `istm_name` = 'Drums' AND `istm_type` = 'Kick'), 'Sample #2', 130,
-        'Genre #2', 0, 'https://dummyurl.com/sample2', 0, 'Field #2'),
-       (1, (SELECT `id` FROM `instruments` WHERE `istm_name` = 'Drums' AND `istm_type` = 'Hi-Hat'), 'Sample #3', 90,
-        'Genre #3', 1, 'https://dummyurl.com/sample3', 0, 'Field #3'),
-       (1, (SELECT `id` FROM `instruments` WHERE `istm_name` = 'Vocals' AND `istm_type` = 'Female Vocal'), 'Sample #4',
-        140, 'Genre #4', 0, 'https://dummyurl.com/sample4', 0, 'Field #4'),
-       (1, (SELECT `id` FROM `instruments` WHERE `istm_name` = 'Vocals' AND `istm_type` = 'Male Vocal'),
-        'Sample #5', 110, 'Genre #5', 1, 'https://dummyurl.com/sample5', 0, 'Field #5'),
-       (1, (SELECT `id` FROM `instruments` WHERE `istm_name` = 'Synth' AND `istm_type` = 'Pads'), 'Sample #6', 160,
-        'Genre #6', 0, 'https://dummyurl.com/sample6', 0, 'Field #6'),
-       (1, (SELECT `id` FROM `instruments` WHERE `istm_name` = 'Synth' AND `istm_type` = 'Bass'), 'Sample #7',
-        100, 'Genre #7', 1, 'https://dummyurl.com/sample7', 0, 'Field #7'),
-       (1, (SELECT `id` FROM `instruments` WHERE `istm_name` = 'Keys' AND `istm_type` = 'Piano'), 'Sample #8', 115,
-        'Genre #8', 0, 'https://dummyurl.com/sample8', 0, 'Field #8'),
-       (1, (SELECT `id` FROM `instruments` WHERE `istm_name` = 'Keys' AND `istm_type` = 'Organ'), 'Sample #9', 125,
-        'Genre #9', 1, 'https://dummyurl.com/sample9', 0, 'Field #9'),
-       (1, (SELECT `id` FROM `instruments` WHERE `istm_name` = 'Guitar' AND `istm_type` = 'Electric'),
-        'Sample #10', 135, 'Genre #10', 0, 'https://dummyurl.com/sample10', 0, 'Field #10');
+
 
 
 -- 데이터 조회
 SELECT *
 FROM users;
+

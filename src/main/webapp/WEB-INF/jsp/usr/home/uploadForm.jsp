@@ -13,18 +13,22 @@
     <label for="file">Select WAV File:</label>
     <input type="file" name="file" accept=".wav" required>
     <br><br>
-    <%--악기선택--%>
+
     <!-- 악기 대분류를 선택하는 드롭다운 -->
     <select id="instrumentSelect" name="instrument">
         <option value="">Select an instrument</option>
         <c:forEach var="instrument" items="${instruments}">
-            <option value="${instrument.id}">${instrument.name}</option>
+            <option value="${instrument}">${instrument}</option>
+            <!-- 대분류 악기 타입 표시 -->
         </c:forEach>
     </select>
+
+    <!-- 세부 항목을 선택하는 드롭다운 -->
     <select id="instrumentItemsSelect" name="instrumentItem">
         <option value="">Select an instrument item</option>
     </select>
     <br><br>
+
     <label for="name">Sample Name:</label>
     <input type="text" name="name" required>
     <br><br>
@@ -49,20 +53,22 @@
 </form>
 
 <script type="text/javascript">
-    $(document).ready(function() {
+    $(document).ready(function () {
         // 대분류 악기 선택 시 AJAX 요청
-        $('#instrumentSelect').change(function() {
-            var instrumentId = $(this).val();
-            if (instrumentId) {
+        $('#instrumentSelect').change(function () {
+            var instrumentType = $(this).val(); // 대분류 악기 타입
+
+            if (instrumentType) {
                 $.ajax({
                     url: '/getInstrumentItems',
                     type: 'GET',
-                    data: { instrumentId: instrumentId },
-                    success: function(items) {
+                    data: {instrumentType: instrumentType},  // 대분류 악기 타입을 서버에 전달
+                    success: function (items) {
                         // 세부 항목 셀렉트 박스 비우기
                         $('#instrumentItemsSelect').empty();
+                        $('#instrumentItemsSelect').append('<option value="">Select an instrument item</option>');
                         // 세부 항목 추가
-                        $.each(items, function(index, item) {
+                        $.each(items, function (index, item) {
                             $('#instrumentItemsSelect').append('<option value="' + item.id + '">' + item.itemsName + '</option>');
                         });
                     }
@@ -75,5 +81,6 @@
         });
     });
 </script>
+
 <!-- 푸터 불러오기 -->
 <%@ include file="../common/foot.jspf" %>

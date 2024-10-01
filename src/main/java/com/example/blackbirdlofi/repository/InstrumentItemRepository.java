@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface InstrumentItemRepository extends JpaRepository<InstrumentItem, Integer> {
-    // Instrument 객체를 기준으로 세부 항목 리스트를 가져옴
-    List<InstrumentItem> findByItemsId(Instrument instrument);
+    // Instrument 리스트를 기반으로 InstrumentItem 리스트를 조회
+    List<InstrumentItem> findByInstrumentIn(List<Instrument> instruments);
 }

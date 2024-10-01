@@ -16,12 +16,17 @@ public class InstrumentController {
     @Autowired
     private InstrumentService instrumentService;
 
+    // 대분류 악기 리스트 제공
+    @GetMapping("/getAllInstruments")
+    @ResponseBody
+    public List<String> getAllInstruments() {
+        return instrumentService.getAllInstrumentTypes();
+    }
+
     // Ajax 요청으로 항목 리스트 제공
     @GetMapping("/getInstrumentItems")
     @ResponseBody
-    public List<InstrumentItem> getInstrumentItems(@RequestParam("instrumentId") int instrumentId) {
-        System.err.println("======================getInstrumentItems 작동=======================");
-        // 악기 ID로 세부 항목을 가져옴
-        return instrumentService.getInstrumentItemsByInstrumentId(instrumentId);
+    public List<InstrumentItem> getInstrumentItems(@RequestParam("instrumentType") String instrumentType) {
+        return instrumentService.getInstrumentItemsByInstrumentType(instrumentType);
     }
 }

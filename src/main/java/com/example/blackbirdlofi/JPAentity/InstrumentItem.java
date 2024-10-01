@@ -18,9 +18,10 @@ public class InstrumentItem {
 
     // ManyToOne 관계 설정: Instrument와 외래키 관계
     @ManyToOne
-    @JoinColumn(name = "items_id")  // 외래 키 컬럼 이름이 'items_id'
-    private Instrument itemsId; // 악기 ID
+    @JoinColumn(name = "items_id", referencedColumnName = "id")  // 외래 키 컬럼 이름이 'items_id'
+    private Instrument instrument; // 악기 ID
 
-    @Column(name = "items_name")
-    private String itemsName; // 악기 이름
+    @Column(name = "istm_items_name")
+    private String istmItemsName; // 악기 이름
+
 }

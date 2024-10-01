@@ -39,20 +39,17 @@ public class FileUploadController {
         this.memberService = memberService;
     }
 
-    // 파일 업로드 화면
+    //파일 업로드 화면
     @GetMapping("/usr/home/uploadForm")
     public String showUploadForm(Model model) {
-        System.err.println("===============FileUploadController 작동================");
-
         // 파일 리스트 가져오기
         List<String> files = storageService.listAllFiles();
         model.addAttribute("files", files);
 
-        // 중복 제거된 악기 이름 리스트 가져오기
-        List<String> instruments = instrumentService.getUniqueInstrumentNames();
-        model.addAttribute("instruments", instruments);
+        // 대분류 악기 타입 리스트 가져오기
+        List<String> instrumentTypes = instrumentService.getAllInstrumentTypes();
+        model.addAttribute("instruments", instrumentTypes);
 
-        System.err.println("Instrument list: " + instruments);
         return "usr/home/uploadForm";  // 업로드 폼 JSP 페이지를 반환
     }
 
